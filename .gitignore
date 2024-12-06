@@ -1,0 +1,33 @@
+# Xcode
+*.xcworkspace
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+# Build products
+build/
+DerivedData/
+
+# Logs
+*.log
+
+# Dependency management
+Pods/
+Cartfile.resolved
+Carthage/
+
+# CocoaPods
+Podfile.lock
+
+# Swift Package Manager
+*.swiftpm
+.build/
+
+# User-specific
+*.swp
+*.swo
+.DS_Store
+
+# Environment files
+*.env
+
