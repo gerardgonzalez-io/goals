@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(TopicManager.self) var topicManager
 
     var body: some View {
         GoalList()

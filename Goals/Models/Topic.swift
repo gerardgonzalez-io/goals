@@ -17,6 +17,8 @@ struct Topic: Identifiable, Codable {
     var description: String?
     /// The time goal associated with the topic.
     var goal: TopicGoal
+    /// The time spend studying the topic.
+    var timeSpend: TimeSpend
     /// The scheduled reminders for the topic.
     var reminders: [Reminder]
     /// The history of time spent on the topic.
@@ -28,6 +30,7 @@ struct Topic: Identifiable, Codable {
     ///   - name: The name of the topic.
     ///   - description: A description or additional details about the topic.
     ///   - goal: The goal associated with the topic.
+    ///   - timeSpend: The time spend in a topic.
     ///   - reminders: The scheduled reminders for the topic.
     ///   - history: The history of time spent on the topic.
     init(
@@ -35,6 +38,7 @@ struct Topic: Identifiable, Codable {
         name: String,
         description: String? = nil,
         goal: TopicGoal,
+        timeSpend: TimeSpend,
         reminders: [Reminder] = [],
         history: [TopicHistory] = []
     ) {
@@ -42,6 +46,7 @@ struct Topic: Identifiable, Codable {
         self.name = name
         self.description = description
         self.goal = goal
+        self.timeSpend = timeSpend
         self.reminders = reminders
         self.history = history
     }

@@ -9,6 +9,14 @@ import SwiftUI
 
 struct GoalRow: View {
     let topic: Topic
+    
+    var dailyGoal: Double {
+        topic.goal.dailyTimeGoal
+    }
+
+    var dailyTimeSpend: Double {
+        topic.timeSpend.dailyTimeSpend
+    }
 
     var body: some View {
         HStack {
@@ -17,10 +25,12 @@ struct GoalRow: View {
                     .font(.headline)
                 Spacer()
                 Text("Daily goal")
-                Text(String("0/\(topic.goal.dailyTimeGoal)"))
+                Text(String("\(Int(dailyTimeSpend))/\(Int(dailyGoal))"))
             }
+
             Spacer()
-            PercentageView()
+
+            PercentageView(topic: topic)
         }
         .padding()
  

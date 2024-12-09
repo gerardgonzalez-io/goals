@@ -24,6 +24,7 @@
 		FD3D05FA2D0373E8009DF07C /* GoalRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D05F92D0373E8009DF07C /* GoalRow.swift */; };
 		FD3D05FC2D038BA8009DF07C /* GoalDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D05FB2D038BA8009DF07C /* GoalDetail.swift */; };
 		FD3D061C2D039499009DF07C /* PercentageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D061B2D039499009DF07C /* PercentageView.swift */; };
+		FD8E828C2D073BB200F8AFD0 /* TimeSpend.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E828B2D073BB200F8AFD0 /* TimeSpend.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		FD3D05F92D0373E8009DF07C /* GoalRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalRow.swift; sourceTree = "<group>"; };
 		FD3D05FB2D038BA8009DF07C /* GoalDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetail.swift; sourceTree = "<group>"; };
 		FD3D061B2D039499009DF07C /* PercentageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentageView.swift; sourceTree = "<group>"; };
+		FD8E828B2D073BB200F8AFD0 /* TimeSpend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSpend.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 			children = (
 				FD3D05D12D00A08D009DF07C /* Topic.swift */,
 				FD3D05D32D00A222009DF07C /* TopicGoal.swift */,
+				FD8E828B2D073BB200F8AFD0 /* TimeSpend.swift */,
 				FD3D05D52D00A276009DF07C /* Reminder.swift */,
 				FD3D05D72D00A300009DF07C /* TopicHistory.swift */,
 				FD3D05D92D00AA12009DF07C /* FocusSession.swift */,
@@ -158,9 +161,9 @@
 		FD3D05F62D03739D009DF07C /* Goals */ = {
 			isa = PBXGroup;
 			children = (
-				FD3D05FB2D038BA8009DF07C /* GoalDetail.swift */,
 				FD3D05F72D0373C7009DF07C /* GoalList.swift */,
 				FD3D05F92D0373E8009DF07C /* GoalRow.swift */,
+				FD3D05FB2D038BA8009DF07C /* GoalDetail.swift */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				FD3D061C2D039499009DF07C /* PercentageView.swift in Sources */,
 				FD3D05DA2D00AA12009DF07C /* FocusSession.swift in Sources */,
 				FD3D05D22D00A08D009DF07C /* Topic.swift in Sources */,
+				FD8E828C2D073BB200F8AFD0 /* TimeSpend.swift in Sources */,
 				FD3D05D42D00A222009DF07C /* TopicGoal.swift in Sources */,
 				FD3D05CA2CFFAC8B009DF07C /* GoalsApp.swift in Sources */,
 				FD3D05D82D00A300009DF07C /* TopicHistory.swift in Sources */,

@@ -10,11 +10,11 @@ import Foundation
 /// Represents the goal associated with a topic.
 struct TopicGoal: Codable {
     /// The daily time goal in minutes.
-    var dailyTimeGoal: Int
+    var dailyTimeGoal: Double
     
     /// Initializes a new topic goal with the given daily time goal in minutes.
     /// - Parameter dailyTimeGoal: The daily time goal in minutes.
-    init(dailyTimeGoal: Int) {
+    init(dailyTimeGoal: Double) {
         self.dailyTimeGoal = dailyTimeGoal
     }
 }

@@ -23,6 +23,9 @@ struct TopicTests {
                 "goal": {
                     "dailyTimeGoal": 120
                 },
+                "timeSpend": {
+                    "dailyTimeSpend": 20
+                },
                 "reminders": [
                     {
                         "id": "3f65bfa4-8c5e-4d8e-9f88-76c56e8f3b42",
@@ -50,6 +53,9 @@ struct TopicTests {
                 "goal": {
                     "dailyTimeGoal": 90
                 },
+                "timeSpend": {
+                    "dailyTimeSpend": 50
+                },
                 "reminders": [
                     {
                         "id": "e1a7c9b9-5d4b-4f9a-bf3e-8e2a6b4d5f60",
@@ -71,6 +77,9 @@ struct TopicTests {
                 "description": "Practice Swift programming.",
                 "goal": {
                     "dailyTimeGoal": 150
+                },
+                "timeSpend": {
+                    "dailyTimeSpend": 70
                 },
                 "reminders": [
                     {
@@ -103,6 +112,8 @@ struct TopicTests {
                 ]
             }
         ]
+
+
         """.data(using: .utf8)!
 
         // JSONDecoder setup
