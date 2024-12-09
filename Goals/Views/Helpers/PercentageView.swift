@@ -23,15 +23,22 @@ struct PercentageView: View {
         return min(timeSpend / goal, 1.0)
     }
 
+    var trackRingColor: Color {
+        if topic.theme == .goldenyellow {
+            return .darkergray
+        }
+        return .neutralgray
+    }
+
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color.gray.opacity(0.3), lineWidth: 10)
+                .stroke(trackRingColor, lineWidth: 10)
                 .frame(width: 90, height: 90)
             
             Circle()
                 .trim(from: 0.0, to: CGFloat(progress))
-                .stroke(Color.blue, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                .stroke(.goldenyellow, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .frame(width: 90, height: 90)
             
@@ -43,5 +50,5 @@ struct PercentageView: View {
 
 #Preview {
     let topics = TopicManager().topics
-    PercentageView(topic: topics[0])
+    PercentageView(topic: topics[1])
 }

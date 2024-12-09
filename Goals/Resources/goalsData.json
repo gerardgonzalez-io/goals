@@ -27,7 +27,8 @@
                 "date": "2023-10-27T05:00:00Z",
                 "duration": 90
             }
-        ]
+        ],
+        "theme": "deepnavy"
     },
     {
         "id": "a3d7e05d-6c58-4f20-b7c6-1e9d45f8a96e",
@@ -52,7 +53,8 @@
                 "date": "2023-10-28T06:00:00Z",
                 "duration": 45
             }
-        ]
+        ],
+        "theme": "goldenyellow"
     },
     {
         "id": "d2f8a3b7-6c9d-4f0e-9b5c-3a1e2d7f6b8c",
@@ -92,7 +94,8 @@
                 "date": "2023-10-26T07:00:00Z",
                 "duration": 90
             }
-        ]
+        ],
+        "theme": "deepnavy"
     }
 ]
 

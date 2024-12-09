@@ -23,6 +23,8 @@ struct Topic: Identifiable, Codable {
     var reminders: [Reminder]
     /// The history of time spent on the topic.
     var history: [TopicHistory]
+    /// Theme of the row list of the topics.
+    var theme: Theme
 
     /// Initializes a new topic with the given parameters.
     /// - Parameters:
@@ -40,7 +42,8 @@ struct Topic: Identifiable, Codable {
         goal: TopicGoal,
         timeSpend: TimeSpend,
         reminders: [Reminder] = [],
-        history: [TopicHistory] = []
+        history: [TopicHistory] = [],
+        theme: Theme
     ) {
         self.id = id
         self.name = name
@@ -49,5 +52,6 @@ struct Topic: Identifiable, Codable {
         self.timeSpend = timeSpend
         self.reminders = reminders
         self.history = history
+        self.theme = theme
     }
 }

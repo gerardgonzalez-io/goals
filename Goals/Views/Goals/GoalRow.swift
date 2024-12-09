@@ -22,10 +22,13 @@ struct GoalRow: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(topic.name)
-                    .font(.headline)
+                    .font(.system(.headline, design: .default))
+                    .fontWeight(.bold)
                 Spacer()
                 Text("Daily goal")
-                Text(String("\(Int(dailyTimeSpend))/\(Int(dailyGoal))"))
+                    .font(.system(.body, design: .default))
+                Text(String("\(Int(dailyTimeSpend))/\(Int(dailyGoal))MIN"))
+                    .font(.system(.body, design: .default))
             }
 
             Spacer()
@@ -33,6 +36,7 @@ struct GoalRow: View {
             PercentageView(topic: topic)
         }
         .padding()
+        .foregroundStyle(topic.theme.accentColor)
  
     }
 }
@@ -40,5 +44,5 @@ struct GoalRow: View {
 #Preview {
     let topics = TopicManager().topics
     GoalRow(topic: topics[0])
-        .background(.yellow)
+        .background(.deepnavy)
 }

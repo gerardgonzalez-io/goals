@@ -3,6 +3,11 @@
 *.xcuserstate
 *.xccheckout
 *.xcscmblueprint
+*.xcdebugger
+*.xcuserdata
+
+# Ignore Xcode user-specific settings
+Goals.xcodeproj/xcuserdata/
 
 # Build products
 build/
