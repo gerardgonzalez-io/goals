@@ -19,17 +19,11 @@ struct GoalList: View {
                     GoalRow(topic: topic)
                 }
                 .listRowBackground(topic.theme.mainColor)
-                .foregroundStyle(getArrowColor(for: topic.theme.mainColor))
+                .foregroundStyle(
+                    topic.theme.mainColor == Color("goldenyellow") ? Color.black : Color.white
+                )
             }
             .navigationTitle("Topics")
-        }
-    }
-    
-    func getArrowColor(for backgroundColor: Color) -> Color {
-        if backgroundColor == Color("goldenyellow") {
-            return Color.black
-        } else {
-            return Color.white
         }
     }
 }
