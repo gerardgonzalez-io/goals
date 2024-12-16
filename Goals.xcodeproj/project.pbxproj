@@ -26,6 +26,9 @@
 		FD3D061C2D039499009DF07C /* PercentageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D061B2D039499009DF07C /* PercentageView.swift */; };
 		FD8E828C2D073BB200F8AFD0 /* TimeSpend.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E828B2D073BB200F8AFD0 /* TimeSpend.swift */; };
 		FD8E828E2D076BBA00F8AFD0 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E828D2D076BB900F8AFD0 /* Theme.swift */; };
+		FD8E82972D0B829D00F8AFD0 /* FocusSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E82962D0B829D00F8AFD0 /* FocusSessionView.swift */; };
+		FD8E82992D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E82982D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift */; };
+		FD8E829B2D0B952600F8AFD0 /* MinutesArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E829A2D0B952600F8AFD0 /* MinutesArc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +63,9 @@
 		FD3D061B2D039499009DF07C /* PercentageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentageView.swift; sourceTree = "<group>"; };
 		FD8E828B2D073BB200F8AFD0 /* TimeSpend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSpend.swift; sourceTree = "<group>"; };
 		FD8E828D2D076BB900F8AFD0 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		FD8E82962D0B829D00F8AFD0 /* FocusSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionView.swift; sourceTree = "<group>"; };
+		FD8E82982D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionTimerView.swift; sourceTree = "<group>"; };
+		FD8E829A2D0B952600F8AFD0 /* MinutesArc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinutesArc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,8 +143,9 @@
 		FD3D05CF2D009FD2009DF07C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FD3D061A2D03942F009DF07C /* Helpers */,
 				FD3D05F62D03739D009DF07C /* Goals */,
+				FD8E82912D0A523300F8AFD0 /* FocusSessions */,
+				FD3D061A2D03942F009DF07C /* Helpers */,
 				FD3D05C72CFFAC8B009DF07C /* ContentView.swift */,
 			);
 			path = Views;
@@ -177,6 +184,16 @@
 				FD3D061B2D039499009DF07C /* PercentageView.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		FD8E82912D0A523300F8AFD0 /* FocusSessions */ = {
+			isa = PBXGroup;
+			children = (
+				FD8E82962D0B829D00F8AFD0 /* FocusSessionView.swift */,
+				FD8E82982D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift */,
+				FD8E829A2D0B952600F8AFD0 /* MinutesArc.swift */,
+			);
+			path = FocusSessions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,7 +306,9 @@
 				FD3D05FC2D038BA8009DF07C /* GoalDetail.swift in Sources */,
 				FD3D05FA2D0373E8009DF07C /* GoalRow.swift in Sources */,
 				FD3D05F82D0373C7009DF07C /* GoalList.swift in Sources */,
+				FD8E82972D0B829D00F8AFD0 /* FocusSessionView.swift in Sources */,
 				FD3D061C2D039499009DF07C /* PercentageView.swift in Sources */,
+				FD8E82992D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift in Sources */,
 				FD3D05DA2D00AA12009DF07C /* FocusSession.swift in Sources */,
 				FD3D05D22D00A08D009DF07C /* Topic.swift in Sources */,
 				FD8E828C2D073BB200F8AFD0 /* TimeSpend.swift in Sources */,
@@ -297,6 +316,7 @@
 				FD3D05CA2CFFAC8B009DF07C /* GoalsApp.swift in Sources */,
 				FD3D05D82D00A300009DF07C /* TopicHistory.swift in Sources */,
 				FD3D05CB2CFFAC8B009DF07C /* ContentView.swift in Sources */,
+				FD8E829B2D0B952600F8AFD0 /* MinutesArc.swift in Sources */,
 				FD3D05D62D00A276009DF07C /* Reminder.swift in Sources */,
 				FD8E828E2D076BBA00F8AFD0 /* Theme.swift in Sources */,
 			);
