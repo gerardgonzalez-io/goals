@@ -14,13 +14,13 @@ struct TopicHistory: Identifiable, Codable {
     /// The date of the topic session.
     var date: Date
     /// The duration of the session in minutes.
-    var duration: Int
+    var durationInMinutes: Int
     
     /// Initializes a new topic history entry with the given date and duration.
     /// - Parameters:
     ///   - id: The unique identifier for the history entry.
     ///   - date: The date of the topic session.
-    ///   - duration: The duration of the session in minutes.
+    ///   - durationInMinutes: The duration of the session in minutes.
     init(
         id: UUID = UUID(),
         date: Date,
@@ -28,6 +28,6 @@ struct TopicHistory: Identifiable, Codable {
     ) {
         self.id = id
         self.date = date
-        self.duration = duration
+        self.durationInMinutes = duration
     }
 }

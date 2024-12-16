@@ -52,7 +52,7 @@ class TopicManager {
         let calendar = Calendar.current
         let weekStart = calendar.startOfDay(for: Date()).addingTimeInterval(-6 * 24 * 60 * 60)
         let weeklyHistory = topic.history.filter { $0.date >= weekStart }
-        let totalDuration = weeklyHistory.reduce(0) { $0 + $1.duration }
+        let totalDuration = weeklyHistory.reduce(0) { $0 + $1.durationInMinutes }
         return totalDuration
     }
     
@@ -66,8 +66,8 @@ class TopicManager {
         let dayStart = calendar.startOfDay(for: date)
         let dayEnd = calendar.date(byAdding: .day, value: 1, to: dayStart)!
         let dailyHistory = topic.history.filter { $0.date >= dayStart && $0.date < dayEnd }
-        let totalDuration = dailyHistory.reduce(0) { $0 + $1.duration }
-        return totalDuration >= topic.goal.dailyTimeGoal
+        let totalDuration = dailyHistory.reduce(0) { $0 + $1.durationInMinutes }
+        return Double(totalDuration) >= topic.goal.dailyMinutesGoal
     }
 }
 

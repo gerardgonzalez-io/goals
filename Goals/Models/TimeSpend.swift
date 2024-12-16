@@ -10,11 +10,11 @@ import Foundation
 /// Represents the time spend studying a topic.
 struct TimeSpend: Codable {
     /// The daily time spend in a topic in minutes.
-    var dailyTimeSpend: Double
+    var dailyMinutesSpend: Double
     
     /// Initializes a new time spend in minutes.
-    /// - Parameter dailyTimeSpend: The daily time spend in minutes.
-    init(dailyTimeSpend: Double) {
-        self.dailyTimeSpend = dailyTimeSpend
+    /// - Parameter dailyMinutesSpend: The daily time spend in minutes.
+    init(dailyMinutesSpend: Double) {
+        self.dailyMinutesSpend = dailyMinutesSpend
     }
 }

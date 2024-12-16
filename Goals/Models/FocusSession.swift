@@ -14,32 +14,60 @@ class FocusSession: ObservableObject {
     /// The topic associated with the focus session.
     @Published var topic: Topic
     /// The duration of the focus session in minutes.
-    @Published var duration: Int
-    /// The remaining time in the focus session, in seconds.
-    @Published var timeRemaining: Int
-    /// The number of seconds since the beginning of the focus session.
-    @Published var timeElapsed = 0
+    @Published var durationInMinutes: Int = 0
+    /// The number of seconds that have elapsed since the start of the session.
+    @Published var secondsElapsed: Int = 0
+    /// The number of seconds remaining in the session.
+    @Published var secondsRemaining: Int = 0
+    /// The time spent studying the topic.
+    @Published var timeSpend: TimeSpend
     /// Indicates whether the focus session is active.
     @Published var isActive: Bool = false
 
+    /// The date when the session started, used to calculate elapsed time.
+    private var startDate: Date?
+    /// A frequency for the timer updates, default once per second.
+    private var frequency: TimeInterval { 1.0 }
     private var timer: Timer?
-    
+    private var timerStopped = false
+
+    /// Convert the total duration from minutes to seconds.
+    private var durationInSeconds: Int {
+        durationInMinutes * 60
+    }
+
+    /// Compute the remaining minutes from the remaining seconds.
+    var minutesRemaining: Int {
+        secondsRemaining / 60
+    }
+
     /// Initializes a new focus session with the given topic and duration.
     /// - Parameters:
     ///   - topic: The topic to focus on.
-    ///   - duration: The duration of the session in minutes.
-    init(topic: Topic, duration: Int) {
+    init(topic: Topic, durationInMinutes: Int = 0, timeSpend: TimeSpend = TimeSpend(dailyMinutesSpend: 0)) {
         self.topic = topic
-        self.duration = duration
-        self.timeRemaining = duration * 60 // Convert minutes to seconds
+        self.durationInMinutes = durationInMinutes
+        self.timeSpend = timeSpend
     }
-    
+
     /// Starts the focus session timer.
     func start() {
         isActive = true
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            self?.tick()
+        timerStopped = false
+        // Record the start date.
+        startDate = Date()
+
+        // Initialize secondsElapsed and secondsRemaining.
+        secondsElapsed = 0
+        secondsRemaining = durationInSeconds // Set initial remaining time in seconds
+
+        // Schedule the timer to run at the given frequency.
+        timer = Timer.scheduledTimer(withTimeInterval: frequency, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.update()
+            }
         }
+        timer?.tolerance = 0.1
     }
     
     /// Stops the focus session timer.
@@ -47,14 +75,29 @@ class FocusSession: ObservableObject {
         isActive = false
         timer?.invalidate()
         timer = nil
+        timerStopped = true
     }
     
-    private func tick() {
-        if timeRemaining > 0 {
-            timeRemaining -= 1
-        } else {
+    /// Updates the elapsed and remaining time by comparing current time to the start date.
+    private func update() {
+        guard let startDate, !timerStopped else { return }
+
+        // Calculate how many seconds have passed since the start of the session.
+        let elapsed = Int(Date().timeIntervalSince1970 - startDate.timeIntervalSince1970)
+        secondsElapsed = elapsed
+        secondsRemaining = max(durationInSeconds - secondsElapsed, 0)
+
+        // If one full minute has passed, update the dailyMinutesSpend.
+        if secondsElapsed % 60 == 0 {
+            // Convert elapsed seconds to minutes
+            let minutesSpent = Double(secondsElapsed) / 60.0
+            // Update timeSpend with the new calculated minutes
+            timeSpend.dailyMinutesSpend = minutesSpent
+        }
+
+        // If no time remains, stop the session.
+        if secondsRemaining <= 0 {
             stop()
-            // You can add additional actions here when the timer finishes.
         }
     }
 }
