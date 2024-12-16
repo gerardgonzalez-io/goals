@@ -11,11 +11,11 @@ struct PercentageView: View {
     let topic: Topic
 
     var goal: Double {
-        topic.goal.dailyTimeGoal
+        topic.goal.dailyMinutesGoal
     }
 
     var timeSpend: Double {
-        topic.timeSpend.dailyTimeSpend
+        topic.timeSpend.dailyMinutesSpend
     }
 
     var progress: Double {

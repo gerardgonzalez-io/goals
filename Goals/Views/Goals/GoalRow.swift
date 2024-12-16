@@ -11,11 +11,11 @@ struct GoalRow: View {
     let topic: Topic
     
     var dailyGoal: Double {
-        topic.goal.dailyTimeGoal
+        topic.goal.dailyMinutesGoal
     }
 
     var dailyTimeSpend: Double {
-        topic.timeSpend.dailyTimeSpend
+        topic.timeSpend.dailyMinutesSpend
     }
 
     var body: some View {

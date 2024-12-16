@@ -14,7 +14,7 @@ struct GoalList: View {
         NavigationStack {
             List(topicManager.topics) { topic in
                 NavigationLink {
-                    GoalDetail()
+                    GoalDetail(topic: topic)
                 } label: {
                     GoalRow(topic: topic)
                 }

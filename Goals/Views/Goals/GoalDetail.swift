@@ -8,11 +8,48 @@
 import SwiftUI
 
 struct GoalDetail: View {
+    let topic: Topic
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section(header: Text("Focus session info")){
+                NavigationLink {
+                    
+                } label: {
+                    Label("Start focus session", systemImage: "timer")
+                        .font(.headline)
+                        .foregroundColor(.accentColor)
+                }
+                HStack {
+                    Label("Daily goal", systemImage: "clock")
+                    Spacer()
+                    Text(String("\(Int(topic.goal.dailyMinutesGoal)) minutes"))
+                }
+                HStack {
+                    Label("Time spend", systemImage: "hourglass")
+                    Spacer()
+                    Text(String("\(Int(topic.timeSpend.dailyMinutesSpend)) minutes"))
+                }
+            }
+            
+            Section(header: Text("History")) {
+                if topic.history.isEmpty {
+                    Label("No focus sessions yet", systemImage: "calendar.badge.exclamationmark")
+                }
+                ForEach(topic.history) { history in
+                    HStack {
+                        Image(systemName: "calendar")
+                        Text(history.date, style: .date)
+                    }
+                }
+            }
+        }
+        
+        .navigationTitle(topic.name)
     }
 }
 
 #Preview {
-    GoalDetail()
+    let topics = TopicManager().topics
+    GoalDetail(topic: topics[0])
 }
