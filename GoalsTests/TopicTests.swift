@@ -21,10 +21,10 @@ struct TopicTests {
                 "name": "Mathematics",
                 "description": "Study algebra and calculus.",
                 "goal": {
-                    "dailyTimeGoal": 120
+                    "dailyMinutesGoal": 120
                 },
                 "timeSpend": {
-                    "dailyTimeSpend": 20
+                    "dailyMinutesSpend": 20
                 },
                 "reminders": [
                     {
@@ -37,24 +37,25 @@ struct TopicTests {
                     {
                         "id": "8b65f5c7-d7a6-4e19-87aa-1c8c15e5479e",
                         "date": "2023-10-28T05:00:00Z",
-                        "duration": 60
+                        "durationInMinutes": 60
                     },
                     {
                         "id": "f5c31776-3b6d-4c7a-94c6-d3bb7e5268ba",
                         "date": "2023-10-27T05:00:00Z",
-                        "duration": 90
+                        "durationInMinutes": 90
                     }
-                ]
+                ],
+                "theme": "deepnavy"
             },
             {
                 "id": "a3d7e05d-6c58-4f20-b7c6-1e9d45f8a96e",
                 "name": "Physics",
                 "description": "Learn classical mechanics.",
                 "goal": {
-                    "dailyTimeGoal": 90
+                    "dailyMinutesGoal": 90
                 },
                 "timeSpend": {
-                    "dailyTimeSpend": 50
+                    "dailyMinutesSpend": 50
                 },
                 "reminders": [
                     {
@@ -67,19 +68,20 @@ struct TopicTests {
                     {
                         "id": "c8d9a2f3-8f0a-4d2b-b5b7-e9f3d2c7a1b6",
                         "date": "2023-10-28T06:00:00Z",
-                        "duration": 45
+                        "durationInMinutes": 45
                     }
-                ]
+                ],
+                "theme": "goldenyellow"
             },
             {
                 "id": "d2f8a3b7-6c9d-4f0e-9b5c-3a1e2d7f6b8c",
                 "name": "Programming",
                 "description": "Practice Swift programming.",
                 "goal": {
-                    "dailyTimeGoal": 150
+                    "dailyMinutesGoal": 150
                 },
                 "timeSpend": {
-                    "dailyTimeSpend": 70
+                    "dailyMinutesSpend": 70
                 },
                 "reminders": [
                     {
@@ -97,23 +99,22 @@ struct TopicTests {
                     {
                         "id": "7c6b5a4d-3e2f-1d0c-9b8a-7c6d5e4f3b2a",
                         "date": "2023-10-28T07:00:00Z",
-                        "duration": 120
+                        "durationInMinutes": 120
                     },
                     {
                         "id": "0f9e8d7c-6b5a-4c3d-2e1f-0a9b8c7d6e5f",
                         "date": "2023-10-27T07:00:00Z",
-                        "duration": 150
+                        "durationInMinutes": 150
                     },
                     {
                         "id": "5e4d3c2b-1a0f-9e8d-7c6b-5a4d3e2f1b0c",
                         "date": "2023-10-26T07:00:00Z",
-                        "duration": 90
+                        "durationInMinutes": 90
                     }
-                ]
+                ],
+                "theme": "deepnavy"
             }
         ]
-
-
         """.data(using: .utf8)!
 
         // JSONDecoder setup
@@ -126,10 +127,10 @@ struct TopicTests {
         // Assertions using `expect`
         #expect(topics.count == 3, "Expected 1 topic in the JSON.")
         #expect(topics[0].name == "Mathematics", "Topics name should match.")
-        #expect(topics[0].goal.dailyTimeGoal == 120, "Daily time goal should match.")
+        #expect(topics[0].goal.dailyMinutesGoal == 120, "Daily time goal should match.")
         #expect(topics[0].reminders.count == 1, "Expected 1 reminder.")
         #expect(topics[0].reminders[0].isEnabled, "Reminder should be enabled.")
-        #expect(topics[0].history[0].duration == 60, "History duration should match.")
+        #expect(topics[0].history[0].durationInMinutes == 60, "History duration should match.")
     }
 }
 
