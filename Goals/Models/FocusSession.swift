@@ -44,7 +44,7 @@ class FocusSession: ObservableObject {
     /// Initializes a new focus session with the given topic and duration.
     /// - Parameters:
     ///   - topic: The topic to focus on.
-    init(topic: Topic, durationInMinutes: Int = 0, timeSpend: TimeSpend = TimeSpend(dailyMinutesSpend: 0)) {
+    init(topic: Topic = Topic(), durationInMinutes: Int = 0, timeSpend: TimeSpend = TimeSpend(dailyMinutesSpend: 0)) {
         self.topic = topic
         self.durationInMinutes = durationInMinutes
         self.timeSpend = timeSpend
@@ -59,7 +59,7 @@ class FocusSession: ObservableObject {
 
         // Initialize secondsElapsed and secondsRemaining.
         secondsElapsed = 0
-        secondsRemaining = durationInSeconds // Set initial remaining time in seconds
+        //secondsRemaining = durationInSeconds // Set initial remaining time in seconds
 
         // Schedule the timer to run at the given frequency.
         timer = Timer.scheduledTimer(withTimeInterval: frequency, repeats: true) { [weak self] _ in
@@ -99,5 +99,18 @@ class FocusSession: ObservableObject {
         if secondsRemaining <= 0 {
             stop()
         }
+    }
+    
+    /**
+     Reset the timer with a new focus session.
+     
+     - Parameters:
+         - durationInMinutes: The meeting duration.
+         - topic: The topic of the focus session.
+     */
+    func reset(durationInMinutes: Int, topic: Topic) {
+        self.durationInMinutes = durationInMinutes
+        self.topic = topic
+        secondsRemaining = durationInSeconds
     }
 }

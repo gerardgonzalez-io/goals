@@ -14,7 +14,7 @@ struct GoalDetail: View {
         List {
             Section(header: Text("Focus session info")){
                 NavigationLink {
-                    
+                    FocusSessionView(topic: topic)
                 } label: {
                     Label("Start focus session", systemImage: "timer")
                         .font(.headline)
@@ -44,7 +44,6 @@ struct GoalDetail: View {
                 }
             }
         }
-        
         .navigationTitle(topic.name)
     }
 }

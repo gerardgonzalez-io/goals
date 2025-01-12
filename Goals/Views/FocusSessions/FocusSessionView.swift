@@ -8,11 +8,33 @@
 import SwiftUI
 
 struct FocusSessionView: View {
+    let topic: Topic
+    @StateObject var focusSession = FocusSession()
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            RoundedRectangle(cornerRadius: 16.0)
+                .fill(topic.theme.mainColor)
+            VStack {
+                FocusSessionHeaderView(secondsElapsed: focusSession.secondsElapsed, secondsRemaining: focusSession.secondsRemaining, theme: topic.theme)
+                FocusSessionTimerView(focusSession: focusSession, theme: topic.theme)
+            }
+        }
+        .padding()
+        .foregroundColor(topic.theme.accentColor)
+        .onAppear {
+            startFocusSession()
+        }
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func startFocusSession() {
+        focusSession.reset(durationInMinutes: Int(topic.goal.dailyMinutesGoal), topic: topic)
+        focusSession.start()
     }
 }
 
 #Preview {
-    FocusSessionView()
+    let topics = TopicManager().topics
+    FocusSessionView(topic: topics[0])
 }

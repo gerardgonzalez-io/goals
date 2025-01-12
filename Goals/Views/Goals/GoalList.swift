@@ -11,6 +11,8 @@ struct GoalList: View {
     @Environment(TopicManager.self) var topicManager
 
     var body: some View {
+        @Bindable var topicManager = topicManager
+
         NavigationStack {
             List(topicManager.topics) { topic in
                 NavigationLink {

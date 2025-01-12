@@ -29,6 +29,9 @@
 		FD8E82972D0B829D00F8AFD0 /* FocusSessionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E82962D0B829D00F8AFD0 /* FocusSessionView.swift */; };
 		FD8E82992D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E82982D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift */; };
 		FD8E829B2D0B952600F8AFD0 /* MinutesArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E829A2D0B952600F8AFD0 /* MinutesArc.swift */; };
+		FDAF6A092D13608800C90176 /* FocusSessionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A082D13608800C90176 /* FocusSessionHeaderView.swift */; };
+		FDAF6A0C2D13617900C90176 /* GoalsProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A0B2D13617900C90176 /* GoalsProgressViewStyle.swift */; };
+		FDAF6A0F2D1364DF00C90176 /* TrailingIconLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A0E2D1364DF00C90176 /* TrailingIconLabelStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,9 @@
 		FD8E82962D0B829D00F8AFD0 /* FocusSessionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionView.swift; sourceTree = "<group>"; };
 		FD8E82982D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionTimerView.swift; sourceTree = "<group>"; };
 		FD8E829A2D0B952600F8AFD0 /* MinutesArc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinutesArc.swift; sourceTree = "<group>"; };
+		FDAF6A082D13608800C90176 /* FocusSessionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionHeaderView.swift; sourceTree = "<group>"; };
+		FDAF6A0B2D13617900C90176 /* GoalsProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsProgressViewStyle.swift; sourceTree = "<group>"; };
+		FDAF6A0E2D1364DF00C90176 /* TrailingIconLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingIconLabelStyle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +149,7 @@
 		FD3D05CF2D009FD2009DF07C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FDAF6A0D2D13648500C90176 /* Styles */,
 				FD3D05F62D03739D009DF07C /* Goals */,
 				FD8E82912D0A523300F8AFD0 /* FocusSessions */,
 				FD3D061A2D03942F009DF07C /* Helpers */,
@@ -191,9 +198,19 @@
 			children = (
 				FD8E82962D0B829D00F8AFD0 /* FocusSessionView.swift */,
 				FD8E82982D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift */,
+				FDAF6A082D13608800C90176 /* FocusSessionHeaderView.swift */,
 				FD8E829A2D0B952600F8AFD0 /* MinutesArc.swift */,
 			);
 			path = FocusSessions;
+			sourceTree = "<group>";
+		};
+		FDAF6A0D2D13648500C90176 /* Styles */ = {
+			isa = PBXGroup;
+			children = (
+				FDAF6A0B2D13617900C90176 /* GoalsProgressViewStyle.swift */,
+				FDAF6A0E2D1364DF00C90176 /* TrailingIconLabelStyle.swift */,
+			);
+			path = Styles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,6 +321,8 @@
 			files = (
 				FD3D05DC2D00AA30009DF07C /* TopicManager.swift in Sources */,
 				FD3D05FC2D038BA8009DF07C /* GoalDetail.swift in Sources */,
+				FDAF6A0C2D13617900C90176 /* GoalsProgressViewStyle.swift in Sources */,
+				FDAF6A0F2D1364DF00C90176 /* TrailingIconLabelStyle.swift in Sources */,
 				FD3D05FA2D0373E8009DF07C /* GoalRow.swift in Sources */,
 				FD3D05F82D0373C7009DF07C /* GoalList.swift in Sources */,
 				FD8E82972D0B829D00F8AFD0 /* FocusSessionView.swift in Sources */,
@@ -317,6 +336,7 @@
 				FD3D05D82D00A300009DF07C /* TopicHistory.swift in Sources */,
 				FD3D05CB2CFFAC8B009DF07C /* ContentView.swift in Sources */,
 				FD8E829B2D0B952600F8AFD0 /* MinutesArc.swift in Sources */,
+				FDAF6A092D13608800C90176 /* FocusSessionHeaderView.swift in Sources */,
 				FD3D05D62D00A276009DF07C /* Reminder.swift in Sources */,
 				FD8E828E2D076BBA00F8AFD0 /* Theme.swift in Sources */,
 			);

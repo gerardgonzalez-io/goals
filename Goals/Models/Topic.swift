@@ -37,13 +37,13 @@ struct Topic: Identifiable, Codable {
     ///   - history: The history of time spent on the topic.
     init(
         id: UUID = UUID(),
-        name: String,
+        name: String = "",
         description: String? = nil,
-        goal: TopicGoal,
-        timeSpend: TimeSpend,
+        goal: TopicGoal = TopicGoal(dailyMinutesGoal: 0),
+        timeSpend: TimeSpend = TimeSpend(dailyMinutesSpend: 0),
         reminders: [Reminder] = [],
         history: [TopicHistory] = [],
-        theme: Theme
+        theme: Theme = .kingblue
     ) {
         self.id = id
         self.name = name

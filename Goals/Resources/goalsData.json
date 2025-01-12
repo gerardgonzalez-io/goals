@@ -4,7 +4,7 @@
         "name": "Mathematics",
         "description": "Study algebra and calculus.",
         "goal": {
-            "dailyMinutesGoal": 120
+            "dailyMinutesGoal": 60
         },
         "timeSpend": {
             "dailyMinutesSpend": 20
@@ -61,7 +61,7 @@
         "name": "Programming",
         "description": "Practice Swift programming.",
         "goal": {
-            "dailyMinutesGoal": 150
+            "dailyMinutesGoal": 120
         },
         "timeSpend": {
             "dailyMinutesSpend": 70
