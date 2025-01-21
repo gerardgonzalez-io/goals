@@ -25,8 +25,8 @@ struct PercentageView: View {
 
     var trackRingColor: Color {
         switch topic.theme {
-        case .bubblegum, .buttercup, .lavender, .orange, .periwinkle, .poppy, .seafoam, .sky, .tan, .teal, .yellow, .goldenyellow: return .darkergray
-        case .indigo, .magenta, .navy, .oxblood, .purple, .kingblue, .deepnavy : return .neutralgray
+        case .bubblegum, .buttercup, .lavender, .customOrange, .periwinkle, .poppy, .seafoam, .sky, .tan, .customTeal, .customYellow, .goldenYellow: return .darkergray
+        case .customIndigo, .customMagenta, .navy, .oxblood, .customPurple, .kingblue, .deepNavy : return .neutralgray
         }
     }
 
@@ -38,7 +38,7 @@ struct PercentageView: View {
             
             Circle()
                 .trim(from: 0.0, to: CGFloat(progress))
-                .stroke(.goldenyellow, style: StrokeStyle(lineWidth: 5, lineCap: .round))
+                .stroke(.goldenYellow, style: StrokeStyle(lineWidth: 5, lineCap: .round))
                 .rotationEffect(.degrees(-90))
                 .frame(width: 90, height: 90)
             
@@ -49,6 +49,6 @@ struct PercentageView: View {
 }
 
 #Preview {
-    let topics = TopicManager().topics
+    let topics = TopicStore().topics
     PercentageView(topic: topics[1])
 }

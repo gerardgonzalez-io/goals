@@ -32,5 +32,5 @@ struct GoalsProgressViewStyle: ProgressViewStyle {
 
 #Preview {
     ProgressView(value: 0.5)
-        .progressViewStyle(GoalsProgressViewStyle(theme: .goldenyellow))
+        .progressViewStyle(GoalsProgressViewStyle(theme: .goldenYellow))
 }

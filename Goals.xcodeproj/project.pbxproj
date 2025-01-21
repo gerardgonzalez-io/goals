@@ -35,6 +35,10 @@
 		FDAF6A4E2D3FF3F700C90176 /* DetailEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A4D2D3FF3F700C90176 /* DetailEditView.swift */; };
 		FDAF6A502D3FF6BC00C90176 /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A4F2D3FF6BC00C90176 /* ThemePicker.swift */; };
 		FDAF6A522D3FF70400C90176 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A512D3FF70400C90176 /* ThemeView.swift */; };
+		FDAF6A542D40213700C90176 /* TopicStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A532D40213700C90176 /* TopicStore.swift */; };
+		FDAF6A562D40243200C90176 /* ErrorWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A552D40243200C90176 /* ErrorWrapper.swift */; };
+		FDAF6A582D402B1100C90176 /* NewTopicSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A572D402B1100C90176 /* NewTopicSheet.swift */; };
+		FDAF6A5A2D402DF600C90176 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A592D402DF600C90176 /* ErrorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +82,10 @@
 		FDAF6A4D2D3FF3F700C90176 /* DetailEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailEditView.swift; sourceTree = "<group>"; };
 		FDAF6A4F2D3FF6BC00C90176 /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
 		FDAF6A512D3FF70400C90176 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
+		FDAF6A532D40213700C90176 /* TopicStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicStore.swift; sourceTree = "<group>"; };
+		FDAF6A552D40243200C90176 /* ErrorWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorWrapper.swift; sourceTree = "<group>"; };
+		FDAF6A572D402B1100C90176 /* NewTopicSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicSheet.swift; sourceTree = "<group>"; };
+		FDAF6A592D402DF600C90176 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +156,8 @@
 				FD3D05D92D00AA12009DF07C /* FocusSession.swift */,
 				FD3D05DB2D00AA30009DF07C /* TopicManager.swift */,
 				FD8E828D2D076BB900F8AFD0 /* Theme.swift */,
+				FDAF6A532D40213700C90176 /* TopicStore.swift */,
+				FDAF6A552D40243200C90176 /* ErrorWrapper.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -160,6 +170,7 @@
 				FD8E82912D0A523300F8AFD0 /* FocusSessions */,
 				FD3D061A2D03942F009DF07C /* Helpers */,
 				FD3D05C72CFFAC8B009DF07C /* ContentView.swift */,
+				FDAF6A592D402DF600C90176 /* ErrorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -188,6 +199,7 @@
 				FD3D05F92D0373E8009DF07C /* GoalRow.swift */,
 				FD3D05FB2D038BA8009DF07C /* GoalDetail.swift */,
 				FDAF6A4D2D3FF3F700C90176 /* DetailEditView.swift */,
+				FDAF6A572D402B1100C90176 /* NewTopicSheet.swift */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -335,14 +347,18 @@
 				FDAF6A0C2D13617900C90176 /* GoalsProgressViewStyle.swift in Sources */,
 				FDAF6A0F2D1364DF00C90176 /* TrailingIconLabelStyle.swift in Sources */,
 				FD3D05FA2D0373E8009DF07C /* GoalRow.swift in Sources */,
+				FDAF6A5A2D402DF600C90176 /* ErrorView.swift in Sources */,
 				FD3D05F82D0373C7009DF07C /* GoalList.swift in Sources */,
 				FD8E82972D0B829D00F8AFD0 /* FocusSessionView.swift in Sources */,
 				FD3D061C2D039499009DF07C /* PercentageView.swift in Sources */,
 				FD8E82992D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift in Sources */,
 				FD3D05DA2D00AA12009DF07C /* FocusSession.swift in Sources */,
+				FDAF6A582D402B1100C90176 /* NewTopicSheet.swift in Sources */,
 				FDAF6A502D3FF6BC00C90176 /* ThemePicker.swift in Sources */,
+				FDAF6A562D40243200C90176 /* ErrorWrapper.swift in Sources */,
 				FD3D05D22D00A08D009DF07C /* Topic.swift in Sources */,
 				FD8E828C2D073BB200F8AFD0 /* TimeSpend.swift in Sources */,
+				FDAF6A542D40213700C90176 /* TopicStore.swift in Sources */,
 				FD3D05D42D00A222009DF07C /* TopicGoal.swift in Sources */,
 				FD3D05CA2CFFAC8B009DF07C /* GoalsApp.swift in Sources */,
 				FD3D05D82D00A300009DF07C /* TopicHistory.swift in Sources */,

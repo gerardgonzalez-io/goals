@@ -11,28 +11,28 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
 
     case bubblegum
     case buttercup
-    case indigo
+    case customIndigo
     case lavender
-    case magenta
+    case customMagenta
     case navy
-    case orange
+    case customOrange
     case oxblood
     case periwinkle
     case poppy
-    case purple
+    case customPurple
     case seafoam
     case sky
     case tan
-    case teal
-    case yellow
+    case customTeal
+    case customYellow
     case kingblue
-    case goldenyellow
-    case deepnavy
+    case goldenYellow
+    case deepNavy
     
     var accentColor: Color {
         switch self {
-        case .bubblegum, .buttercup, .lavender, .orange, .periwinkle, .poppy, .seafoam, .sky, .tan, .teal, .yellow, .goldenyellow: return .black
-        case .indigo, .magenta, .navy, .oxblood, .purple, .kingblue, .deepnavy : return .white
+        case .bubblegum, .buttercup, .lavender, .customOrange, .periwinkle, .poppy, .seafoam, .sky, .tan, .customTeal, .customYellow, .goldenYellow: return .black
+        case .customIndigo, .customMagenta, .navy, .oxblood, .customPurple, .kingblue, .deepNavy : return .white
         }
     }
     var mainColor: Color {

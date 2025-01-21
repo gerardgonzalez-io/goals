@@ -91,7 +91,7 @@ struct GoalDetail: View {
         name: "Programming",
         goal: topicGoal,
         timeSpend: timeSpend,
-        theme: .goldenyellow
+        theme: .goldenYellow
     )
     GoalDetail(topic: .constant(topic))
 }

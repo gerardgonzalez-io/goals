@@ -54,7 +54,7 @@ struct FocusSessionView: View {
         name: "Programming",
         goal: topicGoal,
         timeSpend: timeSpend,
-        theme: .goldenyellow
+        theme: .goldenYellow
     )
     FocusSessionView(topic: .constant(topic))
 }

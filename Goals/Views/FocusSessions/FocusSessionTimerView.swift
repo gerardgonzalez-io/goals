@@ -42,9 +42,9 @@ struct FocusSessionTimerView: View {
         name: "Programming",
         goal: topicGoal,
         timeSpend: timeSpend,
-        theme: .goldenyellow
+        theme: .goldenYellow
     )
     
     let focusSession = FocusSession(topic: topic, durationInMinutes: 60, timeSpend: timeSpend)
-    FocusSessionTimerView(focusSession: focusSession, theme: .goldenyellow, topic: topic)
+    FocusSessionTimerView(focusSession: focusSession, theme: .goldenYellow, topic: topic)
 }

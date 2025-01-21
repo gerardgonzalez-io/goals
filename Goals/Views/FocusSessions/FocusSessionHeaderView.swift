@@ -48,5 +48,5 @@ struct FocusSessionHeaderView: View {
 }
 
 #Preview {
-    FocusSessionHeaderView(secondsElapsed: 60, secondsRemaining: 80, theme: .goldenyellow)
+    FocusSessionHeaderView(secondsElapsed: 60, secondsRemaining: 80, theme: .goldenYellow)
 }

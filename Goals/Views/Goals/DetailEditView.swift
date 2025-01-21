@@ -34,7 +34,7 @@ struct DetailEditView: View {
         name: "Programming",
         goal: topicGoal,
         timeSpend: timeSpend,
-        theme: .goldenyellow
+        theme: .goldenYellow
     )
     DetailEditView(topic: .constant(topic))
 }

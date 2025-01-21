@@ -9,12 +9,10 @@ import SwiftUI
 
 @main
 struct GoalsApp: App {
-    @State private var topicManager = TopicManager()
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(topicManager)
         }
     }
 }

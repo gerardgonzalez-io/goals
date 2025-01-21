@@ -65,8 +65,31 @@ extension Topic {
             name: "",
             goal: topicGoal,
             timeSpend: timeSpend,
-            theme: .goldenyellow
+            theme: .goldenYellow
         )
         return topic
     }
+}
+
+extension Topic {
+    static let sampleData = [
+        Topic(
+            name: "Programming",
+            goal: TopicGoal(dailyMinutesGoal: 60),
+            timeSpend: TimeSpend(dailyMinutesSpend: 10),
+            theme: .goldenYellow
+        ),
+        Topic(
+            name: "C Language",
+            goal: TopicGoal(dailyMinutesGoal: 60),
+            timeSpend: TimeSpend(dailyMinutesSpend: 40),
+            theme: .goldenYellow
+        ),
+        Topic(
+            name: "Japanese",
+            goal: TopicGoal(dailyMinutesGoal: 60),
+            timeSpend: TimeSpend(dailyMinutesSpend: 57),
+            theme: .goldenYellow
+        )
+    ]
 }

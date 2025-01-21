@@ -21,5 +21,5 @@ struct ThemeView: View {
 }
 
 #Preview {
-    ThemeView(theme: .goldenyellow)
+    ThemeView(theme: .goldenYellow)
 }

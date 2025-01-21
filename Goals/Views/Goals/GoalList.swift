@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct GoalList: View {
-    @Environment(TopicManager.self) var topicManager
-
+    @Environment(TopicStore.self) var topicStore
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var isPresentingNewTopicView = false
+    let saveAction: ()->Void
+    
     var body: some View {
-        @Bindable var topicManager = topicManager
+        @Bindable var topicStore = topicStore
 
         NavigationStack {
-            List($topicManager.topics) { $topic in
+            List($topicStore.topics) { $topic in
                 NavigationLink {
                     GoalDetail(topic: $topic)
                 } label: {
@@ -27,11 +30,24 @@ struct GoalList: View {
                 )
             }
             .navigationTitle("Topics")
+            .toolbar {
+                Button(action: {
+                    isPresentingNewTopicView = true
+                }) {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $isPresentingNewTopicView) {
+            NewTopicSheet(topics: $topicStore.topics, isPresentingNewTopicView: $isPresentingNewTopicView)
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .inactive { saveAction() }
         }
     }
 }
 
 #Preview {
-    GoalList()
-        .environment(TopicManager())
+    GoalList(saveAction: {})
+        .environment(TopicStore())
 }

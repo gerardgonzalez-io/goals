@@ -42,7 +42,7 @@ struct GoalRow: View {
 }
 
 #Preview {
-    let topics = TopicManager().topics
+    let topics = TopicStore().topics
     GoalRow(topic: topics[0])
-        .background(.deepnavy)
+        .background(.deepNavy)
 }
