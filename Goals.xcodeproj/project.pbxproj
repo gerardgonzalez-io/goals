@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FD3D05CA2CFFAC8B009DF07C /* GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D05C82CFFAC8B009DF07C /* GoalsApp.swift */; };
-		FD3D05CB2CFFAC8B009DF07C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D05C72CFFAC8B009DF07C /* ContentView.swift */; };
 		FD3D05CC2CFFAC8B009DF07C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD3D05C62CFFAC8B009DF07C /* Assets.xcassets */; };
 		FD3D05CD2CFFAC8B009DF07C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FD3D05C42CFFAC8B009DF07C /* Preview Assets.xcassets */; };
 		FD3D05D22D00A08D009DF07C /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD3D05D12D00A08D009DF07C /* Topic.swift */; };
@@ -55,7 +54,6 @@
 		FD3D05962CFF8DC6009DF07C /* Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goals.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD3D05C42CFFAC8B009DF07C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FD3D05C62CFFAC8B009DF07C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FD3D05C72CFFAC8B009DF07C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FD3D05C82CFFAC8B009DF07C /* GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsApp.swift; sourceTree = "<group>"; };
 		FD3D05D12D00A08D009DF07C /* Topic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		FD3D05D32D00A222009DF07C /* TopicGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicGoal.swift; sourceTree = "<group>"; };
@@ -169,7 +167,6 @@
 				FD3D05F62D03739D009DF07C /* Goals */,
 				FD8E82912D0A523300F8AFD0 /* FocusSessions */,
 				FD3D061A2D03942F009DF07C /* Helpers */,
-				FD3D05C72CFFAC8B009DF07C /* ContentView.swift */,
 				FDAF6A592D402DF600C90176 /* ErrorView.swift */,
 			);
 			path = Views;
@@ -362,7 +359,6 @@
 				FD3D05D42D00A222009DF07C /* TopicGoal.swift in Sources */,
 				FD3D05CA2CFFAC8B009DF07C /* GoalsApp.swift in Sources */,
 				FD3D05D82D00A300009DF07C /* TopicHistory.swift in Sources */,
-				FD3D05CB2CFFAC8B009DF07C /* ContentView.swift in Sources */,
 				FD8E829B2D0B952600F8AFD0 /* MinutesArc.swift in Sources */,
 				FDAF6A092D13608800C90176 /* FocusSessionHeaderView.swift in Sources */,
 				FD3D05D62D00A276009DF07C /* Reminder.swift in Sources */,
@@ -525,6 +521,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -554,6 +551,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

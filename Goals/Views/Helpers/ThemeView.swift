@@ -11,7 +11,7 @@ struct ThemeView: View {
     let theme: Theme
     
     var body: some View {
-        Text(theme.name)
+        Text(theme.displayName)
             .padding(4)
             .frame(maxWidth: .infinity)
             .background(theme.mainColor)
@@ -21,5 +21,5 @@ struct ThemeView: View {
 }
 
 #Preview {
-    ThemeView(theme: .goldenYellow)
+    ThemeView(theme: .deepNavy)
 }

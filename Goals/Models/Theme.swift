@@ -41,6 +41,22 @@ enum Theme: String, CaseIterable, Identifiable, Codable {
     var name: String {
         rawValue.capitalized
     }
+    var displayName: String {
+        // Define custom name replacements
+        let replacements: [String: String] = [
+            "customOrange": "Orange",
+            "customIndigo": "Indigo",
+            "customMagenta": "Magenta",
+            "customPurple": "Purple",
+            "customTeal": "Teal",
+            "customYellow": "Yellow",
+            "deepNavy": "Deep Navy",
+            "goldenYellow": "Golden Yellow"
+        ]
+
+        // Return the custom display name if a replacement exists; otherwise, use the default name
+        return replacements[rawValue] ?? name
+    }
     var id: String {
         name
     }
