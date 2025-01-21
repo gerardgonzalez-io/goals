@@ -24,10 +24,10 @@ struct PercentageView: View {
     }
 
     var trackRingColor: Color {
-        if topic.theme == .goldenyellow {
-            return .darkergray
+        switch topic.theme {
+        case .bubblegum, .buttercup, .lavender, .orange, .periwinkle, .poppy, .seafoam, .sky, .tan, .teal, .yellow, .goldenyellow: return .darkergray
+        case .indigo, .magenta, .navy, .oxblood, .purple, .kingblue, .deepnavy : return .neutralgray
         }
-        return .neutralgray
     }
 
     var body: some View {

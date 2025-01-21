@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GoalDetail: View {
     @Binding var topic: Topic
+    @State private var editingTopic = Topic.emptyTopic
+    @State private var isPresentingEditView = false
 
     var body: some View {
         List {
@@ -30,6 +32,15 @@ struct GoalDetail: View {
                     Spacer()
                     Text(String("\(Int(topic.timeSpend.dailyMinutesSpend)) minutes"))
                 }
+                HStack {
+                    Label("Theme", systemImage: "paintpalette")
+                    Spacer()
+                    Text(topic.theme.name)
+                        .padding(4)
+                        .foregroundColor(topic.theme.accentColor)
+                        .background(topic.theme.mainColor)
+                        .cornerRadius(4)
+                }
             }
             
             Section(header: Text("History")) {
@@ -45,6 +56,31 @@ struct GoalDetail: View {
             }
         }
         .navigationTitle(topic.name)
+        .toolbar {
+            Button("Edit") {
+                isPresentingEditView = true
+                editingTopic = topic
+            }
+        }
+        .sheet(isPresented: $isPresentingEditView) {
+            NavigationStack {
+                DetailEditView(topic: $editingTopic)
+                    .navigationTitle(topic.name)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Cancel") {
+                                isPresentingEditView = false
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") {
+                                isPresentingEditView = false
+                                topic = editingTopic
+                            }
+                        }
+                    }
+            }
+        }
     }
 }
 

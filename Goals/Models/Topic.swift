@@ -55,3 +55,18 @@ struct Topic: Identifiable, Codable {
         self.theme = theme
     }
 }
+
+extension Topic {
+    static var emptyTopic: Topic {
+        let timeSpend = TimeSpend(dailyMinutesSpend: 0)
+        let topicGoal = TopicGoal(dailyMinutesGoal: 0)
+
+        let topic = Topic(
+            name: "",
+            goal: topicGoal,
+            timeSpend: timeSpend,
+            theme: .goldenyellow
+        )
+        return topic
+    }
+}

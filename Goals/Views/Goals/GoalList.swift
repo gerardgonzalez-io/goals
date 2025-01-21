@@ -22,7 +22,8 @@ struct GoalList: View {
                 }
                 .listRowBackground(topic.theme.mainColor)
                 .foregroundStyle(
-                    topic.theme.mainColor == Color("goldenyellow") ? Color.black : Color.white
+                    // Color of this symbol " > "
+                    topic.theme.accentColor
                 )
             }
             .navigationTitle("Topics")

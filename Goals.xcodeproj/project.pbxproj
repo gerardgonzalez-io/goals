@@ -32,6 +32,9 @@
 		FDAF6A092D13608800C90176 /* FocusSessionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A082D13608800C90176 /* FocusSessionHeaderView.swift */; };
 		FDAF6A0C2D13617900C90176 /* GoalsProgressViewStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A0B2D13617900C90176 /* GoalsProgressViewStyle.swift */; };
 		FDAF6A0F2D1364DF00C90176 /* TrailingIconLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A0E2D1364DF00C90176 /* TrailingIconLabelStyle.swift */; };
+		FDAF6A4E2D3FF3F700C90176 /* DetailEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A4D2D3FF3F700C90176 /* DetailEditView.swift */; };
+		FDAF6A502D3FF6BC00C90176 /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A4F2D3FF6BC00C90176 /* ThemePicker.swift */; };
+		FDAF6A522D3FF70400C90176 /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAF6A512D3FF70400C90176 /* ThemeView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +75,9 @@
 		FDAF6A082D13608800C90176 /* FocusSessionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusSessionHeaderView.swift; sourceTree = "<group>"; };
 		FDAF6A0B2D13617900C90176 /* GoalsProgressViewStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsProgressViewStyle.swift; sourceTree = "<group>"; };
 		FDAF6A0E2D1364DF00C90176 /* TrailingIconLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingIconLabelStyle.swift; sourceTree = "<group>"; };
+		FDAF6A4D2D3FF3F700C90176 /* DetailEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailEditView.swift; sourceTree = "<group>"; };
+		FDAF6A4F2D3FF6BC00C90176 /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
+		FDAF6A512D3FF70400C90176 /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +187,7 @@
 				FD3D05F72D0373C7009DF07C /* GoalList.swift */,
 				FD3D05F92D0373E8009DF07C /* GoalRow.swift */,
 				FD3D05FB2D038BA8009DF07C /* GoalDetail.swift */,
+				FDAF6A4D2D3FF3F700C90176 /* DetailEditView.swift */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -189,6 +196,8 @@
 			isa = PBXGroup;
 			children = (
 				FD3D061B2D039499009DF07C /* PercentageView.swift */,
+				FDAF6A4F2D3FF6BC00C90176 /* ThemePicker.swift */,
+				FDAF6A512D3FF70400C90176 /* ThemeView.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -321,6 +330,8 @@
 			files = (
 				FD3D05DC2D00AA30009DF07C /* TopicManager.swift in Sources */,
 				FD3D05FC2D038BA8009DF07C /* GoalDetail.swift in Sources */,
+				FDAF6A522D3FF70400C90176 /* ThemeView.swift in Sources */,
+				FDAF6A4E2D3FF3F700C90176 /* DetailEditView.swift in Sources */,
 				FDAF6A0C2D13617900C90176 /* GoalsProgressViewStyle.swift in Sources */,
 				FDAF6A0F2D1364DF00C90176 /* TrailingIconLabelStyle.swift in Sources */,
 				FD3D05FA2D0373E8009DF07C /* GoalRow.swift in Sources */,
@@ -329,6 +340,7 @@
 				FD3D061C2D039499009DF07C /* PercentageView.swift in Sources */,
 				FD8E82992D0B8BEA00F8AFD0 /* FocusSessionTimerView.swift in Sources */,
 				FD3D05DA2D00AA12009DF07C /* FocusSession.swift in Sources */,
+				FDAF6A502D3FF6BC00C90176 /* ThemePicker.swift in Sources */,
 				FD3D05D22D00A08D009DF07C /* Topic.swift in Sources */,
 				FD8E828C2D073BB200F8AFD0 /* TimeSpend.swift in Sources */,
 				FD3D05D42D00A222009DF07C /* TopicGoal.swift in Sources */,
