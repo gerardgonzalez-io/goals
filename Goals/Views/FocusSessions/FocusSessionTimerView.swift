@@ -11,13 +11,14 @@ struct FocusSessionTimerView: View {
 
     let focusSession: FocusSession
     let theme: Theme
+    let topic: Topic
 
     var body: some View {
         Circle()
             .strokeBorder(lineWidth: 24)
             .overlay {
                 VStack {
-                    Text("Programming")
+                    Text(topic.name)
                         .font(.title)
                     Text("Focus session")
                 }
@@ -45,5 +46,5 @@ struct FocusSessionTimerView: View {
     )
     
     let focusSession = FocusSession(topic: topic, durationInMinutes: 60, timeSpend: timeSpend)
-    FocusSessionTimerView(focusSession: focusSession, theme: .goldenyellow)
+    FocusSessionTimerView(focusSession: focusSession, theme: .goldenyellow, topic: topic)
 }

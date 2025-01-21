@@ -14,9 +14,9 @@ struct GoalList: View {
         @Bindable var topicManager = topicManager
 
         NavigationStack {
-            List(topicManager.topics) { topic in
+            List($topicManager.topics) { $topic in
                 NavigationLink {
-                    GoalDetail(topic: topic)
+                    GoalDetail(topic: $topic)
                 } label: {
                     GoalRow(topic: topic)
                 }

@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct GoalDetail: View {
-    let topic: Topic
+    @Binding var topic: Topic
 
     var body: some View {
         List {
             Section(header: Text("Focus session info")){
                 NavigationLink {
-                    FocusSessionView(topic: topic)
+                    FocusSessionView(topic: $topic)
                 } label: {
                     Label("Start focus session", systemImage: "timer")
                         .font(.headline)
@@ -49,6 +49,13 @@ struct GoalDetail: View {
 }
 
 #Preview {
-    let topics = TopicManager().topics
-    GoalDetail(topic: topics[0])
+    let timeSpend = TimeSpend(dailyMinutesSpend: 23)
+    let topicGoal = TopicGoal(dailyMinutesGoal: 60)
+    let topic = Topic(
+        name: "Programming",
+        goal: topicGoal,
+        timeSpend: timeSpend,
+        theme: .goldenyellow
+    )
+    GoalDetail(topic: .constant(topic))
 }
