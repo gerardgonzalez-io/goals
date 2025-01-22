@@ -25,6 +25,8 @@ struct Topic: Identifiable, Codable {
     var history: [TopicHistory]
     /// Theme of the row list of the topics.
     var theme: Theme
+    /// Track when we last "reset" or used the daily goal time.
+    var lastDailyReset: Date
 
     /// Initializes a new topic with the given parameters.
     /// - Parameters:
@@ -43,7 +45,8 @@ struct Topic: Identifiable, Codable {
         timeSpend: TimeSpend = TimeSpend(dailyMinutesSpend: 0),
         reminders: [Reminder] = [],
         history: [TopicHistory] = [],
-        theme: Theme = .kingblue
+        theme: Theme = .kingblue,
+        lastDailyReset: Date = Date()
     ) {
         self.id = id
         self.name = name
@@ -53,6 +56,7 @@ struct Topic: Identifiable, Codable {
         self.reminders = reminders
         self.history = history
         self.theme = theme
+        self.lastDailyReset = lastDailyReset
     }
 }
 

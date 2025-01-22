@@ -32,7 +32,18 @@ struct FocusSessionView: View {
     }
     
     private func startFocusSession() {
-        // 1) Calculate how many minutes are left from the daily goal
+        let now = Date()
+
+        // If the last reset is not "today"...
+        if !Calendar.current.isDate(topic.lastDailyReset, inSameDayAs: now) {
+            // Reset daily spend to zero for the new day
+            topic.timeSpend.dailyMinutesSpend = 0
+        }
+    
+        // Update lastDailyReset to "today"
+        topic.lastDailyReset = now
+
+        //    Calculate how many minutes are left from the daily goal
         //    after subtracting what's already been spent.
         //    Use 'max' to avoid negative numbers if the user has
         //    already exceeded the goal.
