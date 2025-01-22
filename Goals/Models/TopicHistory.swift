@@ -23,7 +23,7 @@ struct TopicHistory: Identifiable, Codable {
     ///   - durationInMinutes: The duration of the session in minutes.
     init(
         id: UUID = UUID(),
-        date: Date,
+        date: Date = Date(),
         duration: Int
     ) {
         self.id = id

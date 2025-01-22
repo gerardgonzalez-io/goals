@@ -35,7 +35,7 @@ struct GoalDetail: View {
                 HStack {
                     Label("Theme", systemImage: "paintpalette")
                     Spacer()
-                    Text(topic.theme.name)
+                    Text(topic.theme.displayName)
                         .padding(4)
                         .foregroundColor(topic.theme.accentColor)
                         .background(topic.theme.mainColor)
@@ -51,6 +51,10 @@ struct GoalDetail: View {
                     HStack {
                         Image(systemName: "calendar")
                         Text(history.date, style: .date)
+                        Spacer()
+                        Text("Completed")
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
                     }
                 }
             }

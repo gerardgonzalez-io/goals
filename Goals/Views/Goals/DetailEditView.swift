@@ -15,7 +15,7 @@ struct DetailEditView: View {
             Section(header: Text("Topic Info")) {
                 TextField("Name", text: $topic.name)
                 HStack {
-                    Slider(value: $topic.goal.dailyMinutesGoal, in: 5...200, step: 1) {
+                    Slider(value: $topic.goal.dailyMinutesGoal, in: 1...200, step: 1) {
                         Text("Length")
                     }
                     Spacer()

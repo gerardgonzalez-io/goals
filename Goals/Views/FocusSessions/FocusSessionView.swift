@@ -40,10 +40,22 @@ struct FocusSessionView: View {
         focusSession.reset(durationInMinutes: Int(focusSessionDuration), topic: topic)
         focusSession.start()
     }
-    
+
     private func endFocusSession() {
         focusSession.stop()
         topic.timeSpend.dailyMinutesSpend += focusSession.timeSpend.dailyMinutesSpend
+        if topic.timeSpend.dailyMinutesSpend >= topic.goal.dailyMinutesGoal {
+            let today = Date()
+            let alreadyFinishToday = topic.history.contains {
+                Calendar.current.isDate($0.date, inSameDayAs: today)
+            }
+
+            if !alreadyFinishToday {
+                let newHistory = TopicHistory(date: today,
+                                              duration: Int(topic.timeSpend.dailyMinutesSpend))
+                topic.history.insert(newHistory, at: 0)
+            }
+        }
     }
 }
 
