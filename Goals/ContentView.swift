@@ -11,9 +11,22 @@ struct ContentView: View
 {
     var body: some View
     {
-        VStack
+        TabView
         {
-            TopicView()
+            Tab("Topics", systemImage: "list.bullet.rectangle")
+            {
+                TopicView()
+            }
+
+            Tab("Streak", systemImage: "flame.fill")
+            {
+                StreakView()
+            }
+
+            Tab("Timer", systemImage: "timer")
+            {
+                
+            }
         }
         
     }
@@ -22,4 +35,5 @@ struct ContentView: View
 #Preview
 {
     ContentView()
+        .preferredColorScheme(.dark)
 }

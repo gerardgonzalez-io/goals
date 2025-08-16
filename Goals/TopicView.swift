@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TopicView: View
 {
-    var topics: [String] = ["iOS", "C"]
+    var topics: [String] = ["iOS", "C", "Electronic", "Microcontrollers", "Japanese"]
     @State private var isPresentingNewTopicView = false
     
     var body: some View
@@ -18,9 +18,12 @@ struct TopicView: View
         {
             NavigationStack
             {
-                List(topics, id: \.self)
-                { topic in
-                    Text(topic)
+                List
+                {
+                    ForEach(topics, id: \.self)
+                    { topic in
+                        Text(topic)
+                    }
                 }
                 .navigationTitle("Topics")
                 .toolbar
@@ -39,4 +42,5 @@ struct TopicView: View
 #Preview
 {
     TopicView()
+        .preferredColorScheme(.dark)
 }
