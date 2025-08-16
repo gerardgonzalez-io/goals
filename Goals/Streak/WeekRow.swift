@@ -10,7 +10,7 @@ import SwiftUI
 struct WeekRow: View
 {
     let days: [String] = ["M", "T", "W", "T", "F", "S", "S"]
-    var selectedIndex: Int = 0
+    var isSelected: [Bool] = [true, true, true, true, false, false, false]
     
     var body: some View
     {
@@ -18,7 +18,7 @@ struct WeekRow: View
         {
             ForEach(days.indices, id: \.self)
             { index in
-                WeekDay(name: days[index], isSelected: index == selectedIndex)
+                WeekDay(name: days[index], isSelected: isSelected[index])
             }
         }
         .padding(.vertical, 6)
@@ -29,4 +29,5 @@ struct WeekRow: View
 #Preview
 {
     WeekRow()
+        .preferredColorScheme(.dark)
 }

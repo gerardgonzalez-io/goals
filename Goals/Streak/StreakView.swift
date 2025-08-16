@@ -18,16 +18,13 @@ struct StreakView: View
 
     var body: some View
     {
-
-
         VStack(spacing: 30)
         {
-            // Chek if this Spacer() is really necessary
             Spacer()
 
             VStack(spacing: 8)
             {
-                Text("Study Goals")
+                Text("Study Goal")
                     .font(.system(.title).bold())
                     .foregroundStyle(.white)
                 
@@ -77,9 +74,9 @@ struct StreakView: View
                 }
                 .offset(y: 16)
             }
-            
+
             WeekRow()
-            
+
             VStack(spacing: 4)
             {
                 HStack(spacing: 6)
