@@ -6,35 +6,67 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct TopicView: View
 {
-    var topics: [String] = ["iOS", "C", "Electronic", "Microcontrollers", "Japanese"]
-    @State private var isPresentingNewTopicView = false
+    @Query(sort: \Topic.name) private var topics: [Topic]
+    @Environment(\.modelContext) private var context
+    @State private var newTopic: Topic?
     
     var body: some View
     {
-        VStack
+        NavigationSplitView
         {
-            NavigationStack
+            List
             {
-                List
-                {
-                    ForEach(topics, id: \.self)
-                    { topic in
-                        Text(topic)
-                    }
+                ForEach(topics)
+                { topic in
+                    Text(topic.name)
                 }
-                .navigationTitle("Topics")
-                .toolbar
+                .onDelete(perform: deteleTopic(indexes:))
+            }
+            .navigationTitle("Topics")
+            .toolbar
+            {
+                ToolbarItem
                 {
-                    Button(action: {
-                        isPresentingNewTopicView = true
-                    }) {
-                        Image(systemName: "plus")
-                    }
+                    Button("Add topic", systemImage: "plus", action: addTopic)
+                }
+                ToolbarItem(placement: .topBarTrailing)
+                {
+                    EditButton()
                 }
             }
+            .sheet(item: $newTopic)
+            { topic in
+                NavigationStack
+                {
+                    NewTopicView(topic: topic)
+                }
+                .interactiveDismissDisabled()
+            }
+        }
+        detail:
+        {
+            Text("Select a topic")
+                .navigationTitle("Topic")
+                .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+    
+    private func addTopic()
+    {
+        let newTopic = Topic(name: "")
+        context.insert(newTopic)
+        self.newTopic = newTopic
+    }
+
+    private func deteleTopic(indexes: IndexSet)
+    {
+        for index in indexes
+        {
+            context.delete(topics[index])
         }
     }
 }
@@ -42,5 +74,6 @@ struct TopicView: View
 #Preview
 {
     TopicView()
+        .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }

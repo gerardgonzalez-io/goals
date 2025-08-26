@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct GoalsApp: App
@@ -16,5 +17,6 @@ struct GoalsApp: App
         {
             ContentView()
         }
+        .modelContainer(for: Topic.self)
     }
 }
