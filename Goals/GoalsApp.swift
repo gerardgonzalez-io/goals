@@ -17,6 +17,6 @@ struct GoalsApp: App
         {
             ContentView()
         }
-        .modelContainer(for: Topic.self)
+        .modelContainer(for: [Topic.self, StudySession.self])
     }
 }

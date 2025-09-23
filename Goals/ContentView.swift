@@ -25,7 +25,7 @@ struct ContentView: View
 
             Tab("Timer", systemImage: "timer")
             {
-                
+                TimerView()
             }
         }
         
