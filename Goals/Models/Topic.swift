@@ -8,10 +8,15 @@
 import Foundation
 import SwiftData
 
+/// Topic is a domain entity representing a subject of study or interest.
+/// Time tracking is modeled via related StudySession records rather than persisted total or daily time.
 @Model
 class Topic
 {
     var name: String
+    
+    /// Sessions associated with this topic, representing study sessions for time tracking.
+    var sessions: [StudySession] = []
     
     init(name: String)
     {

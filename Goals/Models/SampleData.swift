@@ -27,8 +27,10 @@ class SampleData
     
     private init()
     {
+        // In-memory container used for previews and tests
         let schema = Schema([
-            Topic.self
+            Topic.self,
+            StudySession.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         

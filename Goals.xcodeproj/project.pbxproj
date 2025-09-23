@@ -11,13 +11,17 @@
 		FD4AF6642E46A968004B75FE /* TopicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicView.swift */; };
 		FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */; };
 		FD4CFA212E078F9100FD5095 /* FeaturePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA202E078F9100FD5095 /* FeaturePage.swift */; };
+		FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E43122E7C907700856E38 /* TimerDialView.swift */; };
+		FD8E43152E7C90EE00856E38 /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E43142E7C90EE00856E38 /* TimerModel.swift */; };
 		FDA4BC012E0776DE00E0DAA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */; };
 		FDA4BC022E0776DE00E0DAA5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */; };
 		FDA4BC032E0776DE00E0DAA5 /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFF2E0776DE00E0DAA5 /* WelcomePage.swift */; };
 		FDA4BC042E0776DE00E0DAA5 /* GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */; };
+		FDAEFDBE2E7E1F3800E99E4F /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */; };
 		FDC82AE32E5DEC2500C2F545 /* NewTopicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */; };
 		FDC82AE62E5DEFDB00C2F545 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE52E5DEFDB00C2F545 /* Topic.swift */; };
 		FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE72E5DF04700C2F545 /* SampleData.swift */; };
+		FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */; };
 		FDD077C52E4A8D8F0010DD1E /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD077C42E4A8D8F0010DD1E /* StreakView.swift */; };
 		FDD077CB2E4A951E0010DD1E /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD077CA2E4A951E0010DD1E /* WeekDay.swift */; };
 		FDD077CD2E4A96A40010DD1E /* WeekRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD077CC2E4A96A40010DD1E /* WeekRow.swift */; };
@@ -28,14 +32,18 @@
 		FD4AF6632E46A968004B75FE /* TopicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicView.swift; sourceTree = "<group>"; };
 		FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCard.swift; sourceTree = "<group>"; };
 		FD4CFA202E078F9100FD5095 /* FeaturePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturePage.swift; sourceTree = "<group>"; };
+		FD8E43122E7C907700856E38 /* TimerDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDialView.swift; sourceTree = "<group>"; };
+		FD8E43142E7C90EE00856E38 /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
 		FDA4BBEC2E07763E00E0DAA5 /* Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goals.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsApp.swift; sourceTree = "<group>"; };
 		FDA4BBFF2E0776DE00E0DAA5 /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
+		FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySession.swift; sourceTree = "<group>"; };
 		FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicView.swift; sourceTree = "<group>"; };
 		FDC82AE52E5DEFDB00C2F545 /* Topic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		FDC82AE72E5DF04700C2F545 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
 		FDD077C42E4A8D8F0010DD1E /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
 		FDD077CA2E4A951E0010DD1E /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
 		FDD077CC2E4A96A40010DD1E /* WeekRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekRow.swift; sourceTree = "<group>"; };
@@ -76,6 +84,8 @@
 				FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */,
 				FD4AF6632E46A968004B75FE /* TopicView.swift */,
 				FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */,
+				FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */,
+				FD8E43122E7C907700856E38 /* TimerDialView.swift */,
 				FDD077C92E4A94EB0010DD1E /* Streak */,
 				FDE9420A2E46A6EC00AF23D4 /* Onboarding */,
 				FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */,
@@ -87,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				FDC82AE52E5DEFDB00C2F545 /* Topic.swift */,
+				FD8E43142E7C90EE00856E38 /* TimerModel.swift */,
+				FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */,
 				FDC82AE72E5DF04700C2F545 /* SampleData.swift */,
 			);
 			path = Models;
@@ -187,17 +199,21 @@
 			files = (
 				FDD077C52E4A8D8F0010DD1E /* StreakView.swift in Sources */,
 				FDC82AE62E5DEFDB00C2F545 /* Topic.swift in Sources */,
+				FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */,
 				FDD077CD2E4A96A40010DD1E /* WeekRow.swift in Sources */,
 				FDA4BC022E0776DE00E0DAA5 /* ContentView.swift in Sources */,
 				FDD077CB2E4A951E0010DD1E /* WeekDay.swift in Sources */,
 				FD4CFA212E078F9100FD5095 /* FeaturePage.swift in Sources */,
 				FDA4BC032E0776DE00E0DAA5 /* WelcomePage.swift in Sources */,
+				FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */,
 				FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */,
 				FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */,
 				FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */,
 				FD4AF6642E46A968004B75FE /* TopicView.swift in Sources */,
+				FD8E43152E7C90EE00856E38 /* TimerModel.swift in Sources */,
 				FDC82AE32E5DEC2500C2F545 /* NewTopicView.swift in Sources */,
 				FDA4BC042E0776DE00E0DAA5 /* GoalsApp.swift in Sources */,
+				FDAEFDBE2E7E1F3800E99E4F /* StudySession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
