@@ -9,13 +9,15 @@ import SwiftUI
 
 struct ContentView: View
 {
+    @Environment(\.modelContext) private var context
+
     var body: some View
     {
         TabView
         {
             Tab("Topics", systemImage: "list.bullet.rectangle")
             {
-                TopicView()
+                TopicListView()
             }
 
             Tab("Streak", systemImage: "flame.fill")
@@ -26,6 +28,7 @@ struct ContentView: View
             Tab("Timer", systemImage: "timer")
             {
                 TimerView()
+                    .environmentObject(TimerModel(context: context))
             }
         }
         

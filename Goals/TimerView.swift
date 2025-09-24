@@ -12,8 +12,7 @@ struct TimerView: View
 {
     @Query(sort: \Topic.name) private var topics: [Topic]
     // No se esta usando en esta vista por ahora, ya que se esta persistiendo desde el modelo TimerModel
-    @Environment(\.modelContext) private var context
-    @StateObject private var timer = TimerModel()
+    @EnvironmentObject private var timer: TimerModel
     @State private var selectedTopic: Topic? = nil
     @State private var isPresentingTopicSheet: Bool = false
     @State private var draftSelectedTopic: Topic? = nil
@@ -186,14 +185,19 @@ struct TimerView: View
 
 #Preview("Dark")
 {
+    @Previewable @Environment(\.modelContext) var context
+
     TimerView()
+        .environmentObject(TimerModel(context: context))
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Light")
 {
+    @Previewable @Environment(\.modelContext) var context
+
     TimerView()
+        .environmentObject(TimerModel(context: context))
         .preferredColorScheme(.light)
 }
-
