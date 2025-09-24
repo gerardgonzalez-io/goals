@@ -10,10 +10,12 @@ import SwiftData
 
 struct TopicDetailView: View
 {
+    let topic: Topic
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query private var sessions: [StudySession]
-    let topic: Topic
+    @State private var isShowingCalendar = false
 
     private var totalDuration: TimeInterval
     {
@@ -88,13 +90,35 @@ struct TopicDetailView: View
             {
                 Button
                 {
-                    // TODO: Configure calendar action
+                    isShowingCalendar = true
                 }
                 label:
                 {
                     Image(systemName: "calendar")
                 }
                 .accessibilityLabel("Calendario")
+            }
+        }
+        .sheet(isPresented: $isShowingCalendar)
+        {
+            NavigationStack
+            {
+                CalendarView(topic: topic)
+                    .toolbar
+                    {
+                        ToolbarItem(placement: .topBarTrailing)
+                        {
+                            Button
+                            {
+                                isShowingCalendar = false
+                            }
+                            label:
+                            {
+                                Image(systemName: "xmark")
+                            }
+                            .accessibilityLabel("Close")
+                        }
+                    }
             }
         }
     }
