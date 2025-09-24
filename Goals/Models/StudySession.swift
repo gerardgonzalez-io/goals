@@ -45,4 +45,49 @@ final class StudySession
         self.createdAt = createdAt
         self.modifiedAt = modifiedAt
     }
+    
+    /// Sample data for previews, tests, or prototyping.
+    static let sampleData: [StudySession] = {
+        let topics = Topic.sampleData
+        let now = Date()
+        // Create some sessions in the recent past with reasonable durations
+        return [
+            StudySession(
+                topic: topics[0],
+                startDate: now.addingTimeInterval(-60 * 60 * 2),   // 2 hours ago
+                endDate:   now.addingTimeInterval(-60 * 60 * 1),   // 1 hour ago
+                notes: "Morning focus session"
+            ),
+            StudySession(
+                topic: topics[0],
+                startDate: now.addingTimeInterval(-60 * 60 * 5),   // 5 hours ago
+                endDate:   now.addingTimeInterval(-60 * 60 * 3),   // 3 hours ago
+                notes: "Reading and practice"
+            ),
+            StudySession(
+                topic: topics[2],
+                startDate: now.addingTimeInterval(-60 * 30 - 60 * 60 * 24), // 24h 30m ago
+                endDate:   now.addingTimeInterval(-60 * 60 * 24),           // 24h ago
+                notes: "Short review"
+            ),
+            StudySession(
+                topic: topics[0],
+                startDate: now.addingTimeInterval(-60 * 60 * 26),  // 26 hours ago
+                endDate:   now.addingTimeInterval(-60 * 60 * 24),  // 24 hours ago
+                notes: "Grammar drills"
+            ),
+            StudySession(
+                topic: topics[4],
+                startDate: now.addingTimeInterval(-60 * 60 * 50),  // ~2 days + 2 hours ago
+                endDate:   now.addingTimeInterval(-60 * 60 * 48),  // ~2 days ago
+                notes: "UI prototyping"
+            ),
+            StudySession(
+                topic: topics[5],
+                startDate: now.addingTimeInterval(-60 * 20),       // 20 minutes ago
+                endDate:   now,                                    // now
+                notes: "Quick kata"
+            )
+        ]
+    }()
 }

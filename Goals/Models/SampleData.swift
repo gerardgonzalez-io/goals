@@ -52,5 +52,10 @@ class SampleData
         {
             context.insert(topic)
         }
+        
+        for session in StudySession.sampleData
+        {
+            context.insert(session)
+        }
     }
 }

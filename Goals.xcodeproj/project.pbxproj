@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6612E46A820004B75FE /* OnboardingView.swift */; };
-		FD4AF6642E46A968004B75FE /* TopicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicView.swift */; };
+		FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicListView.swift */; };
 		FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */; };
 		FD4CFA212E078F9100FD5095 /* FeaturePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA202E078F9100FD5095 /* FeaturePage.swift */; };
+		FD6F7FF22E82FB51000E1C4F /* TopicDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F7FF12E82FB51000E1C4F /* TopicDetailView.swift */; };
+		FD6F7FF42E836D8C000E1C4F /* TopicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F7FF32E836D8C000E1C4F /* TopicCard.swift */; };
 		FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E43122E7C907700856E38 /* TimerDialView.swift */; };
 		FD8E43152E7C90EE00856E38 /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E43142E7C90EE00856E38 /* TimerModel.swift */; };
 		FDA4BC012E0776DE00E0DAA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */; };
@@ -29,9 +31,11 @@
 
 /* Begin PBXFileReference section */
 		FD4AF6612E46A820004B75FE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		FD4AF6632E46A968004B75FE /* TopicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicView.swift; sourceTree = "<group>"; };
+		FD4AF6632E46A968004B75FE /* TopicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicListView.swift; sourceTree = "<group>"; };
 		FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCard.swift; sourceTree = "<group>"; };
 		FD4CFA202E078F9100FD5095 /* FeaturePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturePage.swift; sourceTree = "<group>"; };
+		FD6F7FF12E82FB51000E1C4F /* TopicDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicDetailView.swift; sourceTree = "<group>"; };
+		FD6F7FF32E836D8C000E1C4F /* TopicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicCard.swift; sourceTree = "<group>"; };
 		FD8E43122E7C907700856E38 /* TimerDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDialView.swift; sourceTree = "<group>"; };
 		FD8E43142E7C90EE00856E38 /* TimerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerModel.swift; sourceTree = "<group>"; };
 		FDA4BBEC2E07763E00E0DAA5 /* Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goals.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -82,7 +86,9 @@
 				FDC82AE42E5DEF8800C2F545 /* Models */,
 				FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */,
 				FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */,
-				FD4AF6632E46A968004B75FE /* TopicView.swift */,
+				FD4AF6632E46A968004B75FE /* TopicListView.swift */,
+				FD6F7FF12E82FB51000E1C4F /* TopicDetailView.swift */,
+				FD6F7FF32E836D8C000E1C4F /* TopicCard.swift */,
 				FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */,
 				FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */,
 				FD8E43122E7C907700856E38 /* TimerDialView.swift */,
@@ -97,9 +103,9 @@
 			isa = PBXGroup;
 			children = (
 				FDC82AE52E5DEFDB00C2F545 /* Topic.swift */,
-				FD8E43142E7C90EE00856E38 /* TimerModel.swift */,
 				FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */,
 				FDC82AE72E5DF04700C2F545 /* SampleData.swift */,
+				FD8E43142E7C90EE00856E38 /* TimerModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -197,6 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD6F7FF42E836D8C000E1C4F /* TopicCard.swift in Sources */,
 				FDD077C52E4A8D8F0010DD1E /* StreakView.swift in Sources */,
 				FDC82AE62E5DEFDB00C2F545 /* Topic.swift in Sources */,
 				FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */,
@@ -206,10 +213,11 @@
 				FD4CFA212E078F9100FD5095 /* FeaturePage.swift in Sources */,
 				FDA4BC032E0776DE00E0DAA5 /* WelcomePage.swift in Sources */,
 				FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */,
+				FD6F7FF22E82FB51000E1C4F /* TopicDetailView.swift in Sources */,
 				FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */,
 				FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */,
 				FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */,
-				FD4AF6642E46A968004B75FE /* TopicView.swift in Sources */,
+				FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */,
 				FD8E43152E7C90EE00856E38 /* TimerModel.swift in Sources */,
 				FDC82AE32E5DEC2500C2F545 /* NewTopicView.swift in Sources */,
 				FDA4BC042E0776DE00E0DAA5 /* GoalsApp.swift in Sources */,

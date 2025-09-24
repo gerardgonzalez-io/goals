@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct TopicView: View
+struct TopicListView: View
 {
     @Query(sort: \Topic.name) private var topics: [Topic]
     @Environment(\.modelContext) private var context
@@ -22,7 +22,10 @@ struct TopicView: View
             {
                 ForEach(topics)
                 { topic in
-                    Text(topic.name)
+                    NavigationLink(topic.name)
+                    {
+                        TopicDetailView(topic: topic)
+                    }
                 }
                 .onDelete(perform: deteleTopic(indexes:))
             }
@@ -73,7 +76,7 @@ struct TopicView: View
 
 #Preview
 {
-    TopicView()
+    TopicListView()
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
