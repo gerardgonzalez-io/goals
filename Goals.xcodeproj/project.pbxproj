@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD07C9892E845C01009D4132 /* CalendarView.swift */; };
 		FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6612E46A820004B75FE /* OnboardingView.swift */; };
 		FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicListView.swift */; };
 		FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FD07C9892E845C01009D4132 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		FD4AF6612E46A820004B75FE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FD4AF6632E46A968004B75FE /* TopicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicListView.swift; sourceTree = "<group>"; };
 		FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCard.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */,
 				FD4AF6632E46A968004B75FE /* TopicListView.swift */,
 				FD6F7FF12E82FB51000E1C4F /* TopicDetailView.swift */,
+				FD07C9892E845C01009D4132 /* CalendarView.swift */,
 				FD6F7FF32E836D8C000E1C4F /* TopicCard.swift */,
 				FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */,
 				FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */,
@@ -213,6 +216,7 @@
 				FD4CFA212E078F9100FD5095 /* FeaturePage.swift in Sources */,
 				FDA4BC032E0776DE00E0DAA5 /* WelcomePage.swift in Sources */,
 				FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */,
+				FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */,
 				FD6F7FF22E82FB51000E1C4F /* TopicDetailView.swift in Sources */,
 				FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */,
 				FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */,
