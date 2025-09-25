@@ -132,13 +132,22 @@ struct TopicDetailView: View
     }
 }
 
-#Preview
+#Preview("Dark")
 {
     NavigationStack
     {
         TopicDetailView(topic: SampleData.shared.topic)
             .modelContainer(SampleData.shared.modelContainer)
             .preferredColorScheme(.dark)
-            
+    }
+}
+
+#Preview("Light")
+{
+    NavigationStack
+    {
+        TopicDetailView(topic: SampleData.shared.topic)
+            .modelContainer(SampleData.shared.modelContainer)
+            .preferredColorScheme(.light)
     }
 }

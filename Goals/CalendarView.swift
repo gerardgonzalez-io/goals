@@ -265,7 +265,14 @@ private struct VisualEffectBlur: UIViewRepresentable
     func updateUIView(_ uiView: UIVisualEffectView, context: Context) {}
 }
 
-#Preview
+#Preview("Dark")
 {
     CalendarView(topic: SampleData.shared.topic)
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    CalendarView(topic: SampleData.shared.topic)
+        .preferredColorScheme(.light)
 }

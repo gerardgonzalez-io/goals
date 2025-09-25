@@ -119,7 +119,6 @@ struct TimerDialView: View
                 context.fill(Path(ellipseIn: CGRect(x: center.x - 4, y: center.y - 4, width: 8, height: 8)), with: .color(.orange))
                 context.fill(Path(ellipseIn: CGRect(x: subC.x - 3, y: subC.y - 3, width: 6, height: 6)), with: .color(.orange))
             }
-            
         }
     }
 }

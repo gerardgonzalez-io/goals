@@ -74,9 +74,16 @@ struct TopicListView: View
     }
 }
 
-#Preview
+#Preview("Dark")
 {
     TopicListView()
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    TopicListView()
+        .modelContainer(SampleData.shared.modelContainer)
+        .preferredColorScheme(.light)
 }

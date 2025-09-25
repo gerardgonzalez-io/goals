@@ -26,11 +26,11 @@ struct StreakView: View
             {
                 Text("Study Goal")
                     .font(.system(.title).bold())
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                 
                 Text("Track your time, stay focused, and achieve your daily study goals.")
                     .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
@@ -41,14 +41,14 @@ struct StreakView: View
                 //Background Arc
                 SemiRing()
                     .stroke(lineWidth: 9)
-                    .foregroundStyle(.white.opacity(0.12))
+                    .foregroundStyle(.quaternary)
                     .frame(width: 300, height: 150)
 
                 //Progress Arc
                 SemiRing()
                     .trim(from: 0, to: progress)
                     .stroke(style: StrokeStyle(lineWidth: 9, lineCap: .round))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(.tint.opacity(0.6))
                     .frame(width: 300, height: 150)
                     .animation(.easeInOut(duration: 0.8), value: progress)
                 
@@ -56,12 +56,12 @@ struct StreakView: View
                 {
                     Text("Today’s Session")
                         .font(.callout).bold()
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                         .opacity(0.85)
                     
                     Text("0:00")
                         .font(.system(size: 60, weight: .light, design: .rounded))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                     
                     HStack(spacing: 4)
                     {
@@ -70,7 +70,7 @@ struct StreakView: View
                             .font(.system(size: 12, weight: .semibold))
                     }
                     .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundStyle(.secondary)
                 }
                 .offset(y: 16)
             }
@@ -86,11 +86,11 @@ struct StreakView: View
                     Image(systemName: "chevron.right")
                         .font(.caption.weight(.semibold))
                 }
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
                 
                 Text("Your record is 9 days.")
                     .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(.secondary)
             }
             
             // Chek if this Spacer() is really necessary
@@ -115,9 +115,15 @@ struct SemiRing: Shape
     }
 }
 
-#Preview
+#Preview("Dark")
 {
     StreakView()
         .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    StreakView()
+        .preferredColorScheme(.light)
 }
 

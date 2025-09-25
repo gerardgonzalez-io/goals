@@ -16,19 +16,27 @@ struct WeekDay: View
     {
         Text(name)
             .font(.footnote.weight(.semibold))
+            .foregroundStyle(.primary)
             .frame(width: 36, height: 36)
             .background(
                 Circle()
-                    .fill(isSelected ? .white.opacity(0.18) : .clear)
+                    .fill(.primary.opacity(isSelected ? 0.12 : 0))
                     .overlay(
                         Circle()
-                            .stroke(.white.opacity(0.25), lineWidth: 1.2)
+                            .stroke(.primary.opacity(0.25), lineWidth: 1.2)
                     )
             )
     }
 }
 
-#Preview
+#Preview("Dark")
 {
     WeekDay(name: "M", isSelected: true)
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    WeekDay(name: "M", isSelected: true)
+        .preferredColorScheme(.light)
 }
