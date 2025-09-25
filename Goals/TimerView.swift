@@ -36,7 +36,7 @@ struct TimerView: View
 
                     Text(timer.formatted(t))
                         .font(.system(size: 40, weight: .medium, design: .monospaced))
-                        .foregroundColor(.white)
+                        //.foregroundColor(.white)
                         .padding(.top, 12)
                 }
                 
@@ -52,7 +52,7 @@ struct TimerView: View
                     {
                         Text(selectedTopic?.name ?? "Select topic")
                             .font(.headline)
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
 
                         Spacer()
 
@@ -64,7 +64,7 @@ struct TimerView: View
                     .padding(.vertical, 14)
                     .background(
                         RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(Color(white: 0.12))
+                            .fill(Color(.secondarySystemBackground))
                     )
                 }
                 .buttonStyle(.plain)
@@ -77,6 +77,8 @@ struct TimerView: View
                 {
                     
                     // Done button: marks the session done for the topic
+                    let doneEnabled = timer.elapsed > 0 && selectedTopic != nil
+                    
                     Button
                     {
                         if let topic = selectedTopic
@@ -88,19 +90,20 @@ struct TimerView: View
                     label:
                     {
                         Circle()
-                            .fill((timer.elapsed == 0 || draftSelectedTopic == nil) ? Color(white: 0.12) : Color(white: 0.18))
+                            .fill(doneEnabled ? Color("EmeraldGreen") : Color(.secondarySystemFill))
                             .frame(width: 96, height: 96)
                             .overlay(
                                 Text("Done")
                                     .font(.title3.weight(.semibold))
-                                    .foregroundStyle((timer.elapsed == 0 || selectedTopic == nil) ? Color.secondary : Color.white)
+                                    .foregroundStyle(doneEnabled ? Color.white : Color.secondary)
                             )
                     }
-                    .disabled(timer.elapsed == 0 || selectedTopic == nil)
+                    .disabled(!doneEnabled)
 
                     Spacer()
                     
                     // Start/Pause/Resume button: toggles the timer running state
+                    let startEnabled = selectedTopic != nil
                     Button
                     {
                         timer.toggle()
@@ -108,15 +111,15 @@ struct TimerView: View
                     label:
                     {
                         Circle()
-                            .fill((selectedTopic == nil) ? Color(white: 0.12) : (timer.isRunning ? Color(.systemYellow) : Color.green))
+                            .fill(!startEnabled ? Color(.secondarySystemFill) : (timer.isRunning ? Color.accentColor : Color("EmeraldGreen")))
                             .frame(width: 96, height: 96)
                             .overlay(
                                 Text(timer.isRunning ? "Pause" : (timer.elapsed == 0 ? "Start" : "Resume"))
                                     .font(.title3.weight(.semibold))
-                                    .foregroundStyle((selectedTopic == nil) ? Color.secondary : Color.black)
+                                    .foregroundStyle(!startEnabled ? Color.secondary : Color.white)
                             )
                     }
-                    .disabled(selectedTopic == nil)
+                    .disabled(!startEnabled)
                 }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 32)
@@ -199,5 +202,6 @@ struct TimerView: View
 
     TimerView()
         .environmentObject(TimerModel(context: context))
+        .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }

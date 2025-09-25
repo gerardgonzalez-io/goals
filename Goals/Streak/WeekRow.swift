@@ -26,8 +26,14 @@ struct WeekRow: View
     }
 }
 
-#Preview
+#Preview("Dark")
 {
     WeekRow()
         .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    WeekRow()
+        .preferredColorScheme(.light)
 }

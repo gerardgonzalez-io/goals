@@ -18,10 +18,11 @@ struct TopicCard: View
         {
             Text(description)
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
             Text(timeSpent)
                 .font(.system(size: 47, weight: .semibold, design: .rounded))
                 .monospacedDigit()
+                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
@@ -31,11 +32,25 @@ struct TopicCard: View
                 .foregroundStyle(.tint)
                 .opacity(0.25)
         }
-        .foregroundStyle(.white)
     }
 }
 
-#Preview
+
+#Preview("Dark")
+{
+    TopicCard(description: "Today", timeSpent: "07h 09m")
+        .frame(maxHeight: .infinity)
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    TopicCard(description: "Today", timeSpent: "07h 09m")
+        .frame(maxHeight: .infinity)
+        .preferredColorScheme(.light)
+}
+
+#Preview("Gradient")
 {
     TopicCard(description: "Today", timeSpent: "07h 09m")
         .frame(maxHeight: .infinity)

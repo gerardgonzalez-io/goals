@@ -35,9 +35,16 @@ struct ContentView: View
     }
 }
 
-#Preview
+#Preview("Dark")
 {
     ContentView()
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
+}
+
+#Preview("Light")
+{
+    ContentView()
+        .modelContainer(SampleData.shared.modelContainer)
+        .preferredColorScheme(.light)
 }
