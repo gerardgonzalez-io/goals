@@ -30,7 +30,8 @@ class SampleData
         // In-memory container used for previews and tests
         let schema = Schema([
             Topic.self,
-            StudySession.self
+            StudySession.self,
+            AppSettings.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
@@ -56,6 +57,11 @@ class SampleData
         for session in StudySession.sampleData
         {
             context.insert(session)
+        }
+
+        for dailyGoal in AppSettings.sampleData
+        {
+            context.insert(dailyGoal)
         }
     }
 }

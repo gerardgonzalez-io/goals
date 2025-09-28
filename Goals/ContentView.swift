@@ -23,6 +23,7 @@ struct ContentView: View
             Tab("Streak", systemImage: "flame.fill")
             {
                 StreakView()
+                    .environmentObject(TimerModel(context: context))
             }
 
             Tab("Timer", systemImage: "timer")
