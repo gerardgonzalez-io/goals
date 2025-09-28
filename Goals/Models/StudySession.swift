@@ -50,44 +50,70 @@ final class StudySession
     static let sampleData: [StudySession] = {
         let topics = Topic.sampleData
         let now = Date()
-        // Create some sessions in the recent past with reasonable durations
+
         return [
+            // 1) Hoy: duración 20 minutos.
+            //    Explicación: "Hoy se guardó una sesión y duró 20m".
             StudySession(
                 topic: topics[0],
-                startDate: now.addingTimeInterval(-60 * 60 * 2),   // 2 hours ago
-                endDate:   now.addingTimeInterval(-60 * 60 * 1),   // 1 hour ago
-                notes: "Morning focus session"
+                startDate: now.addingTimeInterval(-20 * 60),      // hoy: empezó hace 20m
+                endDate:   now,                                   // hoy: terminó ahora
+                notes: "Sesión de enfoque (20m)"
             ),
+
+            // 2) Ayer: duración 20 minutos.
+            //    Explicación: "Ayer se guardó una sesión y duró 20m".
             StudySession(
-                topic: topics[0],
-                startDate: now.addingTimeInterval(-60 * 60 * 5),   // 5 hours ago
-                endDate:   now.addingTimeInterval(-60 * 60 * 3),   // 3 hours ago
-                notes: "Reading and practice"
+                topic: topics[1],
+                startDate: now.addingTimeInterval(-24 * 60 * 60 - 2 * 60), // ayer: 24h + 20m atrás
+                endDate:   now.addingTimeInterval(-24 * 60 * 60),            // ayer: hace 24h
+                notes: "Repaso ligero (20m)"
             ),
+
+            // 3) Antes de ayer: duración < 5 minutos (4m).
+            //    Explicación: "Antes de ayer se guardó una sesión y duró 4m".
             StudySession(
                 topic: topics[2],
-                startDate: now.addingTimeInterval(-60 * 30 - 60 * 60 * 24), // 24h 30m ago
-                endDate:   now.addingTimeInterval(-60 * 60 * 24),           // 24h ago
-                notes: "Short review"
+                startDate: now.addingTimeInterval(-48 * 60 * 60 - 4 * 60),   // 48h + 4m atrás
+                endDate:   now.addingTimeInterval(-48 * 60 * 60),            // 48h atrás
+                notes: "Revisión muy corta (4m)"
             ),
+
+            // 4) 3 días atrás: duración < 5 minutos (3m30s).
+            //    Explicación: "Hace 3 días se guardó una sesión y duró 3m30s".
             StudySession(
-                topic: topics[0],
-                startDate: now.addingTimeInterval(-60 * 60 * 26),  // 26 hours ago
-                endDate:   now.addingTimeInterval(-60 * 60 * 24),  // 24 hours ago
-                notes: "Grammar drills"
+                topic: topics[3],
+                startDate: now.addingTimeInterval(-72 * 60 * 60 - (30 * 60 + 30)), // 72h + 3m30s atrás
+                endDate:   now.addingTimeInterval(-72 * 60 * 60),                 // 72h atrás
+                notes: "Micro sesión (3m30s)"
             ),
+
+            // 5) 4 días atrás: duración < 5 minutos (3m).
+            //    Explicación: "Hace 4 días se guardó una sesión y duró 3m".
             StudySession(
                 topic: topics[4],
-                startDate: now.addingTimeInterval(-60 * 60 * 50),  // ~2 days + 2 hours ago
-                endDate:   now.addingTimeInterval(-60 * 60 * 48),  // ~2 days ago
-                notes: "UI prototyping"
+                startDate: now.addingTimeInterval(-96 * 60 * 60 - 3 * 60),   // 96h + 3m atrás
+                endDate:   now.addingTimeInterval(-96 * 60 * 60),            // 96h atrás
+                notes: "Micro práctica (3m)"
             ),
+
+            // 6) 5 días atrás: duración < 5 minutos (2m45s).
+            //    Explicación: "Hace 5 días se guardó una sesión y duró 2m45s".
             StudySession(
                 topic: topics[5],
-                startDate: now.addingTimeInterval(-60 * 20),       // 20 minutes ago
-                endDate:   now,                                    // now
-                notes: "Quick kata"
-            )
+                startDate: now.addingTimeInterval(-120 * 60 * 60 - (2 * 60 + 45)), // 120h + 2m45s atrás
+                endDate:   now.addingTimeInterval(-120 * 60 * 60),                  // 120h atrás
+                notes: "Repaso express (2m45s)"
+            ),
+
+            // 7) 6 días atrás: duración < 5 minutos (2m30s).
+            //    Explicación: "Hace 6 días se guardó una sesión y duró 2m30s".
+            StudySession(
+                topic: topics[0],
+                startDate: now.addingTimeInterval(-144 * 60 * 60 - (2 * 60 + 30)), // 144h + 2m30s atrás
+                endDate:   now.addingTimeInterval(-144 * 60 * 60),                  // 144h atrás
+                notes: "Sesión breve (2m30s)"
+            ),
         ]
     }()
 }

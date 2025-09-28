@@ -5,16 +5,53 @@
 //  Created by Adolfo Gerard Montilla Gonzalez on 11-08-25.
 //
 
-
 import SwiftUI
+import SwiftData
 
 struct StreakView: View
 {
-    // Be careful, this always have to be between 0.0 and 1.0
-    // Do this validation before pass this value to this struct
-    // Validate if it is necessary to create this variable like an @State of the view
-    @State private var progress: CGFloat = 0.5 // 0.0 a 1.0
-    private let goalMinutes = 50
+    @EnvironmentObject private var timer: TimerModel
+    @Query private var appSettings: [AppSettings] // por que query se declara como array?
+    @Query private var todaySessions: [StudySession]
+    @State private var showingLongestStreak = false
+
+    private var goalMinutes: Int {
+        appSettings.first?.dailyStudyGoalMinutes ?? 1
+    }
+
+    private var persistedToday: TimeInterval {
+        todaySessions.reduce(0) { $0 + $1.duration }
+    }
+
+    private var totalToday: TimeInterval {
+        // Tiempo total del día = sesiones guardadas hoy + tiempo actual del cronómetro (aunque esté en pausa)
+        persistedToday + timer.elapsed
+    }
+
+    private var progress: CGFloat {
+        let target = max(1, goalMinutes) // evitar división entre 0
+        let p = CGFloat(totalToday) / CGFloat(target * 60)
+        return min(max(p, 0), 1)
+    }
+
+    private func formatHM(_ interval: TimeInterval) -> String {
+        let total = Int(interval)
+        let hours = total / 3600
+        let minutes = (total % 3600) / 60
+        return String(format: "%d:%02d", hours, minutes)
+    }
+    
+    init() {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: Date())
+        let end = calendar.date(byAdding: .day, value: 1, to: start) ?? Date()
+
+        let pred = #Predicate<StudySession> { session in
+            session.startDate >= start && session.startDate < end
+        }
+        _todaySessions = Query(filter: pred)
+        _appSettings = Query()
+    }
 
     var body: some View
     {
@@ -59,7 +96,7 @@ struct StreakView: View
                         .foregroundStyle(.primary)
                         .opacity(0.85)
                     
-                    Text("0:00")
+                    Text(formatHM(totalToday))
                         .font(.system(size: 60, weight: .light, design: .rounded))
                         .foregroundStyle(.primary)
                     
@@ -79,13 +116,17 @@ struct StreakView: View
 
             VStack(spacing: 4)
             {
-                HStack(spacing: 6)
+                Button(action: { showingLongestStreak = true })
                 {
-                    Text("Start a new streak.")
-                        .font(.callout.weight(.semibold))
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
+                    HStack(spacing: 6)
+                    {
+                        Text("Start a new streak.")
+                            .font(.callout.weight(.semibold))
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                    }
                 }
+                .buttonStyle(.plain)
                 .foregroundStyle(.primary)
                 
                 Text("Your record is 9 days.")
@@ -95,6 +136,27 @@ struct StreakView: View
             
             // Chek if this Spacer() is really necessary
             Spacer()
+        }
+        .sheet(isPresented: $showingLongestStreak)
+        {
+            NavigationStack
+            {
+                LongestStreakView()
+                    .toolbar
+                    {
+                        ToolbarItem(placement: .topBarTrailing)
+                        {
+                            Button
+                            {
+                                showingLongestStreak = false
+                            }
+                            label:
+                            {
+                                Image(systemName: "xmark")
+                            }
+                        }
+                    }
+            }
         }
     }
 }
@@ -115,15 +177,19 @@ struct SemiRing: Shape
     }
 }
 
-#Preview("Dark")
-{
+#Preview("Dark") {
+    @Previewable @Environment(\.modelContext) var context
     StreakView()
+        .environmentObject(TimerModel(context: context))
+        .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
 
-#Preview("Light")
-{
+#Preview("Light") {
+    @Previewable @Environment(\.modelContext) var context
     StreakView()
+        .environmentObject(TimerModel(context: context))
+        .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
 
