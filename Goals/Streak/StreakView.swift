@@ -14,6 +14,7 @@ struct StreakView: View
     @Environment(\.modelContext) private var modelContext
     @Query private var appSettings: [AppSettings] // por que query se declara como array?
     @Query private var todaySessions: [StudySession]
+    @Query private var sessions: [StudySession]
     @State private var showingLongestStreak = false
     @State private var showingGoalPicker = false
     @State private var tempGoalMinutes: Int = 15
@@ -50,6 +51,82 @@ struct StreakView: View
         let hours = total / 3600
         let minutes = (total % 3600) / 60
         return String(format: "%d:%02d", hours, minutes)
+    }
+    
+    // MARK: - Streak logic (concise overview)
+    // We build totals per calendar day from all StudySession records and today's in-progress timer time.
+    // A day "qualifies" when its total time >= goal minutes that were effective for that day (supports historical changes).
+    // currentStreak counts consecutive qualifying days ending in TODAY (only active if today qualifies).
+    // longestStreak scans all qualifying days and returns the longest run of consecutive days.
+    private var calendar: Calendar { Calendar.current }
+
+    // Sum time per startOfDay, including today's timer.elapsed so UI reacts live.
+    private var totalsByDay: [Date: TimeInterval]
+    {
+        var totals: [Date: TimeInterval] = [:]
+        for session in sessions
+        {
+            let day = calendar.startOfDay(for: session.startDate)
+            totals[day, default: 0] += session.duration
+        }
+        let todayStart = calendar.startOfDay(for: Date())
+        if timer.elapsed > 0
+        {
+            totals[todayStart, default: 0] += timer.elapsed
+        }
+        return totals
+    }
+
+    // Set of days that met/exceeded the goal that applied on that day (historical-aware).
+    private var qualifyingDays: Set<Date>
+    {
+        let settings = appSettings.first
+        let days: Set<Date> = Set(
+            totalsByDay.compactMap
+            { (day, total) in
+                let effectiveMinutes = settings?.goalMinutes(effectiveOn: day) ?? AppSettings.defaultGoalMinutes
+                let goalForDaySeconds = TimeInterval(effectiveMinutes * 60)
+                return total >= goalForDaySeconds ? day : nil
+            }
+        )
+        return days
+    }
+
+    // Active only if TODAY qualifies; then count backwards day-by-day while days qualify.
+    private var currentStreak: Int {
+        let today = calendar.startOfDay(for: Date())
+        guard qualifyingDays.contains(today) else { return 0 }
+        var count = 0
+        var cursor = today
+        while qualifyingDays.contains(cursor) {
+            count += 1
+            if let prev = calendar.date(byAdding: .day, value: -1, to: cursor) {
+                cursor = calendar.startOfDay(for: prev)
+            } else {
+                break
+            }
+        }
+        return count
+    }
+
+    private var isCurrentStreakActive: Bool { currentStreak > 0 }
+
+    // Longest run of consecutive qualifying days across history.
+    private var longestStreak: Int {
+        if qualifyingDays.isEmpty { return 0 }
+        let sorted = qualifyingDays.sorted()
+        var longest = 1
+        var current = 1
+        for i in 1..<sorted.count {
+            if let diff = calendar.dateComponents([.day], from: sorted[i-1], to: sorted[i]).day, diff == 1 {
+                current += 1
+            } else {
+                longest = max(longest, current)
+                current = 1
+            }
+        }
+        longest = max(longest, current)
+        return longest
     }
     
     init()
@@ -122,6 +199,7 @@ struct StreakView: View
                     {
                         HStack(spacing: 4)
                         {
+                            // If streak is active, prompt to extend it; otherwise invite to start a new one.
                             Text("of your \(goalMinutes)-minute goal")
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 12, weight: .semibold))
@@ -142,7 +220,8 @@ struct StreakView: View
                 {
                     HStack(spacing: 6)
                     {
-                        Text("Start a new streak.")
+                        // If streak is active, prompt to extend it; otherwise invite to start a new one.
+                        Text(isCurrentStreakActive ? "Extend your \(currentStreak)-day session streak." : "Start a new streak.")
                             .font(.callout.weight(.semibold))
                         Image(systemName: "chevron.right")
                             .font(.caption.weight(.semibold))
@@ -151,7 +230,8 @@ struct StreakView: View
                 .buttonStyle(.plain)
                 .foregroundStyle(.primary)
                 
-                Text("Your record is 9 days.")
+                // Always show the real record (longest streak), regardless of active state.
+                Text("Record is \(longestStreak) days.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -292,3 +372,4 @@ struct GoalMinutesPickerSheet: View {
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
+
