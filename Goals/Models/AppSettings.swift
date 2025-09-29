@@ -40,7 +40,8 @@ extension AppSettings
         // Find the most recent change whose effective date is on or before the given date
         if let change = changes
             .filter({ $0.effectiveAt <= date })
-            .max(by: { $0.effectiveAt < $1.effectiveAt }) {
+            .max(by: { $0.effectiveAt < $1.effectiveAt })
+        {
             return change.minutes
         }
         return dailyStudyGoalMinutes

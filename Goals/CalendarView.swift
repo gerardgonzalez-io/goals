@@ -6,9 +6,26 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CalendarView: View {
     let topic: Topic
+
+    @Query private var appSettings: [AppSettings]
+    @Query private var sessions: [StudySession]
+
+    init(topic: Topic)
+    {
+        self.topic = topic
+        // Fetch sessions only for this topic
+        let topicID = topic.persistentModelID
+        let predicate = #Predicate<StudySession>
+        { session in
+            session.topic.persistentModelID == topicID
+        }
+        _sessions = Query(filter: predicate)
+        _appSettings = Query()
+    }
 
     // Calendario del sistema respetando la configuración regional del usuario
     private let calendar: Calendar =
@@ -24,17 +41,78 @@ struct CalendarView: View {
     // Número de meses hacia atrás a mostrar (puedes aumentar si quieres "indefinido")
     private let monthsBack = 240 // ~20 años
 
+    private var startOfToday: Date
+    {
+        calendar.startOfDay(for: today)
+    }
+
+    // Primer día con sesiones registradas para este tópico (si no hay, no mostrar indicadores)
+    private var earliestSessionDay: Date?
+    {
+        let days = sessions.map { calendar.startOfDay(for: $0.startDate) }
+        return days.min()
+    }
+
+    // Calendario de días cumplidos según sesiones del tópico y la meta efectiva
+    private var totalsByDay: [Date: TimeInterval]
+    {
+        var totals: [Date: TimeInterval] = [:]
+        for session in sessions
+        {
+            let day = calendar.startOfDay(for: session.startDate)
+            totals[day, default: 0] += session.duration
+        }
+        return totals
+    }
+
+    private var qualifyingDays: Set<Date>
+    {
+        let settings = appSettings.first
+        let days: Set<Date> = Set(
+            totalsByDay.compactMap
+            { (day, total) in
+                let effectiveMinutes = settings?.goalMinutes(effectiveOn: day) ?? AppSettings.defaultGoalMinutes
+                let goalSeconds = TimeInterval(effectiveMinutes * 60)
+                return total >= goalSeconds ? day : nil
+            }
+        )
+        return days
+    }
+
+    // Mostrar indicador solo para días pasados. Para hoy, solo si ya se cumplió la meta.
+    private func shouldShowIndicator(on date: Date) -> Bool
+    {
+        guard let earliest = earliestSessionDay else
+        {
+            return false
+        }
+        let dayStart = calendar.startOfDay(for: date)
+
+        // Solo mostrar entre el primer registro y hoy (inclusive)
+        if dayStart < earliest
+        {
+            return false
+        }
+        if dayStart > startOfToday
+        {
+            return false
+        } // futuro: nada
+
+        if calendar.isDate(dayStart, inSameDayAs: startOfToday)
+        {
+            // hoy: solo si ya se cumplió
+            return qualifyingDays.contains(dayStart)
+        }
+        // días pasados dentro del rango: siempre mostrar (check o X)
+        return true
+    }
+
     // Proveedor del estado de cumplimiento para un día concreto.
     // Reemplaza esta lógica con la fuente real de datos del `Topic` cuando esté disponible.
     private func isCompleted(on date: Date) -> Bool
     {
-        // Ejemplo: marcar aleatoriamente días pasados como completados/no completados.
-        // Para fechas futuras no mostrar indicador.
-        if date > today { return false }
-        // Determinístico por día para que no cambie al recargar: usar hash de componentes
-        let comps = calendar.dateComponents([.year, .month, .day], from: date)
-        let seed = (comps.year ?? 0) * 10_000 + (comps.month ?? 0) * 100 + (comps.day ?? 0)
-        return seed % 3 == 0
+        let dayStart = calendar.startOfDay(for: date)
+        return qualifyingDays.contains(dayStart)
     }
 
     var body: some View
@@ -56,7 +134,8 @@ struct CalendarView: View {
                                 month: monthDate,
                                 calendar: calendar,
                                 today: today,
-                                isCompleted: isCompleted(on:)
+                                isCompleted: isCompleted(on:),
+                                shouldShowIndicator: shouldShowIndicator(on:)
                             )
                             .padding(.horizontal)
                         }
@@ -138,6 +217,7 @@ private struct MonthGrid: View
     let calendar: Calendar
     let today: Date
     let isCompleted: (Date) -> Bool
+    let shouldShowIndicator: (Date) -> Bool
 
     var body: some View
     {
@@ -151,7 +231,8 @@ private struct MonthGrid: View
                     DayCell(date: dayDate,
                             isToday: calendar.isDate(dayDate, inSameDayAs: today),
                             inCurrentMonth: day.inCurrentMonth,
-                            completed: isCompleted(dayDate))
+                            completed: isCompleted(dayDate),
+                            showIndicator: shouldShowIndicator(dayDate))
                         .frame(height: 56)
                 }
                 else
@@ -204,6 +285,7 @@ private struct DayCell: View
     let isToday: Bool
     let inCurrentMonth: Bool
     let completed: Bool
+    let showIndicator: Bool
 
     var body: some View
     {
@@ -224,13 +306,28 @@ private struct DayCell: View
                     }
                 }
 
-            // Indicador de cumplimiento
-            Image(systemName: completed ? "checkmark.circle.fill" : "xmark.circle.fill")
-                .symbolRenderingMode(.palette)
-                .foregroundStyle(completed ? Color.green : Color.red, Color.secondary.opacity(0.2))
-                .font(.system(size: 14, weight: .semibold))
-                .opacity(inCurrentMonth ? 1 : 0.3)
-                .accessibilityLabel(completed ? "Completado" : "No completado")
+            // Indicador de cumplimiento (reservar espacio fijo para evitar desalineaciones)
+            ZStack
+            {
+                if showIndicator
+                {
+                    Image(systemName: completed ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(completed ? Color.green : Color.red, .tint.opacity(0.2))
+                        .font(.system(size: 28, weight: .semibold))
+                        .opacity(inCurrentMonth ? 1 : 0.3)
+                        .accessibilityLabel(completed ? "Completado" : "No completado")
+                }
+                else
+                {
+                    // Placeholder invisible del mismo tamaño para mantener el alto
+                    Image(systemName: "circle.fill")
+                        .font(.system(size: 28, weight: .semibold))
+                        .opacity(0)
+                        .accessibilityHidden(true)
+                }
+            }
+            .frame(height: 28)
         }
         .padding(.vertical, 4)
         .contentShape(Rectangle())
@@ -249,7 +346,14 @@ private struct DayCell: View
         let df = DateFormatter()
         df.dateStyle = .full
         let base = df.string(from: date)
-        return completed ? "\(base), objetivo completado" : "\(base), objetivo no completado"
+        if showIndicator
+        {
+            return completed ? "\(base), objetivo completado" : "\(base), objetivo no completado"
+        }
+        else
+        {
+            return base
+        }
     }
 }
 
@@ -268,11 +372,15 @@ private struct VisualEffectBlur: UIViewRepresentable
 #Preview("Dark")
 {
     CalendarView(topic: SampleData.shared.topic)
+        .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
+        
 }
 
 #Preview("Light")
 {
     CalendarView(topic: SampleData.shared.topic)
+        .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
+
