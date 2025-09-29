@@ -23,7 +23,6 @@ struct LongestStreakView: View
     {
         // Compute longest consecutive-day streak where each day meets/exceeds the daily goal
         let calendar = Calendar.current
-        let goalSeconds = TimeInterval(goalMinutes * 60)
 
         // Build totals per day from persisted sessions
         var totalsByDay: [Date: TimeInterval] = [:]
@@ -40,9 +39,15 @@ struct LongestStreakView: View
             totalsByDay[todayStart, default: 0] += timer.elapsed
         }
 
-        // Build the set of qualifying days (met or exceeded goal)
+        // Build the set of qualifying days (met or exceeded the historical goal for that day)
+        let settings = appSettings.first
         let qualifyingDays: Set<Date> = Set(
-            totalsByDay.compactMap { (day, total) in total >= goalSeconds ? day : nil }
+            totalsByDay.compactMap
+            { (day, total) in
+                let effectiveMinutes = settings?.goalMinutes(effectiveOn: day) ?? AppSettings.defaultGoalMinutes
+                let goalForDaySeconds = TimeInterval(effectiveMinutes * 60)
+                return total >= goalForDaySeconds ? day : nil
+            }
         )
 
         if qualifyingDays.isEmpty { return 0 }
@@ -109,7 +114,8 @@ struct LongestStreakView: View
     }
 }
 
-#Preview("Dark") {
+#Preview("Dark")
+{
     @Previewable @Environment(\.modelContext) var context
     LongestStreakView()
         .environmentObject(TimerModel(context: context))
@@ -117,7 +123,8 @@ struct LongestStreakView: View
         .preferredColorScheme(.dark)
 }
 
-#Preview("Light") {
+#Preview("Light")
+{
     @Previewable @Environment(\.modelContext) var context
     LongestStreakView()
         .environmentObject(TimerModel(context: context))

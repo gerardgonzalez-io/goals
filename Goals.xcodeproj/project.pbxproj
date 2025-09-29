@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD07C9892E845C01009D4132 /* CalendarView.swift */; };
 		FD1033732E89BC5600564356 /* LongestStreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1033722E89BC5600564356 /* LongestStreakView.swift */; };
+		FD1033752E8A0CD700564356 /* GoalChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1033742E8A0CD700564356 /* GoalChange.swift */; };
 		FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6612E46A820004B75FE /* OnboardingView.swift */; };
 		FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicListView.swift */; };
 		FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		FD07C9892E845C01009D4132 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		FD1033722E89BC5600564356 /* LongestStreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongestStreakView.swift; sourceTree = "<group>"; };
+		FD1033742E8A0CD700564356 /* GoalChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalChange.swift; sourceTree = "<group>"; };
 		FD4AF6612E46A820004B75FE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FD4AF6632E46A968004B75FE /* TopicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicListView.swift; sourceTree = "<group>"; };
 		FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCard.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				FD8C39912E85A51800392F5A /* AppSettings.swift */,
 				FDC82AE72E5DF04700C2F545 /* SampleData.swift */,
 				FD8E43142E7C90EE00856E38 /* TimerModel.swift */,
+				FD1033742E8A0CD700564356 /* GoalChange.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -218,6 +221,7 @@
 				FDC82AE62E5DEFDB00C2F545 /* Topic.swift in Sources */,
 				FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */,
 				FDD077CD2E4A96A40010DD1E /* WeekRow.swift in Sources */,
+				FD1033752E8A0CD700564356 /* GoalChange.swift in Sources */,
 				FDA4BC022E0776DE00E0DAA5 /* ContentView.swift in Sources */,
 				FD1033732E89BC5600564356 /* LongestStreakView.swift in Sources */,
 				FDD077CB2E4A951E0010DD1E /* WeekDay.swift in Sources */,
