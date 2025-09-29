@@ -31,7 +31,8 @@ class SampleData
         let schema = Schema([
             Topic.self,
             StudySession.self,
-            AppSettings.self
+            AppSettings.self,
+            GoalChange.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         
@@ -62,6 +63,13 @@ class SampleData
         for dailyGoal in AppSettings.sampleData
         {
             context.insert(dailyGoal)
+            let initial = GoalChange(
+                minutes: dailyGoal.dailyStudyGoalMinutes,
+                effectiveAt: Date.distantPast,
+                settings: dailyGoal
+            )
+            context.insert(initial)
         }
     }
 }
+
