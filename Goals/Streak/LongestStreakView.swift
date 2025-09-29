@@ -137,10 +137,14 @@ struct LongestStreakView: View
                     .foregroundStyle(.tint)
 
                 // When active, encourage extending the streak and display the record; otherwise a generic nudge.
-                Group {
-                    if isCurrentStreakActive {
+                Group
+                {
+                    if isCurrentStreakActive
+                    {
                         Text("Keep studying every day to extend your streak.\nLongest streak: \(longestStreak) days")
-                    } else {
+                    }
+                    else
+                    {
                         Text("Study today to reach your goals.")
                     }
                 }

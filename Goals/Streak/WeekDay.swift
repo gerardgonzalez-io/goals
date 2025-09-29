@@ -34,24 +34,30 @@ struct WeekDay: View
             )
     }
     
-    private var fillColor: Color {
-        switch state {
+    private var fillColor: Color
+    {
+        switch state
+        {
         case .none: return .clear
         case .progress: return .primary
         case .completed: return .accentColor
         }
     }
 
-    private var fillOpacity: Double {
-        switch state {
+    private var fillOpacity: Double
+    {
+        switch state
+        {
         case .none: return 0
         case .progress: return 0.12
         case .completed: return 0.28
         }
     }
 
-    private var strokeColor: Color {
-        switch state {
+    private var strokeColor: Color
+    {
+        switch state
+        {
         case .completed:
             return Color.accentColor.opacity(0.6)
         default:
