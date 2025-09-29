@@ -93,16 +93,21 @@ struct StreakView: View
     }
 
     // Active only if TODAY qualifies; then count backwards day-by-day while days qualify.
-    private var currentStreak: Int {
+    private var currentStreak: Int
+    {
         let today = calendar.startOfDay(for: Date())
         guard qualifyingDays.contains(today) else { return 0 }
         var count = 0
         var cursor = today
-        while qualifyingDays.contains(cursor) {
+        while qualifyingDays.contains(cursor)
+        {
             count += 1
-            if let prev = calendar.date(byAdding: .day, value: -1, to: cursor) {
+            if let prev = calendar.date(byAdding: .day, value: -1, to: cursor)
+            {
                 cursor = calendar.startOfDay(for: prev)
-            } else {
+            }
+            else
+            {
                 break
             }
         }
@@ -112,15 +117,20 @@ struct StreakView: View
     private var isCurrentStreakActive: Bool { currentStreak > 0 }
 
     // Longest run of consecutive qualifying days across history.
-    private var longestStreak: Int {
+    private var longestStreak: Int
+    {
         if qualifyingDays.isEmpty { return 0 }
         let sorted = qualifyingDays.sorted()
         var longest = 1
         var current = 1
-        for i in 1..<sorted.count {
-            if let diff = calendar.dateComponents([.day], from: sorted[i-1], to: sorted[i]).day, diff == 1 {
+        for i in 1..<sorted.count
+        {
+            if let diff = calendar.dateComponents([.day], from: sorted[i-1], to: sorted[i]).day, diff == 1
+            {
                 current += 1
-            } else {
+            }
+            else
+            {
                 longest = max(longest, current)
                 current = 1
             }
@@ -129,6 +139,56 @@ struct StreakView: View
         return longest
     }
     
+    private var weekDaySymbols: [String]
+    {
+        // Use short standalone symbols ordered by user's firstWeekday
+        let symbols = calendar.shortStandaloneWeekdaySymbols.map { $0.prefix(1).uppercased() }
+        let first = calendar.firstWeekday - 1
+        let ordered = Array(symbols[first..<symbols.count]) + Array(symbols[0..<first])
+        return ordered
+    }
+
+    private var weekStates: [DayState]
+    {
+        // Build a 7-day window for the current week based on calendar.firstWeekday
+        var result = Array(repeating: DayState.none, count: 7)
+        let today = Date()
+        // start of this week
+        let startOfToday = calendar.startOfDay(for: today)
+        let weekdayIndex = calendar.component(.weekday, from: startOfToday) // 1..7 in Gregorian
+        let first = calendar.firstWeekday // 1..7
+        // Compute index (0..6) for today within our ordered symbols
+        let todayIndex = (weekdayIndex - first + 7) % 7
+
+        // Determine the start date of the displayed week
+        let startOfWeek = calendar.date(byAdding: .day, value: -todayIndex, to: startOfToday) ?? startOfToday
+
+        for i in 0..<7
+        {
+            guard let day = calendar.date(byAdding: .day, value: i, to: startOfWeek) else { continue }
+            let dayStart = calendar.startOfDay(for: day)
+
+            if i <= todayIndex
+            {
+                // Up to today we show progress style; if the day qualified, show completed style (accentColor)
+                if qualifyingDays.contains(dayStart)
+                {
+                    result[i] = .completed
+                }
+                else
+                {
+                    result[i] = .progress
+                }
+            }
+            else
+            {
+                result[i] = .none
+            }
+        }
+
+        return result
+    }
+
     init()
     {
         let calendar = Calendar.current
@@ -212,7 +272,7 @@ struct StreakView: View
                 .offset(y: 16)
             }
 
-            WeekRow()
+            WeekRow(days: weekDaySymbols, states: weekStates)
 
             VStack(spacing: 4)
             {
@@ -372,4 +432,3 @@ struct GoalMinutesPickerSheet: View {
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
-

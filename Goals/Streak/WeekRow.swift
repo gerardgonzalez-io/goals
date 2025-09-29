@@ -9,8 +9,8 @@ import SwiftUI
 
 struct WeekRow: View
 {
-    let days: [String] = ["M", "T", "W", "T", "F", "S", "S"]
-    var isSelected: [Bool] = [true, true, true, true, false, false, false]
+    let days: [String]
+    let states: [DayState] // size 7
     
     var body: some View
     {
@@ -18,7 +18,7 @@ struct WeekRow: View
         {
             ForEach(days.indices, id: \.self)
             { index in
-                WeekDay(name: days[index], isSelected: isSelected[index])
+                WeekDay(name: days[index], state: states[index])
             }
         }
         .padding(.vertical, 6)
@@ -28,12 +28,16 @@ struct WeekRow: View
 
 #Preview("Dark")
 {
-    WeekRow()
+    let days = ["M","T","W","T","F","S","S"]
+    let states: [DayState] = [.progress, .progress, .completed, .none, .none, .none, .none]
+    return WeekRow(days: days, states: states)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Light")
 {
-    WeekRow()
+    let days = ["M","T","W","T","F","S","S"]
+    let states: [DayState] = [.progress, .progress, .completed, .none, .none, .none, .none]
+    return WeekRow(days: days, states: states)
         .preferredColorScheme(.light)
 }
