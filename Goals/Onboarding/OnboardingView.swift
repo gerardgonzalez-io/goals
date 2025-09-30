@@ -14,12 +14,16 @@ let gradientColors: [Color] = [
 
 struct OnboardingView: View
 {
+
+    var onFinish: (() -> Void)? = nil
+
     var body: some View
     {
         TabView
         {
             WelcomePage()
             FeaturePage()
+            GoalView(onFinish: onFinish)
         }
         .background(Gradient(colors: gradientColors))
         .tabViewStyle(.page)
@@ -30,4 +34,5 @@ struct OnboardingView: View
 #Preview
 {
     OnboardingView()
+    
 }
