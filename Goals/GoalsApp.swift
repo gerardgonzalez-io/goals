@@ -15,7 +15,7 @@ struct GoalsApp: App
     {
         WindowGroup
         {
-            ContentView()
+            RootView()
         }
         .modelContainer(for: [Topic.self, StudySession.self, AppSettings.self])
     }
