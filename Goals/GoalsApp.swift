@@ -17,6 +17,6 @@ struct GoalsApp: App
         {
             RootView()
         }
-        .modelContainer(for: [Topic.self, StudySession.self, AppSettings.self])
+        .modelContainer(for: [Topic.self, StudySession.self, AppSettings.self, GoalChange.self])
     }
 }
