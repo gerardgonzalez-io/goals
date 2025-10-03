@@ -40,10 +40,10 @@ struct TopicDetailView: View
     {
         self.topic = topic
         // Fetch all sessions that belong to this topic, newest first
-        let topicID = topic.persistentModelID
+        let topicID = topic.id
         let predicate = #Predicate<StudySession>
         { session in
-            session.topic.persistentModelID == topicID
+            session.topic.id == topicID
         }
         _sessions = Query(
             filter: predicate,

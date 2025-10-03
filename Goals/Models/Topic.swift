@@ -14,12 +14,13 @@ import SwiftData
 class Topic
 {
     var name: String
-    
+    var id: UUID
     /// Sessions associated with this topic, representing study sessions for time tracking.
     var sessions: [StudySession] = []
     
     init(name: String)
     {
+        self.id = UUID()
         self.name = name
     }
     
