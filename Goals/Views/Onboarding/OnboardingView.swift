@@ -1,8 +1,8 @@
 //
 //  OnboardingView.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 08-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
 
 import SwiftUI
@@ -14,7 +14,6 @@ let gradientColors: [Color] = [
 
 struct OnboardingView: View
 {
-
     var onFinish: (() -> Void)? = nil
 
     var body: some View
@@ -34,5 +33,4 @@ struct OnboardingView: View
 #Preview
 {
     OnboardingView()
-    
 }

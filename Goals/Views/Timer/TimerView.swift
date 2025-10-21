@@ -1,8 +1,8 @@
 //
-//  StopwatchView.swift
-//  Goals
+//  TimerView.swift
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 26-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 18-10-25.
 //
 
 import SwiftUI
@@ -10,12 +10,16 @@ import SwiftData
 
 struct TimerView: View
 {
+    @Environment(\.modelContext) private var modelContext
+
+    @Query(sort: \Goal.createdAt, order: .forward) private var goals: [Goal]
     @Query(sort: \Topic.name) private var topics: [Topic]
-    // No se esta usando en esta vista por ahora, ya que se esta persistiendo desde el modelo TimerModel
-    @EnvironmentObject private var timer: TimerModel
+
+    @State private var timer = Timer()
     @State private var selectedTopic: Topic? = nil
     @State private var isPresentingTopicSheet: Bool = false
     @State private var draftSelectedTopic: Topic? = nil
+    @State private var sessionStartDate: Date? = nil
 
     var body: some View
     {
@@ -26,17 +30,15 @@ struct TimerView: View
             {
                 Spacer()
 
-                TimelineView(.animation)
-                { timeline in
-                    let now = timeline.date
-                    let t = timer.displayTime(at: now)
+                Group
+                {
+                    let t = timer.displayTime()
 
                     TimerDialView(time: t)
                         .frame(width: min(geo.size.width, geo.size.height) * 0.9)
 
                     Text(timer.formatted(t))
                         .font(.system(size: 40, weight: .medium, design: .monospaced))
-                        //.foregroundColor(.white)
                         .padding(.top, 12)
                 }
                 
@@ -84,7 +86,9 @@ struct TimerView: View
                         if let topic = selectedTopic
                         {
                             timer.done(for: topic)
+                            createAndPersistSession(for: topic)
                             selectedTopic = nil
+                            sessionStartDate = nil
                         }
                     }
                     label:
@@ -106,6 +110,7 @@ struct TimerView: View
                     let startEnabled = selectedTopic != nil
                     Button
                     {
+                        createStartDateForSession()
                         timer.toggle()
                     }
                     label:
@@ -186,22 +191,71 @@ struct TimerView: View
     }
 }
 
+extension TimerView
+{
+    private func createStartDateForSession()
+    {
+        if !timer.isRunning && timer.elapsed == 0
+        {
+            var calendarWithTimeZone = Calendar.current
+            calendarWithTimeZone.timeZone = .current
+            let now = Date()
+            let normalizedStart = calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
+            sessionStartDate = normalizedStart
+        }
+    }
+
+    private func createAndPersistSession(for topic: Topic)
+    {
+        guard let capturedStart = sessionStartDate
+        else
+        {
+
+            return
+        }
+
+        guard let goal = goals.last
+        else
+        {
+            return
+        }
+
+        var calendarWithTimeZone = Calendar.current
+        calendarWithTimeZone.timeZone = .current
+
+        let now = Date()
+        let normalizedEnd = calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
+
+        let session = StudySession(topic: topic,
+                                   goal: goal,
+                                   startDate: capturedStart,
+                                   endDate: normalizedEnd)
+        
+        modelContext.insert(session)
+
+        do
+        {
+            try modelContext.save()
+        }
+        catch
+        {
+            #if DEBUG
+            print("Failed to save StudySession: \(error)")
+            #endif
+        }
+    }
+}
+
 #Preview("Dark")
 {
-    @Previewable @Environment(\.modelContext) var context
-
     TimerView()
-        .environmentObject(TimerModel(context: context))
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Light")
 {
-    @Previewable @Environment(\.modelContext) var context
-
     TimerView()
-        .environmentObject(TimerModel(context: context))
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }

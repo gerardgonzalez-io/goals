@@ -1,8 +1,8 @@
 //
 //  SampleData.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 26-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 12-10-25.
 //
 
 import Foundation
@@ -12,30 +12,29 @@ import SwiftData
 class SampleData
 {
     static let shared = SampleData()
-    
+
     let modelContainer: ModelContainer
-    
+
     var context: ModelContext
     {
         modelContainer.mainContext
     }
-    
+
     var topic: Topic
     {
         Topic.sampleData.first!
     }
-    
+
     private init()
     {
         // In-memory container used for previews and tests
         let schema = Schema([
             Topic.self,
             StudySession.self,
-            AppSettings.self,
-            GoalChange.self
+            Goal.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-        
+
         do
         {
             modelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
@@ -47,29 +46,17 @@ class SampleData
             fatalError("Could not create model container: \(error)")
         }
     }
-    
+
     private func insertSampleData()
     {
         for topic in Topic.sampleData
         {
             context.insert(topic)
         }
-        
+
         for session in StudySession.sampleData
         {
             context.insert(session)
         }
-
-        for dailyGoal in AppSettings.sampleData
-        {
-            context.insert(dailyGoal)
-            let initial = GoalChange(
-                minutes: dailyGoal.dailyStudyGoalMinutes,
-                effectiveAt: Date.distantPast,
-                settings: dailyGoal
-            )
-            context.insert(initial)
-        }
     }
 }
-

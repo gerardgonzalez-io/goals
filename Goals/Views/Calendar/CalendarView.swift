@@ -1,8 +1,8 @@
 //
 //  CalendarView.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 24-09-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 20-10-25.
 //
 
 import SwiftUI
@@ -10,24 +10,21 @@ import SwiftData
 
 struct CalendarView: View {
     let topic: Topic
+    private let topicID: Topic.ID
 
-    @Query private var appSettings: [AppSettings]
-    @Query private var sessions: [StudySession]
+    @Query private var topicSessions: [StudySession]
+    @State private var completionCache: [Date: Bool] = [:]
 
     init(topic: Topic)
     {
         self.topic = topic
-        // Fetch sessions only for this topic
-        let topicID = topic.persistentModelID
-        let predicate = #Predicate<StudySession>
+        self.topicID = topic.id
+        self._topicSessions = Query(filter: #Predicate<StudySession>
         { session in
-            session.topic.persistentModelID == topicID
-        }
-        _sessions = Query(filter: predicate)
-        _appSettings = Query()
+            session.topic.id == topicID
+        })
     }
 
-    // Calendario del sistema respetando la configuración regional del usuario
     private let calendar: Calendar =
     {
         var cal = Calendar.current
@@ -35,84 +32,59 @@ struct CalendarView: View {
         return cal
     }()
 
-    // Fecha de referencia (hoy)
+    private let monthsBack = 240
+
     private let today = Date()
 
-    // Número de meses hacia atrás a mostrar (puedes aumentar si quieres "indefinido")
-    private let monthsBack = 240 // ~20 años
-
-    private var startOfToday: Date
+    // Primer día con sesiones para este topic (normalizado)
+    private func earliestTopicDay() -> Date?
     {
-        calendar.startOfDay(for: today)
-    }
-
-    // Primer día con sesiones registradas para este tópico (si no hay, no mostrar indicadores)
-    private var earliestSessionDay: Date?
-    {
-        let days = sessions.map { calendar.startOfDay(for: $0.startDate) }
-        return days.min()
-    }
-
-    // Calendario de días cumplidos según sesiones del tópico y la meta efectiva
-    private var totalsByDay: [Date: TimeInterval]
-    {
-        var totals: [Date: TimeInterval] = [:]
-        for session in sessions
-        {
-            let day = calendar.startOfDay(for: session.startDate)
-            totals[day, default: 0] += session.duration
-        }
-        return totals
-    }
-
-    private var qualifyingDays: Set<Date>
-    {
-        let settings = appSettings.first
-        let days: Set<Date> = Set(
-            totalsByDay.compactMap
-            { (day, total) in
-                let effectiveMinutes = settings?.goalMinutes(effectiveOn: day) ?? AppSettings.defaultGoalMinutes
-                let goalSeconds = TimeInterval(effectiveMinutes * 60)
-                return total >= goalSeconds ? day : nil
-            }
-        )
-        return days
+        topicSessions.map(\.normalizedDay).min()
     }
 
     // Mostrar indicador solo para días pasados. Para hoy, solo si ya se cumplió la meta.
     private func shouldShowIndicator(on date: Date) -> Bool
     {
-        guard let earliest = earliestSessionDay else
-        {
-            return false
-        }
-        let dayStart = calendar.startOfDay(for: date)
+        // Si el tópico no tiene sesiones, no mostrar indicadores en ningún día
+        if topicSessions.isEmpty { return false }
 
-        // Solo mostrar entre el primer registro y hoy (inclusive)
-        if dayStart < earliest
-        {
-            return false
-        }
-        if dayStart > startOfToday
-        {
-            return false
-        } // futuro: nada
+        let startOfDate = calendar.startOfDay(for: date)
+        let startOfToday = calendar.startOfDay(for: today)
 
-        if calendar.isDate(dayStart, inSameDayAs: startOfToday)
-        {
-            // hoy: solo si ya se cumplió
-            return qualifyingDays.contains(dayStart)
+        if let rawFirstDay = earliestTopicDay() {
+            let firstDay = calendar.startOfDay(for: rawFirstDay)
+            // No mostrar nada antes de la primera sesión registrada para este topic
+            if startOfDate < firstDay { return false }
         }
-        // días pasados dentro del rango: siempre mostrar (check o X)
-        return true
+        // Si no hay sesiones aún (o el query aún no cargó), usar comportamiento por defecto
+        if startOfDate < startOfToday { return true }
+        if calendar.isDate(startOfDate, inSameDayAs: startOfToday) { return isCompleted(on: date) }
+        return false
     }
 
     // Proveedor del estado de cumplimiento para un día concreto.
     // Reemplaza esta lógica con la fuente real de datos del `Topic` cuando esté disponible.
     private func isCompleted(on date: Date) -> Bool
     {
-        let dayStart = calendar.startOfDay(for: date)
-        return qualifyingDays.contains(dayStart)
+        // Cache por día normalizado para evitar recomputar
+        let dayKey = calendar.startOfDay(for: date)
+        if let cached = completionCache[dayKey] { return cached }
+
+        // Filtra sesiones del mismo día (ya normalizadas por StudySession.normalizedDay)
+        let sessionsForDay = topicSessions.filter { session in
+            calendar.isDate(session.normalizedDay, inSameDayAs: dayKey)
+        }
+
+        guard let status = DailyStatus.compute(from: sessionsForDay) else {
+            completionCache[dayKey] = false
+            return false
+        }
+
+        // Regla del día cumplido: al menos un objetivo de los tópicos del día fue cumplido.
+        // Como ya filtramos por `topic`, esto equivale a si ese tópico cumplió su objetivo ese día.
+        let met = status.isMet.contains(true)
+        completionCache[dayKey] = met
+        return met
     }
 
     var body: some View
@@ -209,7 +181,6 @@ private struct WeekdayRow: View
         .accessibilityHidden(true)
     }
 }
-
 // MARK: - Cuadrícula del mes
 private struct MonthGrid: View
 {
@@ -357,7 +328,6 @@ private struct DayCell: View
     }
 }
 
-// MARK: - Utilidad de blur ligera para encabezado pegajoso
 // Evita dependencias externas: pequeño wrapper que usa material del sistema
 private struct VisualEffectBlur: UIViewRepresentable
 {

@@ -1,8 +1,8 @@
 //
 //  NewTopicView.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 26-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
 
 import SwiftUI

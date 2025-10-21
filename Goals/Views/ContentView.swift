@@ -1,15 +1,16 @@
 //
 //  ContentView.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 21-06-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 12-10-25.
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View
 {
-    @Environment(\.modelContext) private var context
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View
     {
@@ -23,29 +24,18 @@ struct ContentView: View
             Tab("Streak", systemImage: "flame.fill")
             {
                 StreakView()
-                    .environmentObject(TimerModel(context: context))
             }
 
             Tab("Timer", systemImage: "timer")
             {
                 TimerView()
-                    .environmentObject(TimerModel(context: context))
             }
         }
         
     }
 }
 
-#Preview("Dark")
+#Preview
 {
     ContentView()
-        .modelContainer(SampleData.shared.modelContainer)
-        .preferredColorScheme(.dark)
-}
-
-#Preview("Light")
-{
-    ContentView()
-        .modelContainer(SampleData.shared.modelContainer)
-        .preferredColorScheme(.light)
 }

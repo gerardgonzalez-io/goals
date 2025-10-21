@@ -1,9 +1,10 @@
 //
-//  TimerDial.swift
-//  Goals
+//  TimerDialView.swift
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 18-09-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 18-10-25.
 //
+
 import SwiftUI
 
 struct TimerDialView: View

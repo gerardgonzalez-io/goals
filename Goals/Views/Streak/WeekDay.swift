@@ -1,13 +1,13 @@
 //
 //  WeekDay.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 11-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
-
 import SwiftUI
 
-enum DayState {
+enum DayState
+{
     case none
     case progress
     case completed

@@ -1,8 +1,8 @@
 //
 //  TopicCard.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 23-09-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
 
 import SwiftUI
@@ -56,3 +56,4 @@ struct TopicCard: View
         .frame(maxHeight: .infinity)
         .background(Gradient(colors: gradientColors))
 }
+

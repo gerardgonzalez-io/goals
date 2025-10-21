@@ -8,22 +8,27 @@
 import Foundation
 import SwiftData
 
-/// Topic is a domain entity representing a subject of study or interest.
-/// Time tracking is modeled via related StudySession records rather than persisted total or daily time.
 @Model
-class Topic
+class Topic: Identifiable
 {
-    var name: String
     var id: UUID
-    /// Sessions associated with this topic, representing study sessions for time tracking.
-    var sessions: [StudySession] = []
-    
-    init(name: String)
+    var name: String
+
+    // Estudia para que es util esta propiedad studySessions
+    // tanto tecnicamente como dentro del flujo funcional de la App
+    @Relationship(deleteRule: .cascade, inverse: \StudySession.topic)
+    var studySessions: [StudySession] = []
+
+    init(name: String, studySessions: [StudySession] = [])
     {
         self.id = UUID()
         self.name = name
+        self.studySessions = studySessions
     }
-    
+}
+
+extension Topic
+{
     static let sampleData = [
         Topic(name: "iOS"),
         Topic(name: "Swift"),

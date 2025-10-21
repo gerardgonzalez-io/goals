@@ -1,8 +1,8 @@
 //
 //  TopicDetailView.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 23-09-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
 
 import SwiftUI
@@ -17,22 +17,25 @@ struct TopicDetailView: View
     @Query private var sessions: [StudySession]
     @State private var isShowingCalendar = false
 
-    private var totalDuration: TimeInterval
+    private var totalDuration: Int
     {
-        sessions.reduce(0) { $0 + $1.duration }
+        sessions.reduce(0) { $0 + $1.durationInMinutes }
     }
 
-    private var todayDuration: TimeInterval
+    private var todayDuration: Int
     {
         let calendar = Calendar.current
         let today = Date()
         return sessions.filter
         { session in
-            calendar.isDate(session.startDate, inSameDayAs: today)
+            // valida el comportamiento de la app para ver si es posible
+            // que se guarden sesiones con startDate nulas
+            // session.startDate ?? today
+            calendar.isDate(session.normalizedDay, inSameDayAs: today)
         }
         .reduce(0)
         {
-            $0 + $1.duration
+            $0 + $1.durationInMinutes
         }
     }
 
@@ -123,12 +126,11 @@ struct TopicDetailView: View
         }
     }
 
-    private func durationString(_ interval: TimeInterval) -> String
+    private func durationString(_ minutes: Int) -> String
     {
-        let total = Int(interval)
-        let hours = total / 3600
-        let minutes = (total % 3600) / 60
-        return String(format: "%dh %02dm", hours, minutes)
+        let hours = minutes / 60
+        let remainingMinutes = minutes % 60
+        return String(format: "%dh %02dm", hours, remainingMinutes)
     }
 }
 

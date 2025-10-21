@@ -1,8 +1,8 @@
 //
 //  WeekRow.swift
-//  Goals
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 11-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
 
 import SwiftUI
@@ -41,3 +41,4 @@ struct WeekRow: View
     return WeekRow(days: days, states: states)
         .preferredColorScheme(.light)
 }
+

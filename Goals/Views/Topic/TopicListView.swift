@@ -1,8 +1,8 @@
 //
-//  TopicView.swift
-//  Goals
+//  TopicListView.swift
+//  GoalsV2
 //
-//  Created by Adolfo Gerard Montilla Gonzalez on 08-08-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
 
 import SwiftUI
@@ -87,3 +87,4 @@ struct TopicListView: View
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
+
