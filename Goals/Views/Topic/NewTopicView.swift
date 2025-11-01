@@ -35,6 +35,7 @@ struct NewTopicView: View
                 {
                     dismiss()
                 }
+                .disabled(topic.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
             ToolbarItem(placement: .cancellationAction)
             {

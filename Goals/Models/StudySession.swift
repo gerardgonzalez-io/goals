@@ -43,7 +43,8 @@ class StudySession
 extension StudySession
 {
     /// Sample data for previews, tests, or prototyping.
-    static let sampleData: [StudySession] = {
+    static let sampleData: [StudySession] =
+    {
         let topics = Topic.sampleData
         let goal = Goal.sampleData.first!
 

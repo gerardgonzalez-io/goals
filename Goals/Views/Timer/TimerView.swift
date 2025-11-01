@@ -210,7 +210,6 @@ extension TimerView
         guard let capturedStart = sessionStartDate
         else
         {
-
             return
         }
 
