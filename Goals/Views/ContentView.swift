@@ -11,6 +11,8 @@ import SwiftData
 struct ContentView: View
 {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var timer = Timer()
 
     var body: some View
     {
@@ -28,10 +30,35 @@ struct ContentView: View
 
             Tab("Timer", systemImage: "timer")
             {
-                TimerView()
+                TimerView(timer: timer)
             }
         }
-        
+        .onAppear
+        {
+            UserDefaults.standard.set(UUID().uuidString, forKey: "currentLaunchID")
+        }
+        .onChange(of: scenePhase)
+        { oldPhase, newPhase in
+            switch newPhase
+            {
+            case .background:
+                UserDefaults.standard.set(UUID().uuidString, forKey: "lastSessionID")
+                timer.saveSnapshot()
+            case .active:
+                let lastSessionID = UserDefaults.standard.string(forKey: "lastSessionID")
+                let currentLaunchID = UserDefaults.standard.string(forKey: "currentLaunchID")
+                if lastSessionID == currentLaunchID
+                {
+                    timer.restoreFromSnapshotAndResume()
+                }
+                else
+                {
+                    UserDefaults.standard.removeObject(forKey: "timer.snapshot.v1")
+                }
+            default:
+                break
+            }
+        }
     }
 }
 

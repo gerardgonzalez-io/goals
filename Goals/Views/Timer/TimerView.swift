@@ -15,7 +15,8 @@ struct TimerView: View
     @Query(sort: \Goal.createdAt, order: .forward) private var goals: [Goal]
     @Query(sort: \Topic.name) private var topics: [Topic]
 
-    @State private var timer = Timer()
+    @Bindable var timer: Timer
+
     @State private var selectedTopic: Topic? = nil
     @State private var isPresentingTopicSheet: Bool = false
     @State private var draftSelectedTopic: Topic? = nil
@@ -247,14 +248,14 @@ extension TimerView
 
 #Preview("Dark")
 {
-    TimerView()
+    TimerView(timer: Timer())
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Light")
 {
-    TimerView()
+    TimerView(timer: Timer())
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }

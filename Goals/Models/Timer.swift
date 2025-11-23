@@ -8,6 +8,16 @@
 import SwiftUI
 import Foundation
 
+private let kTimerSnapshotKey = "timer.snapshot.v1"
+
+private struct TimerSnapshot: Codable
+{
+    let isRunning: Bool
+    let startDate: Date?
+    let accumulatedBeforeStart: TimeInterval
+    let elapsed: TimeInterval
+}
+
 @MainActor
 @Observable
 final class Timer
@@ -110,5 +120,50 @@ final class Timer
         let centiseconds = Int((time - floor(time)) * 100)
         return String(format: "%02d:%02d,%02d", minutes, seconds, centiseconds)
     }
-}
+    
+    func saveSnapshot()
+    {
+        let snap = TimerSnapshot(
+            isRunning: isRunning,
+            startDate: startDate,
+            accumulatedBeforeStart: accumulatedBeforeStart,
+            elapsed: elapsed
+        )
+        if let data = try? JSONEncoder().encode(snap)
+        {
+            UserDefaults.standard.set(data, forKey: kTimerSnapshotKey)
+        }
+    }
 
+    func restoreFromSnapshotAndResume()
+    {
+        guard
+            let data = UserDefaults.standard.data(forKey: kTimerSnapshotKey),
+            let snap = try? JSONDecoder().decode(TimerSnapshot.self, from: data)
+        else { return }
+
+        timer?.invalidate(); timer = nil
+
+        if snap.isRunning, let start = snap.startDate
+        {
+            // Recalcular el tiempo transcurrido durante el background
+            let recalculated = snap.accumulatedBeforeStart + Date().timeIntervalSince(start)
+            elapsed = recalculated
+            accumulatedBeforeStart = recalculated
+            startDate = Date()
+            isRunning = true
+            timer = Foundation.Timer.scheduledTimer(withTimeInterval: frequency, repeats: true)
+            { [weak self] _ in
+                self?.update()
+            }
+            timer?.tolerance = 0.1
+        }
+        else
+        {
+            isRunning = false
+            startDate = nil
+            accumulatedBeforeStart = snap.accumulatedBeforeStart
+            elapsed = snap.elapsed
+        }
+    }
+}
