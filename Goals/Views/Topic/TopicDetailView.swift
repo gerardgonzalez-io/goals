@@ -15,7 +15,6 @@ struct TopicDetailView: View
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query private var sessions: [StudySession]
-    @State private var isShowingCalendar = false
 
     private var totalDuration: Int
     {
@@ -26,17 +25,11 @@ struct TopicDetailView: View
     {
         let calendar = Calendar.current
         let today = Date()
-        return sessions.filter
-        { session in
-            // valida el comportamiento de la app para ver si es posible
-            // que se guarden sesiones con startDate nulas
-            // session.startDate ?? today
-            calendar.isDate(session.normalizedDay, inSameDayAs: today)
-        }
-        .reduce(0)
-        {
-            $0 + $1.durationInMinutes
-        }
+        return sessions
+            .filter { session in
+                calendar.isDate(session.normalizedDay, inSameDayAs: today)
+            }
+            .reduce(0) { $0 + $1.durationInMinutes }
     }
 
     init(topic: Topic)
@@ -59,17 +52,77 @@ struct TopicDetailView: View
     {
         ScrollView
         {
-            VStack(spacing: 16)
+            VStack(alignment: .leading, spacing: 24)
             {
-                TopicCard(description: "Today",
-                          timeSpent:   durationString(todayDuration))
+                // Metric cards
+                VStack(spacing: 16)
+                {
+                    TopicCard(
+                        title: "Today",
+                        value: durationString(todayDuration),
+                        subtitle: todayDuration > 0
+                            ? "Study time today"
+                            : "You haven't studied today yet",
+                        isPrimary: true
+                    )
 
-                TopicCard(description: "Total",
-                          timeSpent:   durationString(totalDuration))
+                    TopicCard(
+                        title: "Total",
+                        value: durationString(totalDuration),
+                        subtitle: "Total time spent on this topic",
+                        isPrimary: false
+                    )
+                }
+                .padding(.horizontal, 20)
 
+                // Study history
+                VStack(alignment: .leading, spacing: 8)
+                {
+                    Text("Study history")
+                        .font(.headline)
+                        .padding(.horizontal, 20)
+
+                    NavigationLink
+                    {
+                        CalendarView(topic: topic)
+                    }
+                    label:
+                    {
+                        HStack(spacing: 12)
+                        {
+                            Image(systemName: "calendar")
+                                .imageScale(.medium)
+                                .foregroundStyle(.accent)
+
+                            VStack(alignment: .leading, spacing: 2)
+                            {
+                                Text("Open sessions calendar")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+
+                                Text("See which days you studied this topic")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .fill(Color(.secondarySystemBackground))
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 24)
+                }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            .padding(.bottom, 16)
         }
         .navigationTitle(topic.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -86,42 +139,7 @@ struct TopicDetailView: View
                 {
                     Image(systemName: "chevron.left")
                 }
-                .accessibilityLabel("Atrás")
-            }
-
-            ToolbarItem(placement: .topBarTrailing)
-            {
-                Button
-                {
-                    isShowingCalendar = true
-                }
-                label:
-                {
-                    Image(systemName: "calendar")
-                }
-                .accessibilityLabel("Calendario")
-            }
-        }
-        .sheet(isPresented: $isShowingCalendar)
-        {
-            NavigationStack
-            {
-                CalendarView(topic: topic)
-                    .toolbar
-                    {
-                        ToolbarItem(placement: .topBarTrailing)
-                        {
-                            Button
-                            {
-                                isShowingCalendar = false
-                            }
-                            label:
-                            {
-                                Image(systemName: "xmark")
-                            }
-                            .accessibilityLabel("Close")
-                        }
-                    }
+                .accessibilityLabel("Back")
             }
         }
     }
