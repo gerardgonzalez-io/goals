@@ -14,13 +14,15 @@ struct CalendarView: View {
 
     @Query private var topicSessions: [StudySession]
     @State private var completionCache: [Date: Bool] = [:]
+    @State private var monthOffset: Int = 0   // 0 = mes actual, -1 = mes anterior, etc.
 
     init(topic: Topic)
     {
         self.topic = topic
         self.topicID = topic.id
-        self._topicSessions = Query(filter: #Predicate<StudySession>
-        { session in
+
+        let topicID = topic.id
+        self._topicSessions = Query(filter: #Predicate<StudySession> { session in
             session.topic.id == topicID
         })
     }
@@ -32,9 +34,9 @@ struct CalendarView: View {
         return cal
     }()
 
-    private let monthsBack = 240
-
     private let today = Date()
+
+    // MARK: - Lógica de progreso (TUYA, intacta)
 
     // Primer día con sesiones para este topic (normalizado)
     private func earliestTopicDay() -> Date?
@@ -63,7 +65,6 @@ struct CalendarView: View {
     }
 
     // Proveedor del estado de cumplimiento para un día concreto.
-    // Reemplaza esta lógica con la fuente real de datos del `Topic` cuando esté disponible.
     private func isCompleted(on date: Date) -> Bool
     {
         // Cache por día normalizado para evitar recomputar
@@ -80,86 +81,172 @@ struct CalendarView: View {
             return false
         }
 
-        // Regla del día cumplido: al menos un objetivo de los tópicos del día fue cumplido.
-        // Como ya filtramos por `topic`, esto equivale a si ese tópico cumplió su objetivo ese día.
+        // Día cumplido si al menos un objetivo fue cumplido
         let met = status.isMet.contains(true)
         completionCache[dayKey] = met
         return met
     }
 
+    // MARK: - LÓGICA DE FLECHAS (copiada del otro calendario)
+
+    /// Inicio del día de hoy
+    private var todayStart: Date {
+        calendar.startOfDay(for: today)
+    }
+
+    /// Primer día del mes base (mes actual) desplazado por monthOffset
+    private var startOfMonth: Date
+    {
+        let components = calendar.dateComponents([.year, .month], from: todayStart)
+        let baseMonthStart = calendar.date(from: components) ?? todayStart
+        return calendar.date(byAdding: .month, value: monthOffset, to: baseMonthStart) ?? baseMonthStart
+    }
+
+    /// Título del mes (ej. "November 2025")
+    private var monthTitle: String
+    {
+        let formatter = DateFormatter()
+        formatter.calendar = calendar
+        formatter.locale = .current
+        formatter.dateFormat = "LLLL yyyy"
+        return formatter.string(from: startOfMonth)
+    }
+
+    /// ¿Podemos ir al mes siguiente? (nunca ir al futuro)
+    private var canGoNextMonth: Bool {
+        monthOffset < 0
+    }
+
+    private var canGoPreviousMonth: Bool {
+        true // si quieres, luego lo limitamos según earliestTopicDay()
+    }
+
+    private func goToPreviousMonth() {
+        monthOffset -= 1
+    }
+
+    private func goToNextMonth() {
+        guard canGoNextMonth else { return }
+        monthOffset += 1
+    }
+
+    // MARK: - Body
+
     var body: some View
     {
         ScrollView
         {
-            LazyVStack(alignment: .leading, spacing: 24, pinnedViews: [.sectionHeaders])
+            VStack(spacing: 24)
             {
-                ForEach(0..<(monthsBack + 1), id: \.self)
-                { offset in
-                    if let monthDate = calendar.date(byAdding: .month, value: -offset, to: firstOfCurrentMonth())
-                    {
-                        Section(header: MonthHeader(date: monthDate, calendar: calendar))
-                        {
-                            WeekdayRow(calendar: calendar)
-                                .padding(.horizontal)
+                header
 
-                            MonthGrid(
-                                month: monthDate,
-                                calendar: calendar,
-                                today: today,
-                                isCompleted: isCompleted(on:),
-                                shouldShowIndicator: shouldShowIndicator(on:)
-                            )
-                            .padding(.horizontal)
-                        }
-                    }
-                }
+                WeekdayRow(calendar: calendar)
+                    .padding(.horizontal, 20)
+
+                MonthGrid(
+                    month: startOfMonth,               // ← solo este mes
+                    calendar: calendar,
+                    today: today,
+                    isCompleted: isCompleted(on:),
+                    shouldShowIndicator: shouldShowIndicator(on:)
+                )
+                .padding(.horizontal, 20)
+
+                Spacer(minLength: 16)
             }
-            .padding(.vertical, 8)
+            .padding(.top, 16)
         }
         .navigationTitle(topic.name)
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemBackground))
     }
-
-    private func firstOfCurrentMonth() -> Date
-    {
-        let comps = calendar.dateComponents([.year, .month], from: today)
-        return calendar.date(from: comps) ?? today
-    }
 }
 
-// MARK: - Encabezado del mes
-private struct MonthHeader: View
-{
-    let date: Date
-    let calendar: Calendar
+// MARK: - Header con flechitas (lógica copiada)
 
-    var body: some View
+private extension CalendarView
+{
+    var header: some View
     {
-        let formatter = DateFormatter()
-        formatter.calendar = calendar
-        formatter.locale = .current
-        formatter.dateFormat = "LLLL yyyy" // Nombre del mes + año
+        // Colores de la marca
+        let brandLight = Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
+        let brandDark  = Color(red: 29/255, green: 53/255,  blue: 87/255)  // #1D3557
 
         return ZStack
         {
-            // Material sutil para adherirse a las guías de diseño
-            VisualEffectBlur(style: .systemThinMaterial)
-                .ignoresSafeArea(edges: .horizontal)
-            HStack
+            // Banda superior con gradiente suave de la marca
+            LinearGradient(
+                colors: [brandDark, brandLight],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+            .opacity(0.18)
+            .ignoresSafeArea(edges: .horizontal)
+
+            HStack(alignment: .center, spacing: 16)
             {
-                Text(formatter.string(from: date))
-                    .font(.title2.weight(.semibold))
-                    .accessibilityAddTraits(.isHeader)
-                Spacer()
+                // Flecha izquierda
+                Button
+                {
+                    goToPreviousMonth()
+                }
+                label:
+                {
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            Image(systemName: "chevron.left")
+                                .font(.subheadline.weight(.semibold))
+                        )
+                        .frame(width: 32, height: 32)
+                }
+                .buttonStyle(.plain)
+                .disabled(!canGoPreviousMonth)
+                .opacity(canGoPreviousMonth ? 1 : 0.35)
+
+                Spacer(minLength: 8)
+
+                // Título de mes + subtítulo motivador
+                VStack(spacing: 4)
+                {
+                    Text(monthTitle)
+                        .font(.headline.weight(.semibold))
+
+                    Text("See your study streak for this topic")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .multilineTextAlignment(.center)
+
+                Spacer(minLength: 8)
+
+                // Flecha derecha
+                Button
+                {
+                    goToNextMonth()
+                }
+                label:
+                {
+                    Circle()
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            Image(systemName: "chevron.right")
+                                .font(.subheadline.weight(.semibold))
+                        )
+                        .frame(width: 32, height: 32)
+                }
+                .buttonStyle(.plain)
+                .disabled(!canGoNextMonth)
+                .opacity(canGoNextMonth ? 1 : 0.35)
             }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
         }
     }
 }
 
 // MARK: - Fila de días de la semana
+
 private struct WeekdayRow: View
 {
     let calendar: Calendar
@@ -168,6 +255,7 @@ private struct WeekdayRow: View
     {
         let symbols = calendar.shortStandaloneWeekdaySymbols
         let ordered = Array(symbols[calendar.firstWeekday-1..<symbols.count]) + Array(symbols[0..<calendar.firstWeekday-1])
+
         LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 0), count: 7))
         {
             ForEach(ordered, id: \.self)
@@ -181,7 +269,9 @@ private struct WeekdayRow: View
         .accessibilityHidden(true)
     }
 }
-// MARK: - Cuadrícula del mes
+
+// MARK: - Cuadrícula del mes (TUYA, sin cambios de lógica)
+
 private struct MonthGrid: View
 {
     let month: Date
@@ -249,7 +339,8 @@ private struct MonthGrid: View
     }
 }
 
-// MARK: - Celda de día
+// MARK: - Celda de día (igual que tu versión original de Goals)
+
 private struct DayCell: View
 {
     let date: Date
@@ -328,7 +419,8 @@ private struct DayCell: View
     }
 }
 
-// Evita dependencias externas: pequeño wrapper que usa material del sistema
+// MARK: - Blur helper
+
 private struct VisualEffectBlur: UIViewRepresentable
 {
     let style: UIBlurEffect.Style
@@ -344,7 +436,6 @@ private struct VisualEffectBlur: UIViewRepresentable
     CalendarView(topic: SampleData.shared.topic)
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
-        
 }
 
 #Preview("Light")
@@ -353,4 +444,3 @@ private struct VisualEffectBlur: UIViewRepresentable
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
-
