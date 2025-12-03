@@ -54,33 +54,102 @@ struct TopicDetailView: View
         {
             VStack(alignment: .leading, spacing: 24)
             {
-                // Metric cards
-                VStack(spacing: 16)
+                // MARK: - Focus session / Timer entry
+                VStack(alignment: .leading, spacing: 8)
                 {
-                    TopicCard(
-                        title: "Today",
-                        value: durationString(todayDuration),
-                        subtitle: todayDuration > 0
-                            ? "Study time today"
-                            : "You haven't studied today yet",
-                        isPrimary: true
-                    )
+                    Text("Focus session")
+                        .font(.headline)
 
-                    TopicCard(
-                        title: "Total",
-                        value: durationString(totalDuration),
-                        subtitle: "Total time spent on this topic",
-                        isPrimary: false
-                    )
+                    Button
+                    {
+                        // Timer action will be wired here later
+                    }
+                    label:
+                    {
+                        HStack(spacing: 14)
+                        {
+                            // Icon bubble with brand gradient
+                            ZStack
+                            {
+                                LinearGradient(
+                                    colors: [
+                                        Color(red: 63/255, green: 167/255, blue: 214/255), // #3FA7D6
+                                        Color(red: 29/255, green: 53/255,  blue: 87/255)   // #1D3557
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
+
+                                Image(systemName: "play.fill")
+                                    .font(.headline)
+                                    .foregroundStyle(.white)
+                            }
+
+                            VStack(alignment: .leading, spacing: 3)
+                            {
+                                Text("Start focus session")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+
+                                Text("Track a new study session for this topic")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+
+                            Spacer()
+
+                            Image(systemName: "chevron.right")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.tertiary)
+                        }
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                                .fill(Color(.systemBackground))
+                                .shadow(color: Color.black.opacity(0.06),
+                                        radius: 10,
+                                        x: 0,
+                                        y: 4)
+                        )
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 20)
 
-                // Study history
+                // MARK: - Metric cards section
+                VStack(alignment: .leading, spacing: 8)
+                {
+                    Text("Study time")
+                        .font(.headline)
+
+                    VStack(spacing: 16)
+                    {
+                        TopicCard(
+                            title: "Today",
+                            value: durationString(todayDuration),
+                            subtitle: todayDuration > 0
+                                ? "Study time today"
+                                : "You haven't studied today yet",
+                            isPrimary: true
+                        )
+
+                        TopicCard(
+                            title: "Total",
+                            value: durationString(totalDuration),
+                            subtitle: "Total time spent on this topic",
+                            isPrimary: false
+                        )
+                    }
+                }
+                .padding(.horizontal, 20)
+
+                // MARK: - Progress & calendar
                 VStack(alignment: .leading, spacing: 8)
                 {
                     Text("Study history")
                         .font(.headline)
-                        .padding(.horizontal, 20)
 
                     NavigationLink
                     {
@@ -118,11 +187,11 @@ struct TopicDetailView: View
                         )
                     }
                     .buttonStyle(.plain)
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 4)
                 }
+                .padding(.horizontal, 20)
             }
-            .padding(.bottom, 16)
+            .padding(.vertical, 20)
         }
         .navigationTitle(topic.name)
         .navigationBarTitleDisplayMode(.inline)
