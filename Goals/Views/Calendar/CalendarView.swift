@@ -14,7 +14,7 @@ struct CalendarView: View {
 
     @Query private var topicSessions: [StudySession]
     @State private var completionCache: [Date: Bool] = [:]
-    @State private var monthOffset: Int = 0   // 0 = mes actual, -1 = mes anterior, etc.
+    @State private var monthOffset: Int = 0   // 0 = current month, -1 = previous, etc.
 
     init(topic: Topic)
     {
@@ -36,18 +36,16 @@ struct CalendarView: View {
 
     private let today = Date()
 
-    // MARK: - Lógica de progreso (TUYA, intacta)
+    // MARK: - Progress logic (unchanged)
 
-    // Primer día con sesiones para este topic (normalizado)
     private func earliestTopicDay() -> Date?
     {
         topicSessions.map(\.normalizedDay).min()
     }
 
-    // Mostrar indicador solo para días pasados. Para hoy, solo si ya se cumplió la meta.
+    // Show indicator only for past days. For today, only if the goal was met.
     private func shouldShowIndicator(on date: Date) -> Bool
     {
-        // Si el tópico no tiene sesiones, no mostrar indicadores en ningún día
         if topicSessions.isEmpty { return false }
 
         let startOfDate = calendar.startOfDay(for: date)
@@ -55,23 +53,19 @@ struct CalendarView: View {
 
         if let rawFirstDay = earliestTopicDay() {
             let firstDay = calendar.startOfDay(for: rawFirstDay)
-            // No mostrar nada antes de la primera sesión registrada para este topic
             if startOfDate < firstDay { return false }
         }
-        // Si no hay sesiones aún (o el query aún no cargó), usar comportamiento por defecto
+
         if startOfDate < startOfToday { return true }
         if calendar.isDate(startOfDate, inSameDayAs: startOfToday) { return isCompleted(on: date) }
         return false
     }
 
-    // Proveedor del estado de cumplimiento para un día concreto.
     private func isCompleted(on date: Date) -> Bool
     {
-        // Cache por día normalizado para evitar recomputar
         let dayKey = calendar.startOfDay(for: date)
         if let cached = completionCache[dayKey] { return cached }
 
-        // Filtra sesiones del mismo día (ya normalizadas por StudySession.normalizedDay)
         let sessionsForDay = topicSessions.filter { session in
             calendar.isDate(session.normalizedDay, inSameDayAs: dayKey)
         }
@@ -81,20 +75,18 @@ struct CalendarView: View {
             return false
         }
 
-        // Día cumplido si al menos un objetivo fue cumplido
         let met = status.isMet.contains(true)
         completionCache[dayKey] = met
         return met
     }
 
-    // MARK: - LÓGICA DE FLECHAS (copiada del otro calendario)
+    // MARK: - Month navigation (same logic as Habits)
 
-    /// Inicio del día de hoy
     private var todayStart: Date {
         calendar.startOfDay(for: today)
     }
 
-    /// Primer día del mes base (mes actual) desplazado por monthOffset
+    /// First day of the base month (current) shifted by `monthOffset`
     private var startOfMonth: Date
     {
         let components = calendar.dateComponents([.year, .month], from: todayStart)
@@ -102,7 +94,6 @@ struct CalendarView: View {
         return calendar.date(byAdding: .month, value: monthOffset, to: baseMonthStart) ?? baseMonthStart
     }
 
-    /// Título del mes (ej. "November 2025")
     private var monthTitle: String
     {
         let formatter = DateFormatter()
@@ -112,13 +103,12 @@ struct CalendarView: View {
         return formatter.string(from: startOfMonth)
     }
 
-    /// ¿Podemos ir al mes siguiente? (nunca ir al futuro)
     private var canGoNextMonth: Bool {
-        monthOffset < 0
+        monthOffset < 0 // never go into the future
     }
 
     private var canGoPreviousMonth: Bool {
-        true // si quieres, luego lo limitamos según earliestTopicDay()
+        true // you can later clamp this using earliestTopicDay()
     }
 
     private func goToPreviousMonth() {
@@ -136,19 +126,31 @@ struct CalendarView: View {
     {
         ScrollView
         {
-            VStack(spacing: 24)
+            VStack(spacing: 20)
             {
                 header
 
-                WeekdayRow(calendar: calendar)
-                    .padding(.horizontal, 20)
+                // Calendar card
+                VStack(spacing: 12)
+                {
+                    WeekdayRow(calendar: calendar)
 
-                MonthGrid(
-                    month: startOfMonth,               // ← solo este mes
-                    calendar: calendar,
-                    today: today,
-                    isCompleted: isCompleted(on:),
-                    shouldShowIndicator: shouldShowIndicator(on:)
+                    MonthGrid(
+                        month: startOfMonth,
+                        calendar: calendar,
+                        today: today,
+                        isCompleted: isCompleted(on:),
+                        shouldShowIndicator: shouldShowIndicator(on:)
+                    )
+                }
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .fill(Color(.secondarySystemBackground))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                        .strokeBorder(Color.white.opacity(0.04), lineWidth: 1)
                 )
                 .padding(.horizontal, 20)
 
@@ -162,19 +164,18 @@ struct CalendarView: View {
     }
 }
 
-// MARK: - Header con flechitas (lógica copiada)
+// MARK: - Header with arrows
 
 private extension CalendarView
 {
     var header: some View
     {
-        // Colores de la marca
+        // Brand colors
         let brandLight = Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
         let brandDark  = Color(red: 29/255, green: 53/255,  blue: 87/255)  // #1D3557
 
         return ZStack
         {
-            // Banda superior con gradiente suave de la marca
             LinearGradient(
                 colors: [brandDark, brandLight],
                 startPoint: .leading,
@@ -185,7 +186,6 @@ private extension CalendarView
 
             HStack(alignment: .center, spacing: 16)
             {
-                // Flecha izquierda
                 Button
                 {
                     goToPreviousMonth()
@@ -206,7 +206,6 @@ private extension CalendarView
 
                 Spacer(minLength: 8)
 
-                // Título de mes + subtítulo motivador
                 VStack(spacing: 4)
                 {
                     Text(monthTitle)
@@ -220,7 +219,6 @@ private extension CalendarView
 
                 Spacer(minLength: 8)
 
-                // Flecha derecha
                 Button
                 {
                     goToNextMonth()
@@ -245,7 +243,7 @@ private extension CalendarView
     }
 }
 
-// MARK: - Fila de días de la semana
+// MARK: - Weekday row
 
 private struct WeekdayRow: View
 {
@@ -261,7 +259,7 @@ private struct WeekdayRow: View
             ForEach(ordered, id: \.self)
             { s in
                 Text(s.uppercased())
-                    .font(.caption2)
+                    .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
             }
@@ -270,7 +268,7 @@ private struct WeekdayRow: View
     }
 }
 
-// MARK: - Cuadrícula del mes (TUYA, sin cambios de lógica)
+// MARK: - Month grid
 
 private struct MonthGrid: View
 {
@@ -283,35 +281,36 @@ private struct MonthGrid: View
     var body: some View
     {
         let days = makeDays()
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 24), spacing: 0), count: 7), spacing: 12)
+        LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 24), spacing: 0), count: 7), spacing: 10)
         {
             ForEach(days, id: \.self)
             { day in
                 if let dayDate = day.date
                 {
-                    DayCell(date: dayDate,
-                            isToday: calendar.isDate(dayDate, inSameDayAs: today),
-                            inCurrentMonth: day.inCurrentMonth,
-                            completed: isCompleted(dayDate),
-                            showIndicator: shouldShowIndicator(dayDate))
-                        .frame(height: 56)
+                    DayCell(
+                        date: dayDate,
+                        isToday: calendar.isDate(dayDate, inSameDayAs: today),
+                        inCurrentMonth: day.inCurrentMonth,
+                        completed: isCompleted(dayDate),
+                        showIndicator: shouldShowIndicator(dayDate)
+                    )
+                    .frame(height: 44)
                 }
                 else
                 {
-                    Color.clear.frame(height: 56)
+                    Color.clear.frame(height: 44)
                 }
             }
         }
     }
 
-    // Construye los "slots" del mes incluyendo espacios iniciales según el primer día de la semana
+    // Build slots including leading blanks to align weekdays
     private func makeDays() -> [DaySlot]
     {
         let range = calendar.range(of: .day, in: .month, for: month) ?? (1..<31)
         let firstOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month)) ?? month
         let firstWeekdayIndex = calendar.component(.weekday, from: firstOfMonth)
 
-        // Ajustar al primer día configurado en el calendario del usuario
         let leadingEmpty = (firstWeekdayIndex - calendar.firstWeekday + 7) % 7
 
         var result: [DaySlot] = []
@@ -324,7 +323,7 @@ private struct MonthGrid: View
                 result.append(DaySlot(date: date, inCurrentMonth: true))
             }
         }
-        // Rellenar hasta múltiplo de 7 para cuadrícula completa
+
         while result.count % 7 != 0
         {
             result.append(DaySlot(date: nil, inCurrentMonth: false))
@@ -339,7 +338,7 @@ private struct MonthGrid: View
     }
 }
 
-// MARK: - Celda de día (igual que tu versión original de Goals)
+// MARK: - Day cell (new elegant design)
 
 private struct DayCell: View
 {
@@ -349,49 +348,80 @@ private struct DayCell: View
     let completed: Bool
     let showIndicator: Bool
 
+    // Brand colors
+    private var brandLight: Color {
+        Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
+    }
+
+    private var brandDark: Color {
+        Color(red: 29/255, green: 53/255, blue: 87/255)   // #1D3557
+    }
+
+    private var successGradient: LinearGradient {
+        LinearGradient(
+            colors: [brandLight, brandDark],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+    }
+
+    private enum VisualStatus {
+        case none      // no indicator (future, before start, etc.)
+        case success   // goal met
+        case missed    // goal not met
+    }
+
+    private var status: VisualStatus {
+        guard showIndicator else { return .none }
+        return completed ? .success : .missed
+    }
+
     var body: some View
     {
-        VStack(spacing: 6)
+        let config = colorsAndIcon(for: status)
+
+        return ZStack
         {
+            // Base circle with background + border
+            Circle()
+                .fill(config.bg)
+                .overlay(
+                    Circle()
+                        .strokeBorder(config.border, lineWidth: 1.4)
+                )
+                .frame(width: 32, height: 32)
+                .overlay(
+                    // Extra ring for "today" when there is no status yet
+                    Group {
+                        if isToday && status == .none {
+                            Circle()
+                                .strokeBorder(brandLight.opacity(0.9), lineWidth: 1.6)
+                        }
+                    }
+                )
+
+            // Day number
             Text(dayNumber)
-                .font(.body.weight(isToday ? .semibold : .regular))
-                .foregroundStyle(inCurrentMonth ? Color.primary : Color.secondary.opacity(0.3))
-                .frame(maxWidth: .infinity)
-                .overlay(alignment: .topTrailing)
-                {
-                    if isToday
-                    {
-                        Circle()
-                            .strokeBorder(Color.accentColor.opacity(0.6), lineWidth: 1)
-                            .frame(width: 22, height: 22)
-                            .opacity(0) // marcador visual ligero si lo necesitas
+                .font(.subheadline.weight(isToday ? .semibold : .regular))
+                .foregroundStyle(config.text)
+
+            // Icon (check / x) in the corner when applicable
+            if let iconName = config.iconName
+            {
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Image(systemName: iconName)
+                            .font(.caption2.weight(.bold))
+                            .foregroundStyle(config.iconColor)
+                            .padding(2)
                     }
                 }
-
-            // Indicador de cumplimiento (reservar espacio fijo para evitar desalineaciones)
-            ZStack
-            {
-                if showIndicator
-                {
-                    Image(systemName: completed ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(completed ? Color.green : Color.red, .tint.opacity(0.2))
-                        .font(.system(size: 28, weight: .semibold))
-                        .opacity(inCurrentMonth ? 1 : 0.3)
-                        .accessibilityLabel(completed ? "Completado" : "No completado")
-                }
-                else
-                {
-                    // Placeholder invisible del mismo tamaño para mantener el alto
-                    Image(systemName: "circle.fill")
-                        .font(.system(size: 28, weight: .semibold))
-                        .opacity(0)
-                        .accessibilityHidden(true)
-                }
             }
-            .frame(height: 28)
         }
-        .padding(.vertical, 4)
+        .frame(height: 40)
+        .opacity(inCurrentMonth ? 1 : 0.4)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityText)
@@ -403,17 +433,61 @@ private struct DayCell: View
         return String(comps.day ?? 0)
     }
 
+    private func colorsAndIcon(for status: VisualStatus)
+        -> (bg: AnyShapeStyle, border: Color, text: Color, iconName: String?, iconColor: Color)
+    {
+        switch status {
+        case .success:
+            return (
+                bg: AnyShapeStyle(successGradient),
+                border: .clear,
+                text: .white,
+                iconName: "checkmark",
+                iconColor: .white
+            )
+
+        case .missed:
+            return (
+                bg: AnyShapeStyle(Color.clear),
+                border: Color.red.opacity(0.75),
+                text: .primary,
+                iconName: "xmark",
+                iconColor: Color.red.opacity(0.9)
+            )
+
+        case .none:
+            if inCurrentMonth {
+                return (
+                    bg: AnyShapeStyle(Color.secondary.opacity(0.08)),
+                    border: Color.secondary.opacity(0.15),
+                    text: .primary,
+                    iconName: nil,
+                    iconColor: .clear
+                )
+            } else {
+                return (
+                    bg: AnyShapeStyle(Color.clear),
+                    border: Color.clear,
+                    text: Color.secondary.opacity(0.4),
+                    iconName: nil,
+                    iconColor: .clear
+                )
+            }
+        }
+    }
+
     private var accessibilityText: String
     {
         let df = DateFormatter()
         df.dateStyle = .full
         let base = df.string(from: date)
-        if showIndicator
-        {
-            return completed ? "\(base), objetivo completado" : "\(base), objetivo no completado"
-        }
-        else
-        {
+
+        switch status {
+        case .success:
+            return "\(base), goal met"
+        case .missed:
+            return "\(base), goal not met"
+        case .none:
             return base
         }
     }
