@@ -64,20 +64,16 @@ struct CalendarView: View {
     private func isCompleted(on date: Date) -> Bool
     {
         let dayKey = calendar.startOfDay(for: date)
-        if let cached = completionCache[dayKey] { return cached }
 
         let sessionsForDay = topicSessions.filter { session in
             calendar.isDate(session.normalizedDay, inSameDayAs: dayKey)
         }
 
         guard let status = DailyStatus.compute(from: sessionsForDay) else {
-            completionCache[dayKey] = false
             return false
         }
 
-        let met = status.isMet.contains(true)
-        completionCache[dayKey] = met
-        return met
+        return status.isMet.contains(true)
     }
 
     // MARK: - Month navigation (same logic as Habits)
