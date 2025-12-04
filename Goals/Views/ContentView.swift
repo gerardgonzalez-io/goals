@@ -20,17 +20,12 @@ struct ContentView: View
         {
             Tab("Topics", systemImage: "list.bullet.rectangle")
             {
-                TopicListView()
+                TopicListView(timer: timer)
             }
 
             Tab("Streak", systemImage: "flame.fill")
             {
                 StreakView()
-            }
-
-            Tab("Timer", systemImage: "timer")
-            {
-                TimerView(timer: timer)
             }
         }
         .onAppear

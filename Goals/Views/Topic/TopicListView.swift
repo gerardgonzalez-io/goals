@@ -13,7 +13,9 @@ struct TopicListView: View
     @Query(sort: \Topic.name) private var topics: [Topic]
     @Environment(\.modelContext) private var context
     @State private var newTopic: Topic?
-    
+
+    @Bindable var timer: Timer
+
     var body: some View
     {
         NavigationSplitView
@@ -24,7 +26,7 @@ struct TopicListView: View
                 { topic in
                     NavigationLink(topic.name)
                     {
-                        TopicDetailView(topic: topic)
+                        TopicDetailView(topic: topic, timer: timer)
                     }
                 }
                 .onDelete(perform: deteleTopic(indexes:))
@@ -76,15 +78,14 @@ struct TopicListView: View
 
 #Preview("Dark")
 {
-    TopicListView()
+    TopicListView(timer: Timer())
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Light")
 {
-    TopicListView()
+    TopicListView(timer: Timer())
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
-

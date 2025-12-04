@@ -13,8 +13,9 @@ struct TopicDetailView: View
     let topic: Topic
 
     @Environment(\.modelContext) private var context
-    @Environment(\.dismiss) private var dismiss
     @Query private var sessions: [StudySession]
+
+    @Bindable var timer: Timer
 
     private var totalDuration: Int
     {
@@ -32,10 +33,11 @@ struct TopicDetailView: View
             .reduce(0) { $0 + $1.durationInMinutes }
     }
 
-    init(topic: Topic)
+    init(topic: Topic, timer: Timer)
     {
         self.topic = topic
-        // Fetch all sessions that belong to this topic, newest first
+        self._timer = Bindable(wrappedValue: timer)
+
         let topicID = topic.id
         let predicate = #Predicate<StudySession>
         { session in
@@ -54,15 +56,14 @@ struct TopicDetailView: View
         {
             VStack(alignment: .leading, spacing: 24)
             {
-                // MARK: - Focus session / Timer entry
                 VStack(alignment: .leading, spacing: 8)
                 {
                     Text("Focus session")
                         .font(.headline)
 
-                    Button
+                    NavigationLink
                     {
-                        // Timer action will be wired here later
+                        TimerView(timer: timer, preselectedTopic: topic)
                     }
                     label:
                     {
@@ -209,9 +210,12 @@ struct TopicDetailView: View
 {
     NavigationStack
     {
-        TopicDetailView(topic: SampleData.shared.topic)
-            .modelContainer(SampleData.shared.modelContainer)
-            .preferredColorScheme(.dark)
+        TopicDetailView(
+            topic: SampleData.shared.topic,
+            timer: Timer()
+        )
+        .modelContainer(SampleData.shared.modelContainer)
+        .preferredColorScheme(.dark)
     }
 }
 
@@ -219,8 +223,11 @@ struct TopicDetailView: View
 {
     NavigationStack
     {
-        TopicDetailView(topic: SampleData.shared.topic)
-            .modelContainer(SampleData.shared.modelContainer)
-            .preferredColorScheme(.light)
+        TopicDetailView(
+            topic: SampleData.shared.topic,
+            timer: Timer()
+        )
+        .modelContainer(SampleData.shared.modelContainer)
+        .preferredColorScheme(.light)
     }
 }
