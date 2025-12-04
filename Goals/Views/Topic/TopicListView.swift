@@ -18,45 +18,36 @@ struct TopicListView: View
 
     var body: some View
     {
-        NavigationSplitView
+        List
         {
-            List
-            {
-                ForEach(topics)
-                { topic in
-                    NavigationLink(topic.name)
-                    {
-                        TopicDetailView(topic: topic, timer: timer)
-                    }
-                }
-                .onDelete(perform: deteleTopic(indexes:))
-            }
-            .navigationTitle("Topics")
-            .toolbar
-            {
-                ToolbarItem
-                {
-                    Button("Add topic", systemImage: "plus", action: addTopic)
-                }
-                ToolbarItem(placement: .topBarTrailing)
-                {
-                    EditButton()
-                }
-            }
-            .sheet(item: $newTopic)
+            ForEach(topics)
             { topic in
-                NavigationStack
+                NavigationLink(topic.name)
                 {
-                    NewTopicView(topic: topic)
+                    TopicDetailView(topic: topic, timer: timer)
                 }
-                .interactiveDismissDisabled()
+            }
+            .onDelete(perform: deteleTopic(indexes:))
+        }
+        .navigationTitle("Topics")
+        .toolbar
+        {
+            ToolbarItem
+            {
+                Button("Add topic", systemImage: "plus", action: addTopic)
+            }
+            ToolbarItem(placement: .topBarTrailing)
+            {
+                EditButton()
             }
         }
-        detail:
-        {
-            Text("Select a topic")
-                .navigationTitle("Topic")
-                .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $newTopic)
+        { topic in
+            NavigationStack
+            {
+                NewTopicView(topic: topic)
+            }
+            .interactiveDismissDisabled()
         }
     }
     
@@ -78,14 +69,20 @@ struct TopicListView: View
 
 #Preview("Dark")
 {
-    TopicListView(timer: Timer())
-        .modelContainer(SampleData.shared.modelContainer)
-        .preferredColorScheme(.dark)
+    NavigationStack
+    {
+        TopicListView(timer: Timer())
+            .modelContainer(SampleData.shared.modelContainer)
+            .preferredColorScheme(.dark)
+    }
 }
 
 #Preview("Light")
 {
-    TopicListView(timer: Timer())
-        .modelContainer(SampleData.shared.modelContainer)
-        .preferredColorScheme(.light)
+    NavigationStack
+    {
+        TopicListView(timer: Timer())
+            .modelContainer(SampleData.shared.modelContainer)
+            .preferredColorScheme(.light)
+    }
 }

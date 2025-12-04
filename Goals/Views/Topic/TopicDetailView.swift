@@ -69,7 +69,6 @@ struct TopicDetailView: View
                     {
                         HStack(spacing: 14)
                         {
-                            // Icon bubble with brand gradient
                             ZStack
                             {
                                 LinearGradient(
@@ -119,7 +118,6 @@ struct TopicDetailView: View
                 }
                 .padding(.horizontal, 20)
 
-                // MARK: - Metric cards section
                 VStack(alignment: .leading, spacing: 8)
                 {
                     Text("Study time")
@@ -146,7 +144,6 @@ struct TopicDetailView: View
                 }
                 .padding(.horizontal, 20)
 
-                // MARK: - Progress & calendar
                 VStack(alignment: .leading, spacing: 8)
                 {
                     Text("Study history")

@@ -89,8 +89,6 @@ struct TopicCard: View
     }
 }
 
-// MARK: - Previews
-
 #Preview("Primary - Dark")
 {
     TopicCard(

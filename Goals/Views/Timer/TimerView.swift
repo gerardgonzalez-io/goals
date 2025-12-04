@@ -23,15 +23,11 @@ struct TimerView: View
     @State private var sessionStartDate: Date? = nil
     @State private var didAutoConfigureFromPreselection = false
 
-    // MARK: - Init
-
     init(timer: Timer, preselectedTopic: Topic)
     {
         self._timer = Bindable(wrappedValue: timer)
         self.preselectedTopic = preselectedTopic
     }
-
-    // MARK: - Body
 
     var body: some View
     {
@@ -86,8 +82,6 @@ struct TimerView: View
     }
 }
 
-// MARK: - Subviews UI
-
 private extension TimerView
 {
     var topicHeader: some View
@@ -97,7 +91,7 @@ private extension TimerView
             ZStack
             {
                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(brandGradient) // gradiente de marca
+                    .fill(brandGradient)
 
                 Image(systemName: "book.closed.fill")
                     .font(.system(size: 18, weight: .semibold))
@@ -140,7 +134,6 @@ private extension TimerView
             let doneEnabled = timer.elapsed > 0 && selectedTopic != nil
             let startEnabled = selectedTopic != nil
 
-            // DONE
             Button
             {
                 if let topic = selectedTopic
@@ -155,7 +148,7 @@ private extension TimerView
             {
                 Circle()
                     .fill(doneEnabled
-                          ? AnyShapeStyle(successGradient)   // gradiente verde
+                          ? AnyShapeStyle(successGradient)
                           : AnyShapeStyle(Color(.secondarySystemFill)))
                     .frame(width: 96, height: 96)
                     .shadow(color: doneEnabled ? successShadow : .clear,
@@ -170,7 +163,6 @@ private extension TimerView
 
             Spacer()
 
-            // START / PAUSE / RESUME
             Button
             {
                 createStartDateForSession()
@@ -185,8 +177,8 @@ private extension TimerView
                         !startEnabled
                         ? AnyShapeStyle(Color(.secondarySystemFill))
                         : (running
-                           ? AnyShapeStyle(brandGradient)     // azul (marca) cuando está corriendo
-                           : AnyShapeStyle(successGradient))  // verde cuando va a empezar / reanudar
+                           ? AnyShapeStyle(brandGradient)
+                           : AnyShapeStyle(successGradient))
                     )
                     .frame(width: 96, height: 96)
                     .shadow(color: startEnabled ? brandShadow : .clear,
@@ -200,16 +192,13 @@ private extension TimerView
             }
             .disabled(!startEnabled)
         }
-        .padding(.horizontal, 4) // CHANGE: pequeño ajuste
+        .padding(.horizontal, 4)
         .padding(.bottom, 32)
     }
 }
 
-// MARK: - Gradients & colors (UI only)
-
 private extension TimerView
 {
-    // CHANGE: gradiente azul de la marca
     var brandGradient: LinearGradient
     {
         LinearGradient(
@@ -222,13 +211,12 @@ private extension TimerView
         )
     }
 
-    // CHANGE: gradiente verde para estados de éxito
     var successGradient: LinearGradient
     {
         LinearGradient(
             colors: [
-                Color(red: 0.04, green: 0.65, blue: 0.45), // verde oscuro
-                Color(red: 0.16, green: 0.80, blue: 0.60)  // verde brillante
+                Color(red: 0.04, green: 0.65, blue: 0.45),
+                Color(red: 0.16, green: 0.80, blue: 0.60)
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -245,8 +233,6 @@ private extension TimerView
         Color.black.opacity(0.25)
     }
 }
-
-// MARK: - Helpers (sin cambios de lógica)
 
 extension TimerView
 {

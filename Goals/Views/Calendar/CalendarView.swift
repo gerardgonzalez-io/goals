@@ -36,8 +36,6 @@ struct CalendarView: View {
 
     private let today = Date()
 
-    // MARK: - Progress logic (unchanged)
-
     private func earliestTopicDay() -> Date?
     {
         topicSessions.map(\.normalizedDay).min()
@@ -76,13 +74,10 @@ struct CalendarView: View {
         return status.isMet.contains(true)
     }
 
-    // MARK: - Month navigation (same logic as Habits)
-
     private var todayStart: Date {
         calendar.startOfDay(for: today)
     }
 
-    /// First day of the base month (current) shifted by `monthOffset`
     private var startOfMonth: Date
     {
         let components = calendar.dateComponents([.year, .month], from: todayStart)
@@ -99,24 +94,26 @@ struct CalendarView: View {
         return formatter.string(from: startOfMonth)
     }
 
-    private var canGoNextMonth: Bool {
-        monthOffset < 0 // never go into the future
+    private var canGoNextMonth: Bool
+    {
+        monthOffset < 0
     }
 
-    private var canGoPreviousMonth: Bool {
-        true // you can later clamp this using earliestTopicDay()
+    private var canGoPreviousMonth: Bool
+    {
+        true
     }
 
-    private func goToPreviousMonth() {
+    private func goToPreviousMonth()
+    {
         monthOffset -= 1
     }
 
-    private func goToNextMonth() {
+    private func goToNextMonth()
+    {
         guard canGoNextMonth else { return }
         monthOffset += 1
     }
-
-    // MARK: - Body
 
     var body: some View
     {
@@ -126,7 +123,6 @@ struct CalendarView: View {
             {
                 header
 
-                // Calendar card
                 VStack(spacing: 12)
                 {
                     WeekdayRow(calendar: calendar)
@@ -159,8 +155,6 @@ struct CalendarView: View {
         .background(Color(.systemBackground))
     }
 }
-
-// MARK: - Header with arrows
 
 private extension CalendarView
 {
@@ -239,8 +233,6 @@ private extension CalendarView
     }
 }
 
-// MARK: - Weekday row
-
 private struct WeekdayRow: View
 {
     let calendar: Calendar
@@ -263,8 +255,6 @@ private struct WeekdayRow: View
         .accessibilityHidden(true)
     }
 }
-
-// MARK: - Month grid
 
 private struct MonthGrid: View
 {
@@ -334,8 +324,6 @@ private struct MonthGrid: View
     }
 }
 
-// MARK: - Day cell (new elegant design)
-
 private struct DayCell: View
 {
     let date: Date
@@ -353,7 +341,8 @@ private struct DayCell: View
         Color(red: 29/255, green: 53/255, blue: 87/255)   // #1D3557
     }
 
-    private var successGradient: LinearGradient {
+    private var successGradient: LinearGradient
+    {
         LinearGradient(
             colors: [brandLight, brandDark],
             startPoint: .topLeading,
@@ -361,13 +350,15 @@ private struct DayCell: View
         )
     }
 
-    private enum VisualStatus {
+    private enum VisualStatus
+    {
         case none      // no indicator (future, before start, etc.)
         case success   // goal met
         case missed    // goal not met
     }
 
-    private var status: VisualStatus {
+    private var status: VisualStatus
+    {
         guard showIndicator else { return .none }
         return completed ? .success : .missed
     }
@@ -388,8 +379,10 @@ private struct DayCell: View
                 .frame(width: 32, height: 32)
                 .overlay(
                     // Extra ring for "today" when there is no status yet
-                    Group {
-                        if isToday && status == .none {
+                    Group
+                    {
+                        if isToday && status == .none
+                        {
                             Circle()
                                 .strokeBorder(brandLight.opacity(0.9), lineWidth: 1.6)
                         }
@@ -432,7 +425,8 @@ private struct DayCell: View
     private func colorsAndIcon(for status: VisualStatus)
         -> (bg: AnyShapeStyle, border: Color, text: Color, iconName: String?, iconColor: Color)
     {
-        switch status {
+        switch status
+        {
         case .success:
             return (
                 bg: AnyShapeStyle(successGradient),
@@ -452,7 +446,8 @@ private struct DayCell: View
             )
 
         case .none:
-            if inCurrentMonth {
+            if inCurrentMonth
+            {
                 return (
                     bg: AnyShapeStyle(Color.secondary.opacity(0.08)),
                     border: Color.secondary.opacity(0.15),
@@ -460,7 +455,9 @@ private struct DayCell: View
                     iconName: nil,
                     iconColor: .clear
                 )
-            } else {
+            }
+            else
+            {
                 return (
                     bg: AnyShapeStyle(Color.clear),
                     border: Color.clear,
@@ -478,7 +475,8 @@ private struct DayCell: View
         df.dateStyle = .full
         let base = df.string(from: date)
 
-        switch status {
+        switch status
+        {
         case .success:
             return "\(base), goal met"
         case .missed:
@@ -488,8 +486,6 @@ private struct DayCell: View
         }
     }
 }
-
-// MARK: - Blur helper
 
 private struct VisualEffectBlur: UIViewRepresentable
 {
