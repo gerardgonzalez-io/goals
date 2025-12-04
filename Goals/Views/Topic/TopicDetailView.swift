@@ -195,22 +195,6 @@ struct TopicDetailView: View
         }
         .navigationTitle(topic.name)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar
-        {
-            ToolbarItem(placement: .topBarLeading)
-            {
-                Button
-                {
-                    dismiss()
-                }
-                label:
-                {
-                    Image(systemName: "chevron.left")
-                }
-                .accessibilityLabel("Back")
-            }
-        }
     }
 
     private func durationString(_ minutes: Int) -> String
