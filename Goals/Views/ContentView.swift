@@ -11,8 +11,13 @@ import SwiftData
 struct ContentView: View
 {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.scenePhase) private var scenePhase
     @State private var timer = Timer()
+
+    private enum Route: Hashable
+    {
+        case topics
+        case streak
+    }
 
     var body: some View
     {
@@ -20,7 +25,8 @@ struct ContentView: View
         {
             ScrollView
             {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 24)
+                {
                     Text("Summary")
                         .font(.largeTitle.bold())
                         .padding(.top, 8)
@@ -31,12 +37,7 @@ struct ContentView: View
 
                     VStack(spacing: 16)
                     {
-
-                        NavigationLink
-                        {
-                            TopicListView(timer: timer)
-                        }
-                        label:
+                        NavigationLink(value: Route.topics)
                         {
                             SummaryCard(
                                 title: "Topics",
@@ -47,11 +48,7 @@ struct ContentView: View
                         }
                         .buttonStyle(.plain)
 
-                        NavigationLink
-                        {
-                            StreakView()
-                        }
-                        label:
+                        NavigationLink(value: Route.streak)
                         {
                             SummaryCard(
                                 title: "Study goal",
@@ -70,32 +67,20 @@ struct ContentView: View
                 .padding(.bottom, 24)
             }
             .background(Color(.systemBackground))
+            .navigationDestination(for: Route.self)
+            { route in
+                switch route
+                {
+                case .topics:
+                    TopicListView(timer: timer)
+                case .streak:
+                    StreakView()
+                }
+            }
         }
         .onAppear
         {
             UserDefaults.standard.set(UUID().uuidString, forKey: "currentLaunchID")
-        }
-        .onChange(of: scenePhase)
-        { oldPhase, newPhase in
-            switch newPhase
-            {
-            case .background:
-                UserDefaults.standard.set(UUID().uuidString, forKey: "lastSessionID")
-                timer.saveSnapshot()
-            case .active:
-                let lastSessionID = UserDefaults.standard.string(forKey: "lastSessionID")
-                let currentLaunchID = UserDefaults.standard.string(forKey: "currentLaunchID")
-                if lastSessionID == currentLaunchID
-                {
-                    timer.restoreFromSnapshotAndResume()
-                }
-                else
-                {
-                    UserDefaults.standard.removeObject(forKey: "timer.snapshot.v1")
-                }
-            default:
-                break
-            }
         }
     }
 }

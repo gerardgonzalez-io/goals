@@ -13,8 +13,9 @@ struct TopicListView: View
     @Query(sort: \Topic.name) private var topics: [Topic]
     @Environment(\.modelContext) private var context
     @State private var newTopic: Topic?
-
     @Bindable var timer: Timer
+
+    typealias Route = Topic.ID
 
     var body: some View
     {
@@ -22,9 +23,9 @@ struct TopicListView: View
         {
             ForEach(topics)
             { topic in
-                NavigationLink(topic.name)
+                NavigationLink(value: topic.id)
                 {
-                    TopicDetailView(topic: topic, timer: timer)
+                    Text(topic.name)
                 }
             }
             .onDelete(perform: deteleTopic(indexes:))
@@ -48,6 +49,17 @@ struct TopicListView: View
                 NewTopicView(topic: topic)
             }
             .interactiveDismissDisabled()
+        }
+        .navigationDestination(for: Route.self)
+        { topicID in
+            if let topic = topics.first(where: { $0.id == topicID })
+            {
+                TopicDetailView(topic: topic, timer: timer)
+            }
+            else
+            {
+                Text("Topic not found")
+            }
         }
     }
     

@@ -11,6 +11,8 @@ import SwiftData
 struct TimerView: View
 {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var didFinishSession = false
 
     @Query(sort: \Goal.createdAt, order: .forward) private var goals: [Goal]
 
@@ -65,9 +67,11 @@ struct TimerView: View
         }
         .onAppear
         {
+            didFinishSession = false
             guard !didAutoConfigureFromPreselection else { return }
 
-            if selectedTopic == nil {
+            if selectedTopic == nil
+            {
                 selectedTopic = preselectedTopic
             }
 
@@ -78,6 +82,41 @@ struct TimerView: View
             }
 
             didAutoConfigureFromPreselection = true
+        }
+        .onChange(of: scenePhase)
+        { oldPhase, newPhase in
+            switch newPhase
+            {
+            case .background:
+                UserDefaults.standard.set(UUID().uuidString, forKey: "lastSessionID")
+                timer.saveSnapshot()
+            case .active:
+                let lastSessionID = UserDefaults.standard.string(forKey: "lastSessionID")
+                let currentLaunchID = UserDefaults.standard.string(forKey: "currentLaunchID")
+                if lastSessionID == currentLaunchID
+                {
+                    timer.restoreFromSnapshotAndResume()
+                }
+                else
+                {
+                    UserDefaults.standard.removeObject(forKey: "timer.snapshot.v1")
+                }
+            default:
+                break
+            }
+        }
+        .onDisappear
+        {
+            guard !didFinishSession else { return }
+            guard timer.elapsed > 0 else { return }
+
+            if timer.isRunning
+            {
+                if let topic = selectedTopic
+                {
+                    done(for: topic)
+                }
+            }
         }
     }
 }
@@ -138,10 +177,7 @@ private extension TimerView
             {
                 if let topic = selectedTopic
                 {
-                    timer.done(for: topic)
-                    createAndPersistSession(for: topic)
-                    selectedTopic = nil
-                    sessionStartDate = nil
+                    done(for: topic)
                 }
             }
             label:
@@ -165,6 +201,18 @@ private extension TimerView
 
             Button
             {
+                if didFinishSession
+                {
+                    didFinishSession = false
+                }
+                if selectedTopic == nil
+                {
+                    selectedTopic = preselectedTopic
+                }
+                if !timer.isRunning
+                {
+                    sessionStartDate = nil
+                }
                 createStartDateForSession()
                 timer.toggle()
             }
@@ -285,6 +333,16 @@ extension TimerView
             print("Failed to save StudySession: \(error)")
             #endif
         }
+    }
+    private func done(for topic: Topic)
+    {
+        guard !didFinishSession else { return }
+        didFinishSession = true
+
+        timer.done(for: topic)
+        createAndPersistSession(for: topic)
+        selectedTopic = preselectedTopic
+        sessionStartDate = nil
     }
 }
 

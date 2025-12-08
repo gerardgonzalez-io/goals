@@ -17,6 +17,12 @@ struct TopicDetailView: View
 
     @Bindable var timer: Timer
 
+    private enum TopicRoute: Hashable
+    {
+        case focus
+        case calendar
+    }
+
     private var totalDuration: Int
     {
         sessions.reduce(0) { $0 + $1.durationInMinutes }
@@ -27,7 +33,8 @@ struct TopicDetailView: View
         let calendar = Calendar.current
         let today = Date()
         return sessions
-            .filter { session in
+            .filter
+            { session in
                 calendar.isDate(session.normalizedDay, inSameDayAs: today)
             }
             .reduce(0) { $0 + $1.durationInMinutes }
@@ -37,7 +44,6 @@ struct TopicDetailView: View
     {
         self.topic = topic
         self._timer = Bindable(wrappedValue: timer)
-
         let topicID = topic.id
         let predicate = #Predicate<StudySession>
         { session in
@@ -60,12 +66,7 @@ struct TopicDetailView: View
                 {
                     Text("Focus session")
                         .font(.headline)
-
-                    NavigationLink
-                    {
-                        TimerView(timer: timer, preselectedTopic: topic)
-                    }
-                    label:
+                    NavigationLink(value: TopicRoute.focus)
                     {
                         HStack(spacing: 14)
                         {
@@ -149,11 +150,7 @@ struct TopicDetailView: View
                     Text("Study history")
                         .font(.headline)
 
-                    NavigationLink
-                    {
-                        CalendarView(topic: topic)
-                    }
-                    label:
+                    NavigationLink(value: TopicRoute.calendar)
                     {
                         HStack(spacing: 12)
                         {
@@ -193,6 +190,16 @@ struct TopicDetailView: View
         }
         .navigationTitle(topic.name)
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: TopicRoute.self)
+        { route in
+            switch route
+            {
+            case .focus:
+                TimerView(timer: timer, preselectedTopic: topic)
+            case .calendar:
+                CalendarView(topic: topic)
+            }
+        }
     }
 
     private func durationString(_ minutes: Int) -> String
