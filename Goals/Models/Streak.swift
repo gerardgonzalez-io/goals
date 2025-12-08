@@ -23,8 +23,8 @@ import Foundation
 */
 
 /// Streak encapsulates streak metrics derived from study sessions.
-/// - `longestStreak`: placeholder for the longest streak calculation (not implemented here).
 /// - `sessions`: the raw list of StudySession instances used to compute streaks.
+/// - Exposes global streaks and per-topic streaks computed from the same source of truth.
 struct Streak
 {
     
@@ -40,48 +40,14 @@ struct Streak
     var longestStreak: Int
     {
         let perDay = dailyStatusesByDay(from: self.sessions)
-        let metByDay: [Date: Bool] = Dictionary(uniqueKeysWithValues: perDay.map { ($0.day, isDayMet($0.status)) })
+        let metByDay: [Date: Bool] = Dictionary(
+            uniqueKeysWithValues: perDay.map { ($0.day, isDayMet($0.status)) }
+        )
 
-        let calendar = Calendar.current
-        let sortedDays = metByDay.keys.sorted()
-
-        var longest = 0
-        var current = 0
-        var previousDay: Date? = nil
-
-        for day in sortedDays
-        {
-            let met = metByDay[day] == true
-            if let prev = previousDay
-            {
-                let diff = calendar.dateComponents([.day], from: prev, to: day).day ?? 0
-                if diff == 1
-                {
-                    // Consecutive calendar day
-                    current = met ? (current + 1) : 0
-                }
-                else if diff > 1
-                {
-                    // Gap in days; start a new streak only if today is met
-                    current = met ? 1 : 0
-                }
-                else
-                {
-                    // Same day duplicate (shouldn't happen due to unique keys); treat as today's met state
-                    current = met ? max(current, 1) : current
-                }
-            }
-            else
-            {
-                // First day in the sequence
-                current = met ? 1 : 0
-            }
-            longest = max(longest, current)
-            previousDay = day
-        }
-        return longest
+        // Reutiliza el algoritmo genérico de longest streak.
+        return longestStreak(using: metByDay)
     }
-    
+
     /// Current streak computed from normalized calendar days.
     ///
     /// Functional behavior:
@@ -96,13 +62,123 @@ struct Streak
     var currentStreak: Int
     {
         let perDay = dailyStatusesByDay(from: self.sessions)
+        let metByDay: [Date: Bool] = Dictionary(
+            uniqueKeysWithValues: perDay.map { ($0.day, isDayMet($0.status)) }
+        )
 
-        let metByDay: [Date: Bool] = Dictionary(uniqueKeysWithValues: perDay.map { ($0.day, isDayMet($0.status)) })
+        // Reutiliza el algoritmo genérico de current streak.
+        return currentStreak(using: metByDay)
+    }
+    // =========================================================
+    // NUEVA FEATURE: RACHAS POR TOPIC
+    // =========================================================
 
+    /// Current streak para un topic específico.
+    /// - Usa las mismas reglas del streak global, pero
+    ///   el "met" del día se calcula SOLO para ese topic.
+    /// - Si el topic no tiene sesiones ese día, el día se considera no met.
+    func currentStreak(for topic: Topic) -> Int
+    {
+        currentStreak(for: topic.id)
+    }
+
+    /// Current streak para un topic específico por ID.
+    func currentStreak(for topicID: Topic.ID) -> Int
+    {
+        let perDay = dailyStatusesByDay(from: self.sessions)
+
+        // Para cada día, evaluamos si el topic específico cumplió su meta.
+        let metByDay: [Date: Bool] = Dictionary(
+            uniqueKeysWithValues: perDay.map { ($0.day, isTopicMet(for: topicID, $0.status)) }
+        )
+
+        return currentStreak(using: metByDay)
+    }
+
+    /// Longest streak histórico para un topic específico.
+    func longestStreak(for topic: Topic) -> Int
+    {
+        longestStreak(for: topic.id)
+    }
+
+    /// Longest streak histórico para un topic específico por ID.
+    func longestStreak(for topicID: Topic.ID) -> Int
+    {
+        let perDay = dailyStatusesByDay(from: self.sessions)
+
+        // Para cada día, evaluamos si el topic específico cumplió su meta.
+        let metByDay: [Date: Bool] = Dictionary(
+            uniqueKeysWithValues: perDay.map { ($0.day, isTopicMet(for: topicID, $0.status)) }
+        )
+
+        return longestStreak(using: metByDay)
+    }
+}
+
+// =========================================================
+// HELPERS REUTILIZABLES (GLOBAL + POR TOPIC)
+// =========================================================
+private extension Streak
+{
+    /// Algoritmo genérico de longest streak basado en un mapa day -> met.
+    /// - Reutilizable para el streak global y por-topic.
+    func longestStreak(using metByDay: [Date: Bool]) -> Int
+    {
+        let calendar = Calendar.current
+        let sortedDays = metByDay.keys.sorted()
+
+        var longest = 0
+        var current = 0
+        var previousDay: Date? = nil
+
+        for day in sortedDays
+        {
+            let met = metByDay[day] == true
+
+            if let prev = previousDay
+            {
+                let diff = calendar.dateComponents([.day], from: prev, to: day).day ?? 0
+
+                if diff == 1
+                {
+                    // Día consecutivo
+                    current = met ? (current + 1) : 0
+                }
+                else if diff > 1
+                {
+                    // Gap: reinicia streak solo si el día actual está met
+                    current = met ? 1 : 0
+                }
+                else
+                {
+                    // Mismo día duplicado (defensivo)
+                    current = met ? max(current, 1) : current
+                }
+            }
+            else
+            {
+                // Primer día
+                current = met ? 1 : 0
+            }
+
+            longest = max(longest, current)
+            previousDay = day
+        }
+
+        return longest
+    }
+
+    /// Algoritmo genérico de current streak basado en un mapa day -> met.
+    /// - Respeta el anchor flexible:
+    ///   si hoy está met -> anchor hoy, sino anchor ayer.
+    func currentStreak(using metByDay: [Date: Bool]) -> Int
+    {
         let calendar = Calendar.current
         let now = Date()
         let today = calendar.startOfDay(for: now)
-        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today).map({ calendar.startOfDay(for: $0) })
+
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today)
+            .map({ calendar.startOfDay(for: $0) })
         else
         {
             return 0
@@ -112,16 +188,37 @@ struct Streak
 
         var streak = 0
         var offset = 0
+
         while true
         {
             guard let day = calendar.date(byAdding: .day, value: -offset, to: anchor) else { break }
             let dayStart = calendar.startOfDay(for: day)
+
+            // Si el día no existe en el mapa, significa que no hubo sesiones para ese eje.
             guard let met = metByDay[dayStart] else { break }
             guard met else { break }
+
             streak += 1
             offset += 1
         }
+
         return streak
+    }
+
+    /// Determina si un día está "met" para un topic específico dentro de un DailyStatus.
+    /// - Si el topic no aparece en ese día, retorna false.
+    /// - Respeta la estructura paralela de DailyStatus (topics/isMet).
+    func isTopicMet(for topicID: Topic.ID, _ status: DailyStatus) -> Bool
+    {
+        for (idx, topic) in status.topics.enumerated()
+        {
+            if topic.id == topicID
+            {
+                guard idx < status.isMet.count else { return false }
+                return status.isMet[idx]
+            }
+        }
+        return false
     }
 }
 

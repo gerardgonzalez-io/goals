@@ -11,16 +11,15 @@ import SwiftData
 struct TopicDetailView: View
 {
     let topic: Topic
-
-    @Environment(\.modelContext) private var context
     @Query private var sessions: [StudySession]
 
     @Bindable var timer: Timer
 
-    private enum TopicRoute: Hashable
+    fileprivate enum TopicRoute: Hashable
     {
         case focus
         case calendar
+        case streak
     }
 
     private var totalDuration: Int
@@ -150,39 +149,22 @@ struct TopicDetailView: View
                     Text("Study history")
                         .font(.headline)
 
-                    NavigationLink(value: TopicRoute.calendar)
-                    {
-                        HStack(spacing: 12)
-                        {
-                            Image(systemName: "calendar")
-                                .imageScale(.medium)
-                                .foregroundStyle(.accent)
-
-                            VStack(alignment: .leading, spacing: 2)
-                            {
-                                Text("Open sessions calendar")
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-
-                                Text("See which days you studied this topic")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-
-                            Spacer()
-
-                            Image(systemName: "chevron.right")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(.tertiary)
-                        }
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .fill(Color(.secondarySystemBackground))
-                        )
-                    }
-                    .buttonStyle(.plain)
+                    TopicDetailNavCard(
+                        value: TopicRoute.calendar,
+                        systemImage: "calendar",
+                        title: "Open sessions calendar",
+                        subtitle: "See which days you studied this topic"
+                    )
                     .padding(.bottom, 4)
+
+                    TopicDetailNavCard(
+                        value: TopicRoute.streak,
+                        systemImage: "flame.fill",
+                        title: "View topic streak",
+                        subtitle: "Check your streak for this topic"
+                    )
+                    .padding(.bottom, 4)
+
                 }
                 .padding(.horizontal, 20)
             }
@@ -198,6 +180,8 @@ struct TopicDetailView: View
                 TimerView(timer: timer, preselectedTopic: topic)
             case .calendar:
                 CalendarView(topic: topic)
+            case .streak:
+                StreakPerTopicView(topic: topic)
             }
         }
     }
@@ -207,6 +191,53 @@ struct TopicDetailView: View
         let hours = minutes / 60
         let remainingMinutes = minutes % 60
         return String(format: "%dh %02dm", hours, remainingMinutes)
+    }
+}
+
+/// Reusable navigation card for TopicDetail sections.
+/// - Keeps the same layout/style for "calendar" and "streak" links.
+/// - Generic over the `NavigationLink(value:)` type to avoid tight coupling.
+private struct TopicDetailNavCard<Value: Hashable>: View
+{
+    let value: Value
+    let systemImage: String
+    let title: String
+    let subtitle: String
+
+    var body: some View
+    {
+        NavigationLink(value: value)
+        {
+            HStack(spacing: 12)
+            {
+                Image(systemName: systemImage)
+                    .imageScale(.medium)
+                    .foregroundStyle(.accent)
+
+                VStack(alignment: .leading, spacing: 2)
+                {
+                    Text(title)
+                        .font(.subheadline)
+                        .fontWeight(.medium)
+
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(Color(.secondarySystemBackground))
+            )
+        }
+        .buttonStyle(.plain)
     }
 }
 
