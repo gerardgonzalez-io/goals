@@ -209,10 +209,6 @@ private extension TimerView
                 {
                     selectedTopic = preselectedTopic
                 }
-                if !timer.isRunning
-                {
-                    sessionStartDate = nil
-                }
                 createStartDateForSession()
                 timer.toggle()
             }
