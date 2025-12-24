@@ -31,7 +31,6 @@ class SampleData
         let schema = Schema([
             Topic.self,
             StudySession.self,
-            Goal.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
 

@@ -12,7 +12,6 @@ import Testing
 
 struct SampleDataTests
 {
-
     @Test("SampleData uses an in-memory SwiftData container and inserts sample Topics and StudySessions")
     @MainActor
     func sampleDataInserts() async throws {
@@ -21,10 +20,8 @@ struct SampleDataTests
 
         let topics = try context.fetch(FetchDescriptor<Topic>())
         let sessions = try context.fetch(FetchDescriptor<StudySession>())
-        let goals = try context.fetch(FetchDescriptor<Goal>())
 
         #expect(topics.count >= Topic.sampleData.count)
         #expect(sessions.count >= StudySession.sampleData.count)
-        #expect(goals.count >= 1)
     }
 }

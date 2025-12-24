@@ -74,7 +74,7 @@ struct ContentView: View
                 case .topics:
                     TopicListView(timer: timer)
                 case .streak:
-                    StreakView()
+                    EmptyView()
                 }
             }
         }

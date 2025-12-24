@@ -22,7 +22,6 @@ struct OnboardingView: View
         {
             WelcomePage()
             FeaturePage()
-            GoalView(onFinish: onFinish)
         }
         .background(Gradient(colors: gradientColors))
         .tabViewStyle(.page)

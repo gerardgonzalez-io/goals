@@ -28,11 +28,10 @@ enum TestDates
 
 func makeSession(
     topic: Topic,
-    goal: Goal,
     start: Date,
     minutes: Int,
     extraSeconds: Int = 0
 ) -> StudySession {
     let end = start.addingTimeInterval(TimeInterval(minutes * 60 + extraSeconds))
-    return StudySession(topic: topic, goal: goal, startDate: start, endDate: end)
+    return StudySession(topic: topic, startDate: start, endDate: end)
 }

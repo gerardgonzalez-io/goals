@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD07C9892E845C01009D4132 /* CalendarView.swift */; };
-		FD1033732E89BC5600564356 /* LongestStreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1033722E89BC5600564356 /* LongestStreakView.swift */; };
 		FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6612E46A820004B75FE /* OnboardingView.swift */; };
 		FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicListView.swift */; };
 		FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */; };
@@ -18,13 +17,12 @@
 		FD7DB2CB2EF4B62E00F029DD /* TestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2CA2EF4B62E00F029DD /* TestSupport.swift */; };
 		FD7DB2CD2EF4B68B00F029DD /* TopicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2CC2EF4B68B00F029DD /* TopicTests.swift */; };
 		FD7DB2CF2EF4B78200F029DD /* StudySessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2CE2EF4B78200F029DD /* StudySessionTests.swift */; };
-		FD7DB2D12EF4B7F600F029DD /* GoalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2D02EF4B7F600F029DD /* GoalTests.swift */; };
 		FD7DB2D32EF4B82500F029DD /* DailyStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2D22EF4B82500F029DD /* DailyStatusTests.swift */; };
 		FD7DB2D52EF4B88700F029DD /* StreakTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2D42EF4B88700F029DD /* StreakTests.swift */; };
 		FD7DB2D72EF4B8AD00F029DD /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2D62EF4B8AD00F029DD /* TimerTests.swift */; };
 		FD7DB2D92EF4B8E500F029DD /* SampleDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2D82EF4B8E500F029DD /* SampleDataTests.swift */; };
+		FD7DB2DD2EFC703300F029DD /* TopicGoalChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2DC2EFC703300F029DD /* TopicGoalChange.swift */; };
 		FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E43122E7C907700856E38 /* TimerDialView.swift */; };
-		FD9B97312E8B64AE00D60181 /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9B97302E8B64AE00D60181 /* GoalView.swift */; };
 		FD9EDE6C2EE75A0D00D2DD23 /* StreakPerTopicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9EDE6B2EE75A0D00D2DD23 /* StreakPerTopicView.swift */; };
 		FDA4BC012E0776DE00E0DAA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */; };
 		FDA4BC022E0776DE00E0DAA5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */; };
@@ -32,7 +30,6 @@
 		FDA4BC042E0776DE00E0DAA5 /* GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */; };
 		FDAEFDBE2E7E1F3800E99E4F /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */; };
 		FDBE08CA2EA84BFD0083938F /* DailyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE08C92EA84BFD0083938F /* DailyStatus.swift */; };
-		FDBE08CC2EA84C1C0083938F /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE08CB2EA84C1C0083938F /* Goal.swift */; };
 		FDBE08CE2EA84C620083938F /* Streak.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE08CD2EA84C620083938F /* Streak.swift */; };
 		FDBE08D02EA84C790083938F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE08CF2EA84C790083938F /* Timer.swift */; };
 		FDBE08D32EA84D720083938F /* GoalMinutesPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE08D22EA84D720083938F /* GoalMinutesPickerSheet.swift */; };
@@ -40,9 +37,6 @@
 		FDC82AE62E5DEFDB00C2F545 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE52E5DEFDB00C2F545 /* Topic.swift */; };
 		FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE72E5DF04700C2F545 /* SampleData.swift */; };
 		FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */; };
-		FDD077C52E4A8D8F0010DD1E /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD077C42E4A8D8F0010DD1E /* StreakView.swift */; };
-		FDD077CB2E4A951E0010DD1E /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD077CA2E4A951E0010DD1E /* WeekDay.swift */; };
-		FDD077CD2E4A96A40010DD1E /* WeekRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD077CC2E4A96A40010DD1E /* WeekRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +51,6 @@
 
 /* Begin PBXFileReference section */
 		FD07C9892E845C01009D4132 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
-		FD1033722E89BC5600564356 /* LongestStreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongestStreakView.swift; sourceTree = "<group>"; };
 		FD4AF6612E46A820004B75FE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FD4AF6632E46A968004B75FE /* TopicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicListView.swift; sourceTree = "<group>"; };
 		FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCard.swift; sourceTree = "<group>"; };
@@ -68,13 +61,12 @@
 		FD7DB2CA2EF4B62E00F029DD /* TestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSupport.swift; sourceTree = "<group>"; };
 		FD7DB2CC2EF4B68B00F029DD /* TopicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicTests.swift; sourceTree = "<group>"; };
 		FD7DB2CE2EF4B78200F029DD /* StudySessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySessionTests.swift; sourceTree = "<group>"; };
-		FD7DB2D02EF4B7F600F029DD /* GoalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTests.swift; sourceTree = "<group>"; };
 		FD7DB2D22EF4B82500F029DD /* DailyStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyStatusTests.swift; sourceTree = "<group>"; };
 		FD7DB2D42EF4B88700F029DD /* StreakTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakTests.swift; sourceTree = "<group>"; };
 		FD7DB2D62EF4B8AD00F029DD /* TimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTests.swift; sourceTree = "<group>"; };
 		FD7DB2D82EF4B8E500F029DD /* SampleDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataTests.swift; sourceTree = "<group>"; };
+		FD7DB2DC2EFC703300F029DD /* TopicGoalChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicGoalChange.swift; sourceTree = "<group>"; };
 		FD8E43122E7C907700856E38 /* TimerDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDialView.swift; sourceTree = "<group>"; };
-		FD9B97302E8B64AE00D60181 /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
 		FD9EDE6B2EE75A0D00D2DD23 /* StreakPerTopicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakPerTopicView.swift; sourceTree = "<group>"; };
 		FDA4BBEC2E07763E00E0DAA5 /* Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goals.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -83,7 +75,6 @@
 		FDA4BBFF2E0776DE00E0DAA5 /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
 		FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySession.swift; sourceTree = "<group>"; };
 		FDBE08C92EA84BFD0083938F /* DailyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyStatus.swift; sourceTree = "<group>"; };
-		FDBE08CB2EA84C1C0083938F /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		FDBE08CD2EA84C620083938F /* Streak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Streak.swift; sourceTree = "<group>"; };
 		FDBE08CF2EA84C790083938F /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		FDBE08D22EA84D720083938F /* GoalMinutesPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalMinutesPickerSheet.swift; sourceTree = "<group>"; };
@@ -91,9 +82,6 @@
 		FDC82AE52E5DEFDB00C2F545 /* Topic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		FDC82AE72E5DF04700C2F545 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
-		FDD077C42E4A8D8F0010DD1E /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
-		FDD077CA2E4A951E0010DD1E /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
-		FDD077CC2E4A96A40010DD1E /* WeekRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +118,6 @@
 				FD7DB2D62EF4B8AD00F029DD /* TimerTests.swift */,
 				FD7DB2CC2EF4B68B00F029DD /* TopicTests.swift */,
 				FD7DB2CE2EF4B78200F029DD /* StudySessionTests.swift */,
-				FD7DB2D02EF4B7F600F029DD /* GoalTests.swift */,
 				FD7DB2D82EF4B8E500F029DD /* SampleDataTests.swift */,
 			);
 			path = TechnicalTests;
@@ -221,10 +208,10 @@
 				FDC82AE52E5DEFDB00C2F545 /* Topic.swift */,
 				FDAEFDBD2E7E1F3800E99E4F /* StudySession.swift */,
 				FDBE08C92EA84BFD0083938F /* DailyStatus.swift */,
-				FDBE08CB2EA84C1C0083938F /* Goal.swift */,
 				FDBE08CD2EA84C620083938F /* Streak.swift */,
 				FDBE08CF2EA84C790083938F /* Timer.swift */,
 				FDC82AE72E5DF04700C2F545 /* SampleData.swift */,
+				FD7DB2DC2EFC703300F029DD /* TopicGoalChange.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -232,10 +219,6 @@
 		FDD077C92E4A94EB0010DD1E /* Streak */ = {
 			isa = PBXGroup;
 			children = (
-				FDD077C42E4A8D8F0010DD1E /* StreakView.swift */,
-				FD1033722E89BC5600564356 /* LongestStreakView.swift */,
-				FDD077CC2E4A96A40010DD1E /* WeekRow.swift */,
-				FDD077CA2E4A951E0010DD1E /* WeekDay.swift */,
 				FDBE08D22EA84D720083938F /* GoalMinutesPickerSheet.swift */,
 				FD9EDE6B2EE75A0D00D2DD23 /* StreakPerTopicView.swift */,
 			);
@@ -249,7 +232,6 @@
 				FDA4BBFF2E0776DE00E0DAA5 /* WelcomePage.swift */,
 				FD4CFA202E078F9100FD5095 /* FeaturePage.swift */,
 				FD4CFA1E2E078BEA00FD5095 /* FeatureCard.swift */,
-				FD9B97302E8B64AE00D60181 /* GoalView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -362,7 +344,6 @@
 				FD7DB2D52EF4B88700F029DD /* StreakTests.swift in Sources */,
 				FD7DB2CB2EF4B62E00F029DD /* TestSupport.swift in Sources */,
 				FD7DB2CF2EF4B78200F029DD /* StudySessionTests.swift in Sources */,
-				FD7DB2D12EF4B7F600F029DD /* GoalTests.swift in Sources */,
 				FD7DB2CD2EF4B68B00F029DD /* TopicTests.swift in Sources */,
 				FD7DB2D92EF4B8E500F029DD /* SampleDataTests.swift in Sources */,
 				FD7DB2D72EF4B8AD00F029DD /* TimerTests.swift in Sources */,
@@ -374,15 +355,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD6F7FF42E836D8C000E1C4F /* TopicCard.swift in Sources */,
-				FDD077C52E4A8D8F0010DD1E /* StreakView.swift in Sources */,
-				FD9B97312E8B64AE00D60181 /* GoalView.swift in Sources */,
 				FDC82AE62E5DEFDB00C2F545 /* Topic.swift in Sources */,
 				FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */,
-				FDD077CD2E4A96A40010DD1E /* WeekRow.swift in Sources */,
 				FDA4BC022E0776DE00E0DAA5 /* ContentView.swift in Sources */,
-				FDBE08CC2EA84C1C0083938F /* Goal.swift in Sources */,
-				FD1033732E89BC5600564356 /* LongestStreakView.swift in Sources */,
-				FDD077CB2E4A951E0010DD1E /* WeekDay.swift in Sources */,
 				FD4CFA212E078F9100FD5095 /* FeaturePage.swift in Sources */,
 				FDA4BC032E0776DE00E0DAA5 /* WelcomePage.swift in Sources */,
 				FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */,
@@ -393,6 +368,7 @@
 				FDBE08D02EA84C790083938F /* Timer.swift in Sources */,
 				FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */,
 				FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */,
+				FD7DB2DD2EFC703300F029DD /* TopicGoalChange.swift in Sources */,
 				FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */,
 				FDBE08CA2EA84BFD0083938F /* DailyStatus.swift in Sources */,
 				FDC82AE32E5DEC2500C2F545 /* NewTopicView.swift in Sources */,

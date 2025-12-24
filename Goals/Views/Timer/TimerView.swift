@@ -14,7 +14,7 @@ struct TimerView: View
     @Environment(\.scenePhase) private var scenePhase
     @State private var didFinishSession = false
 
-    @Query(sort: \Goal.createdAt, order: .forward) private var goals: [Goal]
+    //@Query(sort: \Goal.createdAt, order: .forward) private var goals: [Goal]
 
     @Bindable var timer: Timer
 
@@ -300,12 +300,13 @@ extension TimerView
             return
         }
 
+        /*
         guard let goal = goals.last
         else
         {
             return
         }
-
+        */
         var calendarWithTimeZone = Calendar.current
         calendarWithTimeZone.timeZone = .current
 
@@ -313,7 +314,7 @@ extension TimerView
         let normalizedEnd = calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
 
         let session = StudySession(topic: topic,
-                                   goal: goal,
+                                   //goal: goal,
                                    startDate: capturedStart,
                                    endDate: normalizedEnd)
         

@@ -17,7 +17,6 @@ struct GoalsApp: App
     var sharedModelContainer: ModelContainer =
     {
         let schema = Schema([
-            Goal.self,
             Topic.self,
             StudySession.self,
         ])
