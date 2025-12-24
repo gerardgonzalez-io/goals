@@ -1,6 +1,6 @@
 //
 //  DailyStatus.swift
-//  GoalsV2
+//  Goals
 //
 //  Created by Adolfo Gerard Montilla Gonzalez on 12-10-25.
 //

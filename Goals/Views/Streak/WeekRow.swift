@@ -1,6 +1,6 @@
 //
 //  WeekRow.swift
-//  GoalsV2
+//  Goals
 //
 //  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
