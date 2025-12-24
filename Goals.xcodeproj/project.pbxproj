@@ -119,9 +119,7 @@
 			children = (
 				FD7DB2CA2EF4B62E00F029DD /* TestSupport.swift */,
 				FD7DB2DA2EF9E1C800F029DD /* TechnicalTests */,
-				FD7DB2D22EF4B82500F029DD /* DailyStatusTests.swift */,
-				FD7DB2D42EF4B88700F029DD /* StreakTests.swift */,
-				FD7DB2D62EF4B8AD00F029DD /* TimerTests.swift */,
+				FD7DB2DB2EFB682200F029DD /* FunctionalTests */,
 			);
 			path = GoalsTests;
 			sourceTree = "<group>";
@@ -129,12 +127,22 @@
 		FD7DB2DA2EF9E1C800F029DD /* TechnicalTests */ = {
 			isa = PBXGroup;
 			children = (
+				FD7DB2D62EF4B8AD00F029DD /* TimerTests.swift */,
 				FD7DB2CC2EF4B68B00F029DD /* TopicTests.swift */,
 				FD7DB2CE2EF4B78200F029DD /* StudySessionTests.swift */,
 				FD7DB2D02EF4B7F600F029DD /* GoalTests.swift */,
 				FD7DB2D82EF4B8E500F029DD /* SampleDataTests.swift */,
 			);
 			path = TechnicalTests;
+			sourceTree = "<group>";
+		};
+		FD7DB2DB2EFB682200F029DD /* FunctionalTests */ = {
+			isa = PBXGroup;
+			children = (
+				FD7DB2D22EF4B82500F029DD /* DailyStatusTests.swift */,
+				FD7DB2D42EF4B88700F029DD /* StreakTests.swift */,
+			);
+			path = FunctionalTests;
 			sourceTree = "<group>";
 		};
 		FDA4BBE32E07763E00E0DAA5 = {
