@@ -20,6 +20,7 @@ struct TopicDetailView: View
         case focus
         case calendar
         case streak
+        case topicGoal
     }
 
     private var totalDuration: Int
@@ -164,6 +165,14 @@ struct TopicDetailView: View
                         subtitle: "Check your streak for this topic"
                     )
                     .padding(.bottom, 4)
+                    
+                    TopicDetailNavCard(
+                        value: TopicRoute.topicGoal,
+                        systemImage: "scope",
+                        title: "Change goal",
+                        subtitle: "Adjust your goal for this topic"
+                    )
+                    .padding(.bottom, 4)
 
                 }
                 .padding(.horizontal, 20)
@@ -182,6 +191,8 @@ struct TopicDetailView: View
                 CalendarView(topic: topic)
             case .streak:
                 StreakPerTopicView(topic: topic)
+            case .topicGoal:
+                TopicGoal(topic: topic)
             }
         }
     }

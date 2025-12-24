@@ -21,7 +21,7 @@ struct OnboardingView: View
         TabView
         {
             WelcomePage()
-            FeaturePage()
+            FeaturePage(onFinish: onFinish)
         }
         .background(Gradient(colors: gradientColors))
         .tabViewStyle(.page)
