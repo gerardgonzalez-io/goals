@@ -28,12 +28,12 @@ struct DailyStatusTests {
         let changeA = TopicGoalChange(
             topic: topicA,
             goalInMinutes: 60,
-            effectiveFromDay: TestDates.date(2025, 10, 11, 12, 0)
+            effectiveAt: TestDates.date(2025, 10, 11, 12, 0)
         )
         let changeB = TopicGoalChange(
             topic: topicB,
             goalInMinutes: 30,
-            effectiveFromDay: TestDates.date(2025, 10, 1, 12, 0)
+            effectiveAt: TestDates.date(2025, 10, 1, 12, 0)
         )
 
         // Ensure they are attached even without a ModelContext (avoid relying on inverse inference).
@@ -71,9 +71,9 @@ struct DailyStatusTests {
         let topic = Topic(name: "iOS")
 
         // Goal history (snapshots)
-        let g1 = TopicGoalChange(topic: topic, goalInMinutes: 120, effectiveFromDay: TestDates.date(2025, 12, 20, 12, 0)) // 2h
-        let g2 = TopicGoalChange(topic: topic, goalInMinutes: 240, effectiveFromDay: TestDates.date(2025, 12, 22, 12, 0)) // 4h
-        let g3 = TopicGoalChange(topic: topic, goalInMinutes: 180, effectiveFromDay: TestDates.date(2025, 12, 23, 12, 0)) // 3h
+        let g1 = TopicGoalChange(topic: topic, goalInMinutes: 120, effectiveAt: TestDates.date(2025, 12, 20, 12, 0)) // 2h
+        let g2 = TopicGoalChange(topic: topic, goalInMinutes: 240, effectiveAt: TestDates.date(2025, 12, 22, 12, 0)) // 4h
+        let g3 = TopicGoalChange(topic: topic, goalInMinutes: 180, effectiveAt: TestDates.date(2025, 12, 23, 12, 0)) // 3h
 
         // Ensure they are attached even without a ModelContext (avoid relying on inverse inference).
         topic.goalChanges.append(g1)

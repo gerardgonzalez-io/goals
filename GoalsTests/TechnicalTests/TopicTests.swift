@@ -45,14 +45,26 @@ struct TopicTests
         #expect(topic.goalInMinutes(for: day) == nil)
     }
 
-    @Test("Topic.goalInMinutes(for:) returns the last snapshot whose effectiveFromDay <= target day")
+    @Test("Topic.goalInMinutes(for:) returns the last snapshot whose effectiveAtDay <= target day")
     func topicGoalResolvesByEffectiveDay()
     {
         let topic = Topic(name: "iOS")
 
-        let g1 = TopicGoalChange(topic: topic, goalInMinutes: 120, effectiveFromDay: TestDates.date(2025, 12, 20, 12, 0)) // 2h
-        let g2 = TopicGoalChange(topic: topic, goalInMinutes: 240, effectiveFromDay: TestDates.date(2025, 12, 22, 12, 0)) // 4h
-        let g3 = TopicGoalChange(topic: topic, goalInMinutes: 180, effectiveFromDay: TestDates.date(2025, 12, 23, 12, 0)) // 3h
+        let g1 = TopicGoalChange(
+            topic: topic,
+            goalInMinutes: 120,
+            effectiveAt: TestDates.date(2025, 12, 20, 12, 0) // 2h
+        )
+        let g2 = TopicGoalChange(
+            topic: topic,
+            goalInMinutes: 240,
+            effectiveAt: TestDates.date(2025, 12, 22, 12, 0) // 4h
+        )
+        let g3 = TopicGoalChange(
+            topic: topic,
+            goalInMinutes: 180,
+            effectiveAt: TestDates.date(2025, 12, 23, 12, 0) // 3h
+        )
 
         // Ensure they are attached even without a ModelContext.
         topic.goalChanges.append(g1)
@@ -80,11 +92,12 @@ struct TopicTests
         // With no snapshots, should be nil
         #expect(topic.currentGoalInMinutes == nil)
 
-        // Add one snapshot effective from today (normalized)
+        // Add one snapshot effective today
         let today = Date()
-        let _ = TopicGoalChange(topic: topic, goalInMinutes: 60, effectiveFromDay: today)
-        // Ensure attached even without a ModelContext (if your inverse isn't active in tests)
-        topic.goalChanges.append(TopicGoalChange(topic: topic, goalInMinutes: 60, effectiveFromDay: today))
+        let change = TopicGoalChange(topic: topic, goalInMinutes: 60, effectiveAt: today)
+
+        // Ensure attached even without a ModelContext
+        topic.goalChanges.append(change)
 
         #expect(topic.currentGoalInMinutes == 60)
     }

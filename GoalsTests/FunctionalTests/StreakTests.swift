@@ -22,7 +22,7 @@ struct StreakTests
         let topic = Topic(name: "AnchorTopic")
 
         // Snapshot goal: 30 minutes (active since yesterday)
-        let g = TopicGoalChange(topic: topic, goalInMinutes: 30, effectiveFromDay: yesterday)
+        let g = TopicGoalChange(topic: topic, goalInMinutes: 30, effectiveAt: yesterday)
         topic.goalChanges.append(g)
 
         let sTodayMet = makeSession(topic: topic, start: today.addingTimeInterval(10 * 60), minutes: 30)
@@ -47,7 +47,7 @@ struct StreakTests
         let topic = Topic(name: "GapTopic")
 
         // Snapshot goal: 10 minutes (active since twoDaysAgo)
-        let g = TopicGoalChange(topic: topic, goalInMinutes: 10, effectiveFromDay: twoDaysAgo)
+        let g = TopicGoalChange(topic: topic, goalInMinutes: 10, effectiveAt: twoDaysAgo)
         topic.goalChanges.append(g)
 
         let sToday = makeSession(topic: topic, start: today.addingTimeInterval(10), minutes: 10)
@@ -63,7 +63,7 @@ struct StreakTests
         let topic = Topic(name: "Longest")
 
         // Snapshot goal: 10 minutes
-        let g = TopicGoalChange(topic: topic, goalInMinutes: 10, effectiveFromDay: TestDates.date(2025, 10, 1, 0, 0))
+        let g = TopicGoalChange(topic: topic, goalInMinutes: 10, effectiveAt: TestDates.date(2025, 10, 1, 0, 0))
         topic.goalChanges.append(g)
 
         let d1 = TestDates.date(2025, 10, 1, 9, 0)
@@ -91,8 +91,8 @@ struct StreakTests
         let topicB = Topic(name: "B")
 
         // Snapshot goals: both need 30 minutes
-        topicA.goalChanges.append(TopicGoalChange(topic: topicA, goalInMinutes: 30, effectiveFromDay: yesterday))
-        topicB.goalChanges.append(TopicGoalChange(topic: topicB, goalInMinutes: 30, effectiveFromDay: yesterday))
+        topicA.goalChanges.append(TopicGoalChange(topic: topicA, goalInMinutes: 30, effectiveAt: yesterday))
+        topicB.goalChanges.append(TopicGoalChange(topic: topicB, goalInMinutes: 30, effectiveAt: yesterday))
 
         // Yesterday: A met
         let yA = makeSession(topic: topicA, start: yesterday.addingTimeInterval(60), minutes: 30)
