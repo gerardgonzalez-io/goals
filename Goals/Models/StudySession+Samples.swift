@@ -1,42 +1,11 @@
 //
-//  StudySession.swift
+//  StudySession+Samples.swift
 //  Goals
 //
-//  Created by Assistant on 19-09-25.
+//  Created by Adolfo Gerard Montilla Gonzalez on 25-12-25.
 //
 
 import Foundation
-import SwiftData
-
-@Model
-class StudySession
-{
-    var topic: Topic
-    var startDate: Date
-    var endDate: Date
-
-    /// Normalized start of day for this session's startDate using the current calendar and time zone.
-    var normalizedDay: Date
-    {
-        var calendarWithTimeZone = Calendar.current
-        calendarWithTimeZone.timeZone = TimeZone.current
-        return calendarWithTimeZone.startOfDay(for: startDate)
-    }
-
-    var durationInMinutes: Int
-    {
-        let seconds = endDate.timeIntervalSince(startDate)
-        if seconds <= 0 { return 0 }
-        return Int((seconds / 60))
-    }
-
-    init(topic: Topic, startDate: Date, endDate: Date)
-    {
-        self.topic = topic
-        self.startDate = startDate
-        self.endDate = endDate
-    }
-}
 
 extension StudySession
 {

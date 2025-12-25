@@ -16,15 +16,21 @@ struct GoalsApp: App
 
     var sharedModelContainer: ModelContainer =
     {
-        let schema = Schema([
-            Topic.self,
-            StudySession.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+        // Use the latest schema (V2) + migration plan (V1 -> V2)
+        let schema = Schema(versionedSchema: GoalsSchemaV2.self)
+
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
 
         do
         {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(
+                for: schema,
+                migrationPlan: GoalsMigrationPlan.self,
+                configurations: [modelConfiguration]
+            )
         }
         catch
         {
@@ -34,7 +40,6 @@ struct GoalsApp: App
 
     var body: some Scene
     {
-        // WindosGroup vs Group, study the differences.
         WindowGroup
         {
             if hasCompletedOnboarding
