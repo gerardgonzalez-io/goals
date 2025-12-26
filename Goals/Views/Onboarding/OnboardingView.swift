@@ -1,6 +1,6 @@
 //
 //  OnboardingView.swift
-//  GoalsV2
+//  Goals
 //
 //  Created by Adolfo Gerard Montilla Gonzalez on 17-10-25.
 //
@@ -21,8 +21,7 @@ struct OnboardingView: View
         TabView
         {
             WelcomePage()
-            FeaturePage()
-            GoalView(onFinish: onFinish)
+            FeaturePage(onFinish: onFinish)
         }
         .background(Gradient(colors: gradientColors))
         .tabViewStyle(.page)

@@ -1,6 +1,6 @@
 //
 //  StreakPerTopicView.swift
-//  GoalsV2
+//  Goals
 //
 //  Created by Adolfo Gerard Montilla Gonzalez on 08-12-25.
 //

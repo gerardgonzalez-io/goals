@@ -1,6 +1,6 @@
 //
 //  CalendarView.swift
-//  GoalsV2
+//  Goals
 //
 //  Created by Adolfo Gerard Montilla Gonzalez on 20-10-25.
 //

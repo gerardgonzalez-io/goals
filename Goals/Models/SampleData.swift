@@ -1,6 +1,6 @@
 //
 //  SampleData.swift
-//  GoalsV2
+//  Goals
 //
 //  Created by Adolfo Gerard Montilla Gonzalez on 12-10-25.
 //
@@ -31,7 +31,6 @@ class SampleData
         let schema = Schema([
             Topic.self,
             StudySession.self,
-            Goal.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
 
