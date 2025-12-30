@@ -222,30 +222,30 @@ private extension ProgressVsPlanView {
                     .padding(.vertical, 6)
             } else {
                 Chart {
-                    // Actual
+                    // Actual (serie única)
                     ForEach(report.points.indices, id: \.self) { idx in
                         let p = report.points[idx]
                         LineMark(
                             x: .value("Date", p.periodDate),
-                            y: .value("Actual", p.actualCumulativeMinutes)
+                            y: .value("Minutes", p.actualCumulativeMinutes)
                         )
                         .interpolationMethod(.catmullRom)
                         .lineStyle(StrokeStyle(lineWidth: 2.5))
-                        .foregroundStyle(.accent)
+                        .foregroundStyle(by: .value("Series", "Actual"))
                     }
 
-                    // Plan (only if available)
+                    // Plan (serie única)
                     if report.isPlanAvailable {
                         ForEach(report.points.indices, id: \.self) { idx in
                             let p = report.points[idx]
                             if let plan = p.planCumulativeMinutes {
                                 LineMark(
                                     x: .value("Date", p.periodDate),
-                                    y: .value("Plan", plan)
+                                    y: .value("Minutes", plan)
                                 )
                                 .interpolationMethod(.catmullRom)
                                 .lineStyle(StrokeStyle(lineWidth: 2, dash: [5, 4]))
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(by: .value("Series", "Plan"))
                             }
                         }
                     }
@@ -264,6 +264,10 @@ private extension ProgressVsPlanView {
                             }
                     }
                 }
+                .chartForegroundStyleScale(
+                    domain: ["Actual", "Plan"],
+                    range: [ Color.orange, Color.accentColor ]
+                )
                 .chartYAxis {
                     AxisMarks(position: .leading)
                 }
