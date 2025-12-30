@@ -21,6 +21,7 @@ struct TopicDetailView: View
         case calendar
         case streak
         case topicGoal
+        case progressVsPlan
     }
 
     private var totalDuration: Int
@@ -173,6 +174,14 @@ struct TopicDetailView: View
                         subtitle: "Adjust your goal for this topic"
                     )
                     .padding(.bottom, 4)
+                    
+                    TopicDetailNavCard(
+                        value: TopicRoute.progressVsPlan,
+                        systemImage: "chart.xyaxis.line",
+                        title: "Progress vs Plan",
+                        subtitle: "See if you’re ahead or behind schedule"
+                    )
+                    .padding(.bottom, 4)
 
                 }
                 .padding(.horizontal, 20)
@@ -193,6 +202,8 @@ struct TopicDetailView: View
                 StreakPerTopicView(topic: topic)
             case .topicGoal:
                 TopicGoal(topic: topic)
+            case .progressVsPlan:
+                ProgressVsPlanView(topic: topic)
             }
         }
     }

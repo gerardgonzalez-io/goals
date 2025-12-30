@@ -31,6 +31,7 @@ class SampleData
         let schema = Schema([
             Topic.self,
             StudySession.self,
+            TopicGoalChange.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
 
@@ -51,6 +52,11 @@ class SampleData
         for topic in Topic.sampleData
         {
             context.insert(topic)
+        }
+
+        for goalChange in TopicGoalChange.sampleData
+        {
+            context.insert(goalChange)
         }
 
         for session in StudySession.sampleData

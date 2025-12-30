@@ -20,49 +20,38 @@ extension StudySession
         let now = Date()
         let startOfToday = calendarWithTimeZone.startOfDay(for: now)
 
-        // Helper to get the normalized start of a past day
-        func startOfDay(daysAgo: Int) -> Date
+        // Helper to get the normalized start of a day relative to today
+        func day(_ offset: Int) -> Date
         {
-            calendarWithTimeZone.date(byAdding: .day, value: -daysAgo, to: startOfToday)!
+            calendarWithTimeZone.startOfDay(
+                for: calendarWithTimeZone.date(byAdding: .day, value: offset, to: startOfToday)!
+            )
         }
 
-        // Build sessions so that endDate aligns exactly with the normalized start of the day,
-        // preserving the original relative durations.
-        let twoDaysAgoStart = startOfDay(daysAgo: 2)
-        let threeDaysAgoStart = startOfDay(daysAgo: 3)
-        let fiveDaysAgoStart = startOfDay(daysAgo: 5)
+        // Helper to create a session with a start hour (avoid midnight edge cases)
+        func makeSession(topic: Topic, dayOffset: Int, hour: Int, minutes: Int) -> StudySession
+        {
+            let start = day(dayOffset).addingTimeInterval(TimeInterval(hour * 3600))
+            let end = start.addingTimeInterval(TimeInterval(minutes * 60))
+            return StudySession(topic: topic, startDate: start, endDate: end)
+        }
+
+        // Topic.sampleData indices:
+        // 0 iOS, 1 Swift, 2 Electronic, 3 Japanese, 4 SwiftUI, 5 C languange
 
         return [
-            // 2 days ago: 4 minutes session ending exactly at start of that day
-            StudySession(
-                topic: topics[2],
-                startDate: twoDaysAgoStart.addingTimeInterval(-4 * 60),
-                endDate:   twoDaysAgoStart
-            ),
-            // 3 days ago: 30 minutes 30 seconds session ending exactly at start of that day
-            StudySession(
-                topic: topics[3],
-                startDate: threeDaysAgoStart.addingTimeInterval(-(30 * 60 + 30)),
-                endDate:   threeDaysAgoStart
-            ),
-            // Duplicate of the previous session (as in original sample data)
-            StudySession(
-                topic: topics[3],
-                startDate: threeDaysAgoStart.addingTimeInterval(-(30 * 60 + 30)),
-                endDate:   threeDaysAgoStart
-            ),
-            // 5 days ago: 2 minutes 45 seconds session ending exactly at start of that day
-            StudySession(
-                topic: topics[5],
-                startDate: fiveDaysAgoStart.addingTimeInterval(-(2 * 60 + 45)),
-                endDate:   fiveDaysAgoStart
-            ),
-            // Today: a 30-minute session ending at 'now'
-            StudySession(
-                topic: topics[1],
-                startDate: now.addingTimeInterval(-70 * 60),
-                endDate:   now
-            )
+            // iOS — last 7 days (so Progress vs Plan has movement)
+            makeSession(topic: topics[0], dayOffset: -6, hour: 9,  minutes: 10),
+            makeSession(topic: topics[0], dayOffset: -5, hour: 9,  minutes: 20),
+            makeSession(topic: topics[0], dayOffset: -4, hour: 9,  minutes: 40),
+            makeSession(topic: topics[0], dayOffset: -3, hour: 9,  minutes: 150),
+            makeSession(topic: topics[0], dayOffset: -2, hour: 9,  minutes: 40),
+            makeSession(topic: topics[0], dayOffset: -1, hour: 20, minutes: 40),
+            makeSession(topic: topics[0], dayOffset:  0, hour: 8,  minutes: 40),
+
+            // Extra sessions for other screens/topics
+            makeSession(topic: topics[4], dayOffset: -2, hour: 10, minutes: 50), // SwiftUI
+            makeSession(topic: topics[3], dayOffset: -4, hour: 18, minutes: 35)  // Japanese
         ]
     }()
 }
