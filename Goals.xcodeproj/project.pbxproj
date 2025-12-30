@@ -34,6 +34,8 @@
 		FD7DB2FE2F031D0300F029DD /* ProgressVsPlanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2FD2F031D0300F029DD /* ProgressVsPlanTests.swift */; };
 		FD7DB3002F031F3100F029DD /* ProgressVsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2FF2F031F3100F029DD /* ProgressVsPlan.swift */; };
 		FD7DB3032F0326CC00F029DD /* ProgressVsPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB3022F0326CC00F029DD /* ProgressVsPlanView.swift */; };
+		FD7DB3052F0356A600F029DD /* Topic+Samples.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB3042F0356A600F029DD /* Topic+Samples.swift */; };
+		FD7DB3072F0357A200F029DD /* TopicGoalChange+Samples.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB3062F0357A200F029DD /* TopicGoalChange+Samples.swift */; };
 		FD8E43132E7C907700856E38 /* TimerDialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8E43122E7C907700856E38 /* TimerDialView.swift */; };
 		FD9EDE6C2EE75A0D00D2DD23 /* StreakPerTopicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9EDE6B2EE75A0D00D2DD23 /* StreakPerTopicView.swift */; };
 		FDA4BC012E0776DE00E0DAA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */; };
@@ -87,6 +89,8 @@
 		FD7DB2FD2F031D0300F029DD /* ProgressVsPlanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressVsPlanTests.swift; sourceTree = "<group>"; };
 		FD7DB2FF2F031F3100F029DD /* ProgressVsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressVsPlan.swift; sourceTree = "<group>"; };
 		FD7DB3022F0326CC00F029DD /* ProgressVsPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressVsPlanView.swift; sourceTree = "<group>"; };
+		FD7DB3042F0356A600F029DD /* Topic+Samples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Topic+Samples.swift"; sourceTree = "<group>"; };
+		FD7DB3062F0357A200F029DD /* TopicGoalChange+Samples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TopicGoalChange+Samples.swift"; sourceTree = "<group>"; };
 		FD8E43122E7C907700856E38 /* TimerDialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerDialView.swift; sourceTree = "<group>"; };
 		FD9EDE6B2EE75A0D00D2DD23 /* StreakPerTopicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakPerTopicView.swift; sourceTree = "<group>"; };
 		FDA4BBEC2E07763E00E0DAA5 /* Goals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goals.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -266,12 +270,14 @@
 			children = (
 				FD7DB2F52EFDFC1F00F029DD /* CurrentModels.swift */,
 				FD7DB2F72EFDFC6300F029DD /* Topic+Logic.swift */,
-				FD7DB2F92EFDFD2D00F029DD /* StudySession+Samples.swift */,
 				FDBE08C92EA84BFD0083938F /* DailyStatus.swift */,
 				FDBE08CD2EA84C620083938F /* Streak.swift */,
 				FDBE08CF2EA84C790083938F /* Timer.swift */,
 				FD7DB2FF2F031F3100F029DD /* ProgressVsPlan.swift */,
 				FDC82AE72E5DF04700C2F545 /* SampleData.swift */,
+				FD7DB3062F0357A200F029DD /* TopicGoalChange+Samples.swift */,
+				FD7DB2F92EFDFD2D00F029DD /* StudySession+Samples.swift */,
+				FD7DB3042F0356A600F029DD /* Topic+Samples.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -425,7 +431,9 @@
 				FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */,
 				FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */,
 				FD7DB2E22EFD778800F029DD /* StudyHistoryView.swift in Sources */,
+				FD7DB3072F0357A200F029DD /* TopicGoalChange+Samples.swift in Sources */,
 				FD7DB2DF2EFC988200F029DD /* TopicGoal.swift in Sources */,
+				FD7DB3052F0356A600F029DD /* Topic+Samples.swift in Sources */,
 				FD6F7FF22E82FB51000E1C4F /* TopicDetailView.swift in Sources */,
 				FD7DB3002F031F3100F029DD /* ProgressVsPlan.swift in Sources */,
 				FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */,

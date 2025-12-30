@@ -9,7 +9,8 @@ import SwiftUI
 import SwiftData
 import Charts
 
-struct ProgressVsPlanView: View {
+struct ProgressVsPlanView: View
+{
     let topic: Topic
 
     @Query private var sessions: [StudySession]
@@ -17,7 +18,8 @@ struct ProgressVsPlanView: View {
     @State private var selectedRange: ProgressVsPlan.Range = .days7
     @State private var pageOffset: Int = 0
 
-    init(topic: Topic) {
+    init(topic: Topic)
+    {
         self.topic = topic
 
         let topicID = topic.id
@@ -31,7 +33,8 @@ struct ProgressVsPlanView: View {
         )
     }
 
-    private var report: ProgressVsPlan.Report {
+    private var report: ProgressVsPlan.Report
+    {
         ProgressVsPlan.compute(
             topic: topic,
             sessions: sessions,
@@ -41,21 +44,25 @@ struct ProgressVsPlanView: View {
         )
     }
 
-    private var firstGoalDay: Date? {
+    private var firstGoalDay: Date?
+    {
         topic.goalChanges.map(\.effectiveFromDay).min()
     }
 
-    private var canGoNext: Bool {
+    private var canGoNext: Bool
+    {
         // Apple-like: no “future” browsing; allow only going back and returning to current.
         pageOffset < 0
     }
 
-    private var canGoPrevious: Bool {
+    private var canGoPrevious: Bool
+    {
         guard let fg = firstGoalDay else { return false }
         let cal = calendar
         let today = cal.startOfDay(for: Date())
 
-        switch selectedRange {
+        switch selectedRange
+        {
         case .days7:
             let len = 7
             let prevEnd = cal.date(byAdding: .day, value: (pageOffset - 1) * len, to: today)!
@@ -72,14 +79,17 @@ struct ProgressVsPlanView: View {
         }
     }
 
-    private var headerSubtitle: String {
+    private var headerSubtitle: String
+    {
         guard let first = report.points.first?.periodDate,
               let last  = report.points.last?.periodDate
-        else {
+        else
+        {
             return selectedRangeLabel
         }
 
-        switch selectedRange {
+        switch selectedRange
+        {
         case .days7, .days30:
             return "\(formatDay(first)) – \(formatDay(last))"
         case .months12:
@@ -87,9 +97,12 @@ struct ProgressVsPlanView: View {
         }
     }
 
-    var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
+    var body: some View
+    {
+        ScrollView
+        {
+            VStack(spacing: 24)
+            {
                 header
                 progressCard
                 Spacer(minLength: 8)
@@ -104,9 +117,12 @@ struct ProgressVsPlanView: View {
 
 // MARK: - Header
 
-private extension ProgressVsPlanView {
-    var header: some View {
-        VStack(spacing: 8) {
+private extension ProgressVsPlanView
+{
+    var header: some View
+    {
+        VStack(spacing: 8)
+        {
             Text(topic.name)
                 .font(.title2.bold())
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -121,9 +137,12 @@ private extension ProgressVsPlanView {
 
 // MARK: - Progress Card
 
-private extension ProgressVsPlanView {
-    var progressCard: some View {
-        VStack(spacing: 14) {
+private extension ProgressVsPlanView
+{
+    var progressCard: some View
+    {
+        VStack(spacing: 14)
+        {
             cardTopBar
             kpisRow
             chartSection
@@ -136,15 +155,19 @@ private extension ProgressVsPlanView {
         )
     }
 
-    var cardTopBar: some View {
-        VStack(spacing: 10) {
-            HStack {
+    var cardTopBar: some View
+    {
+        VStack(spacing: 10)
+        {
+            HStack
+            {
                 Text("Progress")
                     .font(.headline)
 
                 Spacer()
 
-                Picker("", selection: $selectedRange) {
+                Picker("", selection: $selectedRange)
+                {
                     Text("7D").tag(ProgressVsPlan.Range.days7)
                     Text("30D").tag(ProgressVsPlan.Range.days30)
                     Text("12M").tag(ProgressVsPlan.Range.months12)
@@ -153,11 +176,15 @@ private extension ProgressVsPlanView {
                 .frame(maxWidth: 240)
             }
 
-            HStack {
-                Button {
+            HStack
+            {
+                Button
+                {
                     guard canGoPrevious else { return }
                     pageOffset -= 1
-                } label: {
+                }
+                label:
+                {
                     Image(systemName: "chevron.left")
                         .font(.caption.weight(.semibold))
                         .frame(width: 34, height: 28)
@@ -170,10 +197,13 @@ private extension ProgressVsPlanView {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
-                Button {
+                Button
+                {
                     guard canGoNext else { return }
                     pageOffset += 1
-                } label: {
+                }
+                label:
+                {
                     Image(systemName: "chevron.right")
                         .font(.caption.weight(.semibold))
                         .frame(width: 34, height: 28)
@@ -187,8 +217,10 @@ private extension ProgressVsPlanView {
         }
     }
 
-    var kpisRow: some View {
-        HStack(spacing: 12) {
+    var kpisRow: some View
+    {
+        HStack(spacing: 12)
+        {
             KPIStat(
                 title: "Actual",
                 value: durationString(report.actualTotalMinutes),
@@ -211,19 +243,26 @@ private extension ProgressVsPlanView {
         }
     }
 
-    var chartSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if report.points.isEmpty {
+    var chartSection: some View
+    {
+        VStack(alignment: .leading, spacing: 10)
+        {
+            if report.points.isEmpty
+            {
                 // Should be rare because we clamp to first goal day; keep graceful.
                 Text("No data for this period.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 6)
-            } else {
-                Chart {
+            }
+            else
+            {
+                Chart
+                {
                     // Actual (serie única)
-                    ForEach(report.points.indices, id: \.self) { idx in
+                    ForEach(report.points.indices, id: \.self)
+                    { idx in
                         let p = report.points[idx]
                         LineMark(
                             x: .value("Date", p.periodDate),
@@ -235,10 +274,13 @@ private extension ProgressVsPlanView {
                     }
 
                     // Plan (serie única)
-                    if report.isPlanAvailable {
-                        ForEach(report.points.indices, id: \.self) { idx in
+                    if report.isPlanAvailable
+                    {
+                        ForEach(report.points.indices, id: \.self)
+                        { idx in
                             let p = report.points[idx]
-                            if let plan = p.planCumulativeMinutes {
+                            if let plan = p.planCumulativeMinutes
+                            {
                                 LineMark(
                                     x: .value("Date", p.periodDate),
                                     y: .value("Minutes", plan)
@@ -251,12 +293,15 @@ private extension ProgressVsPlanView {
                     }
 
                     // End-of-period marker (Today when pageOffset == 0)
-                    if let lastDate = report.points.last?.periodDate {
+                    if let lastDate = report.points.last?.periodDate
+                    {
                         RuleMark(x: .value("End", lastDate))
                             .lineStyle(StrokeStyle(lineWidth: 1))
                             .foregroundStyle(.tertiary)
-                            .annotation(position: .top, alignment: .trailing) {
-                                if pageOffset == 0 {
+                            .annotation(position: .top, alignment: .trailing)
+                            {
+                                if pageOffset == 0
+                                {
                                     Text("Today")
                                         .font(.caption2)
                                         .foregroundStyle(.secondary)
@@ -268,34 +313,43 @@ private extension ProgressVsPlanView {
                     domain: ["Actual", "Plan"],
                     range: [ Color.orange, Color.accentColor ]
                 )
-                .chartYAxis {
+                .chartYAxis
+                {
                     AxisMarks(position: .leading)
                 }
-                .chartXAxis {
-                    switch selectedRange {
+                .chartXAxis
+                {
+                    switch selectedRange
+                    {
                     case .days7:
-                        AxisMarks(values: .stride(by: .day)) { value in
+                        AxisMarks(values: .stride(by: .day))
+                        { value in
                             AxisGridLine()
                             AxisTick()
-                            AxisValueLabel {
+                            AxisValueLabel
+                            {
                                 if let d = value.as(Date.self) { Text(shortWeekday(d)) }
                             }
                         }
 
                     case .days30:
-                        AxisMarks(values: .stride(by: .day, count: 5)) { value in
+                        AxisMarks(values: .stride(by: .day, count: 5))
+                        { value in
                             AxisGridLine()
                             AxisTick()
-                            AxisValueLabel {
+                            AxisValueLabel
+                            {
                                 if let d = value.as(Date.self) { Text(dayNumber(d)) }
                             }
                         }
 
                     case .months12:
-                        AxisMarks(values: .stride(by: .month)) { value in
+                        AxisMarks(values: .stride(by: .month))
+                        { value in
                             AxisGridLine()
                             AxisTick()
-                            AxisValueLabel {
+                            AxisValueLabel
+                            {
                                 if let d = value.as(Date.self) { Text(shortMonth(d)) }
                             }
                         }
@@ -308,15 +362,20 @@ private extension ProgressVsPlanView {
     }
 
     @ViewBuilder
-    var insightSection: some View {
-        if report.isPlanAvailable, let insight = report.insight {
+    var insightSection: some View
+    {
+        if report.isPlanAvailable, let insight = report.insight
+        {
             Text(insight)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 2)
-        } else {
-            VStack(alignment: .leading, spacing: 4) {
+        }
+        else
+        {
+            VStack(alignment: .leading, spacing: 4)
+            {
                 Text("Plan not available")
                     .font(.subheadline.weight(.semibold))
                 Text("Set a goal to see your plan and compare your pace.")
@@ -331,15 +390,18 @@ private extension ProgressVsPlanView {
 
 // MARK: - Small KPI view (matches your card typography)
 
-private struct KPIStat: View {
+private struct KPIStat: View
+{
     let title: String
     let value: String
     let subtitle: String
     var emphasized: Bool = false
     var emphasizedIsPositive: Bool? = nil
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+    var body: some View
+    {
+        VStack(alignment: .leading, spacing: 4)
+        {
             Text(title)
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -364,7 +426,8 @@ private struct KPIStat: View {
         )
     }
 
-    private var valueColor: Color {
+    private var valueColor: Color
+    {
         guard emphasized, let isPositive = emphasizedIsPositive else { return .primary }
         return isPositive ? .green : .red
     }
@@ -372,43 +435,52 @@ private struct KPIStat: View {
 
 // MARK: - Formatting helpers
 
-private extension ProgressVsPlanView {
-    var calendar: Calendar {
+private extension ProgressVsPlanView
+{
+    var calendar: Calendar
+    {
         var c = Calendar.current
         c.timeZone = .current
         return c
     }
 
-    var selectedRangeLabel: String {
-        switch selectedRange {
+    var selectedRangeLabel: String
+    {
+        switch selectedRange
+        {
         case .days7: return "last 7 days"
         case .days30: return "last 30 days"
         case .months12: return "last 12 months"
         }
     }
 
-    var selectedRangeShortLabel: String {
-        switch selectedRange {
+    var selectedRangeShortLabel: String
+    {
+        switch selectedRange
+        {
         case .days7: return "7 days"
         case .days30: return "30 days"
         case .months12: return "12 months"
         }
     }
 
-    func durationString(_ minutes: Int) -> String {
+    func durationString(_ minutes: Int) -> String
+    {
         let h = minutes / 60
         let m = minutes % 60
         if h > 0 { return String(format: "%dh %02dm", h, m) }
         return "\(m)m"
     }
 
-    func deltaString(deltaMinutes: Int?, status: ProgressVsPlan.Status?) -> String {
+    func deltaString(deltaMinutes: Int?, status: ProgressVsPlan.Status?) -> String
+    {
         guard let deltaMinutes, let status else { return "—" }
         let absText = durationString(abs(deltaMinutes))
         return status == .ahead ? "+\(absText)" : "−\(absText)"
     }
 
-    func formatDay(_ date: Date) -> String {
+    func formatDay(_ date: Date) -> String
+    {
         let df = DateFormatter()
         df.calendar = calendar
         df.timeZone = .current
@@ -416,7 +488,8 @@ private extension ProgressVsPlanView {
         return df.string(from: date)
     }
 
-    func formatMonthYear(_ date: Date) -> String {
+    func formatMonthYear(_ date: Date) -> String
+    {
         let df = DateFormatter()
         df.calendar = calendar
         df.timeZone = .current
@@ -424,7 +497,8 @@ private extension ProgressVsPlanView {
         return df.string(from: date)
     }
 
-    func shortWeekday(_ date: Date) -> String {
+    func shortWeekday(_ date: Date) -> String
+    {
         let df = DateFormatter()
         df.calendar = calendar
         df.timeZone = .current
@@ -432,7 +506,8 @@ private extension ProgressVsPlanView {
         return df.string(from: date)
     }
 
-    func dayNumber(_ date: Date) -> String {
+    func dayNumber(_ date: Date) -> String
+    {
         let df = DateFormatter()
         df.calendar = calendar
         df.timeZone = .current
@@ -440,7 +515,8 @@ private extension ProgressVsPlanView {
         return df.string(from: date)
     }
 
-    func shortMonth(_ date: Date) -> String {
+    func shortMonth(_ date: Date) -> String
+    {
         let df = DateFormatter()
         df.calendar = calendar
         df.timeZone = .current
@@ -451,8 +527,10 @@ private extension ProgressVsPlanView {
 
 // MARK: - Preview (self-contained)
 
-#Preview("Progress vs Plan (Dark)") {
-    NavigationStack {
+#Preview("Progress vs Plan (Dark)")
+{
+    NavigationStack
+    {
         ProgressVsPlanView(topic: SampleData.shared.topic)
             .modelContainer(SampleData.shared.modelContainer)
             .preferredColorScheme(.dark)

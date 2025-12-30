@@ -34,11 +34,13 @@ import Testing
 /// - Chart starts at the first TopicGoalChange day (if topic has < window length, show fewer points).
 /// - Plan is "not available" if goal resolution is nil anywhere in the shown range or if no goalChanges exist.
 /// - Sessions are attributed to the day of their startDate (no splitting across midnight).
-struct ProgressVsPlanTests {
+struct ProgressVsPlanTests
+{
 
     // MARK: - Helpers
 
-    private var cal: Calendar {
+    private var cal: Calendar
+    {
         var c = Calendar.current
         c.timeZone = .current
         return c
@@ -46,31 +48,36 @@ struct ProgressVsPlanTests {
 
     private func dayStart(_ d: Date) -> Date { cal.startOfDay(for: d) }
 
-    private func addDays(_ d: Date, _ days: Int) -> Date {
+    private func addDays(_ d: Date, _ days: Int) -> Date
+    {
         cal.date(byAdding: .day, value: days, to: d)!
     }
 
     @discardableResult
-    private func makeGoal(topic: Topic, minutes: Int, effectiveAt: Date) -> TopicGoalChange {
+    private func makeGoal(topic: Topic, minutes: Int, effectiveAt: Date) -> TopicGoalChange
+    {
         let g = TopicGoalChange(topic: topic, goalInMinutes: minutes, effectiveAt: effectiveAt)
         topic.goalChanges.append(g)
         return g
     }
 
     /// Inclusive day count between two start-of-day dates (e.g., Dec 1..Dec 1 = 1).
-    private func inclusiveDayCount(from startDay: Date, to endDay: Date) -> Int {
+    private func inclusiveDayCount(from startDay: Date, to endDay: Date) -> Int
+    {
         let s = dayStart(startDay)
         let e = dayStart(endDay)
         let diff = cal.dateComponents([.day], from: s, to: e).day ?? 0
         return max(0, diff + 1)
     }
 
-    private func monthStart(_ d: Date) -> Date {
+    private func monthStart(_ d: Date) -> Date
+    {
         let comps = cal.dateComponents([.year, .month], from: d)
         return cal.date(from: comps)!
     }
 
-    private func monthsInclusive(from startMonth: Date, to endMonth: Date) -> Int {
+    private func monthsInclusive(from startMonth: Date, to endMonth: Date) -> Int
+    {
         let s = monthStart(startMonth)
         let e = monthStart(endMonth)
         let diff = cal.dateComponents([.month], from: s, to: e).month ?? 0
@@ -80,7 +87,8 @@ struct ProgressVsPlanTests {
     // MARK: - Tests
 
     @Test("Plan not available when topic has no goalChanges (service returns points with nil plan + no KPIs/insight for plan)")
-    func planUnavailableWhenNoGoalChanges() {
+    func planUnavailableWhenNoGoalChanges()
+    {
         let now = TestDates.date(2025, 12, 29, 10, 0)
         let topic = Topic(name: "No Goal")
 
@@ -108,7 +116,8 @@ struct ProgressVsPlanTests {
     }
 
     @Test("7D: daily cumulative points, plan uses full daily goal (including today), and KPIs compute Behind correctly")
-    func days7CumulativeAndKpisBehind() throws {
+    func days7CumulativeAndKpisBehind() throws
+    {
         let now = TestDates.date(2025, 12, 29, 10, 0)
         let topic = Topic(name: "7D Topic")
 
@@ -160,7 +169,8 @@ struct ProgressVsPlanTests {
     }
 
     @Test("7D navigation: pageOffset shifts the window (current vs previous week totals differ and do not mix)")
-    func days7NavigationOffsetShiftsWindow() {
+    func days7NavigationOffsetShiftsWindow()
+    {
         let now = TestDates.date(2025, 12, 29, 10, 0)
         let topic = Topic(name: "Nav Topic")
 
@@ -205,7 +215,8 @@ struct ProgressVsPlanTests {
     }
 
     @Test("Sessions crossing midnight are fully attributed to the start day (no splitting) in daily buckets")
-    func midnightCrossingSessionCountsOnStartDay() throws {
+    func midnightCrossingSessionCountsOnStartDay() throws
+    {
         let now = TestDates.date(2025, 12, 29, 10, 0)
         let topic = Topic(name: "Midnight Topic")
 
@@ -257,7 +268,8 @@ struct ProgressVsPlanTests {
     }
 
     @Test("12M: monthly points, window ends today, starts at first goalChange (topic younger than 12M => fewer than 12 points)")
-    func months12MonthlyBucketsAndAnchorAtFirstGoalChange() throws {
+    func months12MonthlyBucketsAndAnchorAtFirstGoalChange() throws
+    {
         let now = TestDates.date(2025, 12, 29, 10, 0)
         let topic = Topic(name: "12M Topic")
 

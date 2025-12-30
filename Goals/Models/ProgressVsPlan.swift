@@ -10,28 +10,33 @@
 
 import Foundation
 
-struct ProgressVsPlan {
+struct ProgressVsPlan
+{
 
     // MARK: - Public API
 
-    enum Range: Equatable {
+    enum Range: Equatable
+    {
         case days7
         case days30
         case months12
     }
 
-    enum Status: Equatable {
+    enum Status: Equatable
+    {
         case ahead
         case behind
     }
 
-    struct Point: Equatable {
+    struct Point: Equatable
+    {
         let periodDate: Date
         let actualCumulativeMinutes: Int
         let planCumulativeMinutes: Int?
     }
 
-    struct Report: Equatable {
+    struct Report: Equatable
+    {
         let isPlanAvailable: Bool
         let points: [Point]
 
@@ -66,7 +71,8 @@ struct ProgressVsPlan {
             c.timeZone = .current
             return c
         }()
-    ) -> Report {
+    ) -> Report
+    {
 
         let topicID = topic.id
         let topicSessions = sessions.filter { $0.topic.id == topicID }
@@ -81,7 +87,8 @@ struct ProgressVsPlan {
             .map { $0.effectiveFromDay }
             .min()
 
-        switch range {
+        switch range
+        {
         case .days7:
             return computeDaily(
                 topic: topic,
@@ -122,7 +129,8 @@ struct ProgressVsPlan {
 
 // MARK: - Daily (7D / 30D)
 
-private extension ProgressVsPlan {
+private extension ProgressVsPlan
+{
 
     static func computeDaily(
         topic: Topic,
@@ -133,7 +141,8 @@ private extension ProgressVsPlan {
         hasAnyGoalChange: Bool,
         firstGoalDay: Date?,
         calendar: Calendar
-    ) -> Report {
+    ) -> Report
+    {
 
         // Window ends at (today + offset * length).
         let end = calendar.date(byAdding: .day, value: pageOffset * lengthInDays, to: today)
@@ -142,11 +151,15 @@ private extension ProgressVsPlan {
         var start = calendar.startOfDay(for: requestedStart)
 
         // Anchor to firstGoalDay when plan exists.
-        if hasAnyGoalChange, let fg = firstGoalDay {
-            if end < fg {
+        if hasAnyGoalChange, let fg = firstGoalDay
+        {
+            if end < fg
+            {
                 // Should be prevented by UI, but clamp defensively.
                 start = fg
-            } else {
+            }
+            else
+            {
                 start = max(start, fg)
             }
         }
@@ -165,12 +178,16 @@ private extension ProgressVsPlan {
         var planAvailable = hasAnyGoalChange
 
         // First pass: determine plan availability and compute cumulative values.
-        for day in days {
+        for day in days
+        {
             let dailyActual = actualByDay[day] ?? 0
             actualCum += dailyActual
 
-            if planAvailable {
-                guard let dailyGoal = topic.goalInMinutes(for: day) else {
+            if planAvailable
+            {
+                guard let dailyGoal = topic.goalInMinutes(for: day)
+                else
+                {
                     planAvailable = false
                     // From now on, we will produce nil plan values for all points.
                     continue
@@ -183,15 +200,19 @@ private extension ProgressVsPlan {
         actualCum = 0
         planCum = 0
 
-        for day in days {
+        for day in days
+        {
             let dailyActual = actualByDay[day] ?? 0
             actualCum += dailyActual
 
-            if planAvailable {
+            if planAvailable
+            {
                 // Safe to force unwrap: planAvailable implies goal exists for all days.
                 planCum += topic.goalInMinutes(for: day)!
                 points.append(Point(periodDate: day, actualCumulativeMinutes: actualCum, planCumulativeMinutes: planCum))
-            } else {
+            }
+            else
+            {
                 points.append(Point(periodDate: day, actualCumulativeMinutes: actualCum, planCumulativeMinutes: nil))
             }
         }
@@ -206,7 +227,8 @@ private extension ProgressVsPlan {
 
 // MARK: - Monthly (12M)
 
-private extension ProgressVsPlan {
+private extension ProgressVsPlan
+{
 
     static func computeMonthly12(
         topic: Topic,
@@ -216,7 +238,8 @@ private extension ProgressVsPlan {
         hasAnyGoalChange: Bool,
         firstGoalDay: Date?,
         calendar: Calendar
-    ) -> Report {
+    ) -> Report
+    {
 
         // End day shifts by 12 months * offset (window ends at that shifted "today").
         let shiftedEndDay = calendar.date(byAdding: .month, value: pageOffset * 12, to: today)
@@ -231,12 +254,16 @@ private extension ProgressVsPlan {
         var planAvailable = hasAnyGoalChange
         var rangeStartDay = requestedStartDay
 
-        if hasAnyGoalChange, let fg = firstGoalDay {
+        if hasAnyGoalChange, let fg = firstGoalDay
+        {
             let fgDay = calendar.startOfDay(for: fg)
-            if shiftedEndDay < fgDay {
+            if shiftedEndDay < fgDay
+            {
                 // Should be prevented by UI; clamp defensively.
                 rangeStartDay = fgDay
-            } else {
+            }
+            else
+            {
                 rangeStartDay = max(rangeStartDay, fgDay)
             }
         }
@@ -253,9 +280,12 @@ private extension ProgressVsPlan {
         let actualByDay = sumActualMinutesByDay(sessions: sessions, calendar: calendar)
 
         // Validate plan availability by ensuring all days have a goal when plan is expected.
-        if planAvailable {
-            for day in days {
-                if topic.goalInMinutes(for: day) == nil {
+        if planAvailable
+        {
+            for day in days
+            {
+                if topic.goalInMinutes(for: day) == nil
+                {
                     planAvailable = false
                     break
                 }
@@ -269,7 +299,8 @@ private extension ProgressVsPlan {
         var actualCum = 0
         var planCum = 0
 
-        for mStart in months {
+        for mStart in months
+        {
             let mEnd = monthEndDay(forMonthStart: mStart, endCapDay: shiftedEndDay, calendar: calendar)
 
             // Month effective start is clamped to rangeStartDay if this is the first month.
@@ -279,9 +310,11 @@ private extension ProgressVsPlan {
             var actualThisBucket = 0
             var planThisBucket = 0
 
-            for day in effectiveDays {
+            for day in effectiveDays
+            {
                 actualThisBucket += (actualByDay[day] ?? 0)
-                if planAvailable {
+                if planAvailable
+                {
                     planThisBucket += topic.goalInMinutes(for: day)! // safe if available
                 }
             }
@@ -308,17 +341,20 @@ private extension ProgressVsPlan {
 
 // MARK: - Report composition
 
-private extension ProgressVsPlan {
+private extension ProgressVsPlan
+{
 
     static func makeReport(
         rangeLabel: String,
         planAvailable: Bool,
         points: [Point]
-    ) -> Report {
+    ) -> Report
+    {
 
         let actualTotal = points.last?.actualCumulativeMinutes ?? 0
 
-        if !planAvailable {
+        if !planAvailable
+        {
             return Report(
                 isPlanAvailable: false,
                 points: points,
@@ -337,9 +373,12 @@ private extension ProgressVsPlan {
         let absDeltaText = formatMinutes(abs(delta))
 
         let insight: String
-        if status == .ahead {
+        if status == .ahead
+        {
             insight = "You're ahead by \(absDeltaText) in \(rangeLabel)."
-        } else {
+        }
+        else
+        {
             insight = "You're behind by \(absDeltaText) in \(rangeLabel)."
         }
 
@@ -357,7 +396,8 @@ private extension ProgressVsPlan {
 
 // MARK: - Utilities
 
-private extension ProgressVsPlan {
+private extension ProgressVsPlan
+{
 
     static func sumActualMinutesByDay(
         sessions: [StudySession],
@@ -366,21 +406,24 @@ private extension ProgressVsPlan {
         var map: [Date: Int] = [:]
         map.reserveCapacity(min(64, sessions.count))
 
-        for s in sessions {
+        for s in sessions
+        {
             let day = calendar.startOfDay(for: s.startDate) // align with StudySession.normalizedDay logic
             map[day, default: 0] += s.durationInMinutes
         }
         return map
     }
 
-    static func enumerateDays(from startDay: Date, to endDay: Date, calendar: Calendar) -> [Date] {
+    static func enumerateDays(from startDay: Date, to endDay: Date, calendar: Calendar) -> [Date]
+    {
         let s = calendar.startOfDay(for: startDay)
         let e = calendar.startOfDay(for: endDay)
         guard s <= e else { return [] }
 
         var result: [Date] = []
         var d = s
-        while d <= e {
+        while d <= e
+        {
             result.append(d)
             guard let next = calendar.date(byAdding: .day, value: 1, to: d) else { break }
             d = calendar.startOfDay(for: next)
@@ -388,19 +431,22 @@ private extension ProgressVsPlan {
         return result
     }
 
-    static func monthStart(of date: Date, calendar: Calendar) -> Date {
+    static func monthStart(of date: Date, calendar: Calendar) -> Date
+    {
         let comps = calendar.dateComponents([.year, .month], from: date)
         return calendar.date(from: comps)!
     }
 
-    static func enumerateMonthStarts(from startMonthStart: Date, to endMonthStart: Date, calendar: Calendar) -> [Date] {
+    static func enumerateMonthStarts(from startMonthStart: Date, to endMonthStart: Date, calendar: Calendar) -> [Date]
+    {
         let s = monthStart(of: startMonthStart, calendar: calendar)
         let e = monthStart(of: endMonthStart, calendar: calendar)
         guard s <= e else { return [] }
 
         var result: [Date] = []
         var m = s
-        while m <= e {
+        while m <= e
+        {
             result.append(m)
             guard let next = calendar.date(byAdding: .month, value: 1, to: m) else { break }
             m = monthStart(of: next, calendar: calendar)
@@ -409,7 +455,8 @@ private extension ProgressVsPlan {
     }
 
     /// Returns the last day (start-of-day) of a month bucket, capped by `endCapDay`.
-    static func monthEndDay(forMonthStart monthStartDate: Date, endCapDay: Date, calendar: Calendar) -> Date {
+    static func monthEndDay(forMonthStart monthStartDate: Date, endCapDay: Date, calendar: Calendar) -> Date
+    {
         let cap = calendar.startOfDay(for: endCapDay)
 
         guard let nextMonth = calendar.date(byAdding: .month, value: 1, to: monthStartDate) else { return cap }
@@ -421,7 +468,8 @@ private extension ProgressVsPlan {
         return min(lastDayStart, cap)
     }
 
-    static func formatMinutes(_ minutes: Int) -> String {
+    static func formatMinutes(_ minutes: Int) -> String
+    {
         if minutes <= 0 { return "0m" }
         let h = minutes / 60
         let m = minutes % 60
