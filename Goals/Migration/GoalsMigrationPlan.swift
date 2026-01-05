@@ -39,7 +39,8 @@ enum GoalsMigrationPlan: SchemaMigrationPlan
     static let migrateV1toV2 = MigrationStage.custom(
         fromVersion: GoalsSchemaV1.self,
         toVersion: GoalsSchemaV2.self,
-        willMigrate: { context in
+        willMigrate:
+        { context in
             // 1) Read ONLY V1 models here
             let topics = try context.fetch(FetchDescriptor<GoalsSchemaV1.Topic>())
 
@@ -89,7 +90,8 @@ enum GoalsMigrationPlan: SchemaMigrationPlan
 
             goalSeedsByTopicID = result
         },
-        didMigrate: { context in
+        didMigrate:
+        { context in
             // 2) Read/Write ONLY V2 models here
             let topics = try context.fetch(FetchDescriptor<GoalsSchemaV2.Topic>())
 
