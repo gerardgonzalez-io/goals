@@ -26,19 +26,12 @@ struct TopicDetailView: View
 
     private var totalDuration: Int
     {
-        sessions.reduce(0) { $0 + $1.durationInMinutes }
+        Int(TimeCalculator.totalTime(from: sessions) / 60)
     }
 
     private var todayDuration: Int
     {
-        let calendar = Calendar.current
-        let today = Date()
-        return sessions
-            .filter
-            { session in
-                calendar.isDate(session.normalizedDay, inSameDayAs: today)
-            }
-            .reduce(0) { $0 + $1.durationInMinutes }
+        Int(TimeCalculator.dailyTime(from: sessions, on: Date()) / 60)
     }
 
     init(topic: Topic, timer: Timer)
@@ -48,7 +41,7 @@ struct TopicDetailView: View
         let topicID = topic.id
         let predicate = #Predicate<StudySession>
         { session in
-            session.topic.id == topicID
+            session.topicID == topicID
         }
         _sessions = Query(
             filter: predicate,

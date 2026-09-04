@@ -11,6 +11,8 @@ import SwiftData
 struct TopicListView: View
 {
     @Query(sort: \Topic.name) private var topics: [Topic]
+    @Query private var sessions: [StudySession]
+    @Query private var goals: [Goal]
     @Environment(\.modelContext) private var context
     @State private var newTopic: Topic?
     @Bindable var timer: Timer
@@ -74,7 +76,20 @@ struct TopicListView: View
     {
         for index in indexes
         {
-            context.delete(topics[index])
+            let topic = topics[index]
+            let topicID = topic.id
+
+            for session in sessions where session.topicID == topicID
+            {
+                context.delete(session)
+            }
+
+            for goal in goals where goal.topicID == topicID
+            {
+                context.delete(goal)
+            }
+
+            context.delete(topic)
         }
     }
 }

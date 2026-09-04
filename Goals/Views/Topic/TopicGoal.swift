@@ -15,20 +15,43 @@ struct TopicGoal: View
 
     let topic: Topic
 
+    @Query private var goals: [Goal]
+
     @State private var selectedMinutes: Int
     @State private var errorMessage: String?
+    @State private var didLoadCurrentGoal = false
 
     private let minuteRange = Array(1...240)
 
     init(topic: Topic)
     {
         self.topic = topic
-        _selectedMinutes = State(initialValue: topic.currentGoalInMinutes ?? 60)
+        _selectedMinutes = State(initialValue: 60)
+
+        let topicID = topic.id
+        _goals = Query(
+            filter: #Predicate<Goal> { goal in
+                goal.topicID == topicID && !goal.isArchived
+            },
+            sort: [SortDescriptor(\.createdAt, order: .reverse)]
+        )
     }
 
     private var currentMinutes: Int?
     {
-        topic.currentGoalInMinutes
+        sortedGoals.first.map { Int($0.targetSecondsPerDay / 60) }
+    }
+
+    private var sortedGoals: [Goal]
+    {
+        goals.sorted
+        {
+            if $0.effectiveFromDay != $1.effectiveFromDay
+            {
+                return $0.effectiveFromDay > $1.effectiveFromDay
+            }
+            return $0.createdAt > $1.createdAt
+        }
     }
 
     private var canSave: Bool
@@ -109,21 +132,12 @@ struct TopicGoal: View
                 }
             }
 
-            if !topic.goalChanges.isEmpty
+            if !sortedGoals.isEmpty
             {
                 Section("History")
                 {
                     // Newest first: day, then exact time
-                    let sorted = topic.goalChanges.sorted
-                    {
-                        if $0.effectiveFromDay != $1.effectiveFromDay
-                        {
-                            return $0.effectiveFromDay > $1.effectiveFromDay
-                        }
-                        return $0.effectiveAt > $1.effectiveAt
-                    }
-
-                    ForEach(sorted)
+                    ForEach(sortedGoals)
                     { change in
                         HStack
                         {
@@ -132,7 +146,7 @@ struct TopicGoal: View
 
                             Spacer()
 
-                            Text("\(change.goalInMinutes) min")
+                            Text("\(Int(change.targetSecondsPerDay / 60)) min")
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -152,6 +166,15 @@ struct TopicGoal: View
                 .disabled(!canSave)
             }
         }
+        .onAppear
+        {
+            guard !didLoadCurrentGoal else { return }
+            if let currentMinutes
+            {
+                selectedMinutes = currentMinutes
+            }
+            didLoadCurrentGoal = true
+        }
     }
 
     private func saveSnapshot()
@@ -170,14 +193,12 @@ struct TopicGoal: View
         // IMPORTANT: use the real timestamp so multiple changes in the same day are deterministic.
         let now = Date()
 
-        let change = TopicGoalChange(
-            topic: topic,
-            goalInMinutes: selectedMinutes,
-            effectiveAt: now
+        let change = Goal(
+            topicID: topic.id,
+            targetSecondsPerDay: TimeInterval(selectedMinutes * 60),
+            createdAt: now
         )
 
-        // Ensure relationship is set even without relying on inverse inference
-        topic.goalChanges.append(change)
         context.insert(change)
 
         do
@@ -188,7 +209,7 @@ struct TopicGoal: View
         catch
         {
             #if DEBUG
-            print("Failed to save TopicGoalChange: \(error)")
+            print("Failed to save Goal: \(error)")
             #endif
             errorMessage = "Couldn't save. Please try again."
         }

@@ -21,14 +21,14 @@ import SwiftData
     - Footer: “Total for the day” with the summed duration.
 
  Data & Calculations
- - Source of truth: StudySession fetched via SwiftData (@Query), sorted by startDate descending.
+ - Source of truth: StudySession and SessionInterval records fetched via SwiftData.
  - Day grouping:
-    - Sessions are grouped by `session.normalizedDay` (startOfDay for startDate).
-    - One DaySection is produced per unique normalized day (sorted newest → oldest).
+    - Completed intervals are split by calendar-day overlap.
+    - One DaySection is produced per unique touched day (sorted newest -> oldest).
  - Per-day aggregation:
-    - For each day, sessions are grouped by `session.topic.id`.
-    - Minutes are summed using `session.durationInMinutes`.
-    - Daily total is the sum of all sessions’ minutes for that day.
+    - For each day, intervals are grouped by `session.topicID`.
+    - Minutes are summed from interval overlap seconds.
+    - Daily total is the sum of all interval overlap minutes for that day.
  - Display formatting:
     - Minutes are converted to “Xh YYm” using `durationString(_:)`.
     - Topic lines are sorted by minutes descending, then topic name.
@@ -39,6 +39,8 @@ struct StudyHistoryView: View
         sort: [SortDescriptor(\StudySession.startDate, order: .reverse)]
     )
     private var sessions: [StudySession]
+
+    @Query(sort: \Topic.name) private var topics: [Topic]
 
     private var brandLight: Color
     {
@@ -260,48 +262,69 @@ private extension StudyHistoryView
     {
         guard !sessions.isEmpty else { return [] }
 
-        // Group sessions by normalized day
-        let grouped = Dictionary(grouping: sessions, by: { $0.normalizedDay })
+        var secondsByDayAndTopic: [Date: [UUID: TimeInterval]] = [:]
+        let calendar = Calendar.current
 
-        // Build day sections (sorted newest -> oldest)
-        let sortedDays = grouped.keys.sorted(by: >)
+        for session in sessions
+        {
+            for interval in session.sessionIntervals
+            {
+                add(interval: interval, topicID: session.topicID, to: &secondsByDayAndTopic, calendar: calendar)
+            }
+        }
+
+        let topicNames = Dictionary(uniqueKeysWithValues: topics.map { ($0.id, $0.name) })
+        let sortedDays = secondsByDayAndTopic.keys.sorted(by: >)
 
         return sortedDays.compactMap { day in
-            guard let daySessions = grouped[day], !daySessions.isEmpty else { return nil }
+            guard let secondsByTopic = secondsByDayAndTopic[day], !secondsByTopic.isEmpty else { return nil }
 
-            // Group by topic.id and sum minutes
-            var minutesByTopic: [UUID: (name: String, minutes: Int)] = [:]
-            var total = 0
-
-            for s in daySessions
-            {
-                let m = s.durationInMinutes
-                total += m
-
-                let topicID = s.topic.id
-                let name = s.topic.name
-
-                if let existing = minutesByTopic[topicID]
-                {
-                    minutesByTopic[topicID] = (name: existing.name, minutes: existing.minutes + m)
+            let lines: [TopicLine] = secondsByTopic
+                .map { topicID, seconds in
+                    TopicLine(
+                        id: topicID,
+                        topicName: topicNames[topicID] ?? "Unknown topic",
+                        minutes: Int(seconds / 60)
+                    )
                 }
-                else
-                {
-                    minutesByTopic[topicID] = (name: name, minutes: m)
-                }
-            }
-
-            // Sort topics by minutes desc, then name
-            let lines: [TopicLine] = minutesByTopic
-                .map { (topicID, value) in
-                    TopicLine(id: topicID, topicName: value.name, minutes: value.minutes)
-                }
+                .filter { $0.minutes > 0 }
                 .sorted {
                     if $0.minutes != $1.minutes { return $0.minutes > $1.minutes }
                     return $0.topicName.localizedCaseInsensitiveCompare($1.topicName) == .orderedAscending
                 }
 
+            let total = lines.reduce(0) { $0 + $1.minutes }
+            guard total > 0 else { return nil }
+
             return DaySection(id: day, day: day, lines: lines, totalMinutes: total)
+        }
+    }
+
+    func add(
+        interval: SessionInterval,
+        topicID: UUID,
+        to secondsByDayAndTopic: inout [Date: [UUID: TimeInterval]],
+        calendar: Calendar
+    )
+    {
+        guard let endDate = interval.endDate, interval.startDate < endDate else { return }
+
+        var currentDay = calendar.startOfDay(for: interval.startDate)
+
+        while currentDay < endDate
+        {
+            guard let dayInterval = calendar.dateInterval(of: .day, for: currentDay) else { break }
+
+            let overlapStart = max(interval.startDate, dayInterval.start)
+            let overlapEnd = min(endDate, dayInterval.end)
+
+            if overlapStart < overlapEnd
+            {
+                secondsByDayAndTopic[currentDay, default: [:]][topicID, default: 0] += overlapEnd.timeIntervalSince(overlapStart)
+            }
+
+            guard let nextDay = calendar.date(byAdding: .day, value: 1, to: currentDay) else { break }
+            currentDay = nextDay
         }
     }
 

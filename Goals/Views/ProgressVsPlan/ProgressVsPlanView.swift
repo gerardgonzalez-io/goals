@@ -14,6 +14,7 @@ struct ProgressVsPlanView: View
     let topic: Topic
 
     @Query private var sessions: [StudySession]
+    @Query private var goals: [Goal]
 
     @State private var selectedRange: ProgressVsPlan.Range = .days7
     @State private var pageOffset: Int = 0
@@ -24,12 +25,18 @@ struct ProgressVsPlanView: View
 
         let topicID = topic.id
         let predicate = #Predicate<StudySession> { session in
-            session.topic.id == topicID
+            session.topicID == topicID
         }
 
         _sessions = Query(
             filter: predicate,
             sort: [SortDescriptor(\.startDate, order: .reverse)]
+        )
+        _goals = Query(
+            filter: #Predicate<Goal> { goal in
+                goal.topicID == topicID && !goal.isArchived
+            },
+            sort: [SortDescriptor(\.createdAt)]
         )
     }
 
@@ -38,6 +45,7 @@ struct ProgressVsPlanView: View
         ProgressVsPlan.compute(
             topic: topic,
             sessions: sessions,
+            goals: goals,
             range: selectedRange,
             pageOffset: pageOffset,
             now: Date()
@@ -46,7 +54,7 @@ struct ProgressVsPlanView: View
 
     private var firstGoalDay: Date?
     {
-        topic.goalChanges.map(\.effectiveFromDay).min()
+        goals.map(\.effectiveFromDay).min()
     }
 
     private var canGoNext: Bool

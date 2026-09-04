@@ -22,16 +22,16 @@ class SampleData
 
     var topic: Topic
     {
-        Topic.sampleData.first!
+        Topic.sample
     }
 
     private init()
     {
-        // In-memory container used for previews and tests
         let schema = Schema([
             Topic.self,
+            Goal.self,
             StudySession.self,
-            TopicGoalChange.self
+            SessionInterval.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
 
@@ -54,9 +54,9 @@ class SampleData
             context.insert(topic)
         }
 
-        for goalChange in TopicGoalChange.sampleData
+        for goal in Goal.sampleData
         {
-            context.insert(goalChange)
+            context.insert(goal)
         }
 
         for session in StudySession.sampleData

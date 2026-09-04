@@ -20,7 +20,8 @@ struct TimerView: View
     let preselectedTopic: Topic
 
     @State private var selectedTopic: Topic? = nil
-    @State private var sessionStartDate: Date? = nil
+    @State private var activeIntervalStartDate: Date? = nil
+    @State private var completedIntervals: [CompletedInterval] = []
     @State private var didAutoConfigureFromPreselection = false
 
     init(timer: Timer, preselectedTopic: Topic)
@@ -75,7 +76,7 @@ struct TimerView: View
 
             if !timer.isRunning && timer.elapsed == 0
             {
-                createStartDateForSession()
+                openInterval()
                 timer.toggle()
             }
 
@@ -117,6 +118,12 @@ struct TimerView: View
             }
         }
     }
+}
+
+private struct CompletedInterval: Equatable
+{
+    let startDate: Date
+    let endDate: Date
 }
 
 private extension TimerView
@@ -202,13 +209,14 @@ private extension TimerView
                 if didFinishSession
                 {
                     didFinishSession = false
+                    completedIntervals = []
+                    activeIntervalStartDate = nil
                 }
                 if selectedTopic == nil
                 {
                     selectedTopic = preselectedTopic
                 }
-                createStartDateForSession()
-                timer.toggle()
+                toggleTimerInterval()
             }
             label:
             {
@@ -278,36 +286,66 @@ private extension TimerView
 
 extension TimerView
 {
-    private func createStartDateForSession()
+    private func normalizedNow() -> Date
     {
-        if !timer.isRunning && timer.elapsed == 0
+        var calendarWithTimeZone = Calendar.current
+        calendarWithTimeZone.timeZone = .current
+        let now = Date()
+        return calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
+    }
+
+    private func openInterval()
+    {
+        guard activeIntervalStartDate == nil else { return }
+        activeIntervalStartDate = normalizedNow()
+    }
+
+    private func closeInterval()
+    {
+        guard let startDate = activeIntervalStartDate else { return }
+        let endDate = normalizedNow()
+        activeIntervalStartDate = nil
+
+        guard startDate < endDate else { return }
+        completedIntervals.append(CompletedInterval(startDate: startDate, endDate: endDate))
+    }
+
+    private func toggleTimerInterval()
+    {
+        if timer.isRunning
         {
-            var calendarWithTimeZone = Calendar.current
-            calendarWithTimeZone.timeZone = .current
-            let now = Date()
-            let normalizedStart = calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
-            sessionStartDate = normalizedStart
+            closeInterval()
+            timer.pause()
+        }
+        else
+        {
+            openInterval()
+            timer.start()
         }
     }
 
     private func createAndPersistSession(for topic: Topic)
     {
-        guard let capturedStart = sessionStartDate
+        let intervals = completedIntervals
+        guard let firstStart = intervals.map(\.startDate).min(),
+              let lastEnd = intervals.map(\.endDate).max()
         else
         {
             return
         }
 
-        var calendarWithTimeZone = Calendar.current
-        calendarWithTimeZone.timeZone = .current
+        let sessionIntervals = intervals.map
+        { interval in
+            SessionInterval(startDate: interval.startDate, endDate: interval.endDate)
+        }
 
-        let now = Date()
-        let normalizedEnd = calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
+        let session = StudySession(
+            topicID: topic.id,
+            startDate: firstStart,
+            endDate: lastEnd,
+            sessionIntervals: sessionIntervals
+        )
 
-        let session = StudySession(topic: topic,
-                                   startDate: capturedStart,
-                                   endDate: normalizedEnd)
-        
         modelContext.insert(session)
 
         do
@@ -326,10 +364,16 @@ extension TimerView
         guard !didFinishSession else { return }
         didFinishSession = true
 
+        if timer.isRunning
+        {
+            closeInterval()
+        }
+
         timer.done(for: topic)
         createAndPersistSession(for: topic)
         selectedTopic = preselectedTopic
-        sessionStartDate = nil
+        activeIntervalStartDate = nil
+        completedIntervals = []
     }
 }
 

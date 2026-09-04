@@ -21,7 +21,7 @@ struct NewTopicView: View
     init(topic: Topic)
     {
         self.topic = topic
-        _selectedMinutes = State(initialValue: topic.currentGoalInMinutes ?? 60)
+        _selectedMinutes = State(initialValue: 60)
     }
 
     private var trimmedName: String
@@ -116,16 +116,13 @@ struct NewTopicView: View
         guard canSave else { return }
 
         // Create initial snapshot (required)
-        if topic.goalChanges.isEmpty
-        {
-            let change = TopicGoalChange(
-                topic: topic,
-                goalInMinutes: selectedMinutes,
-                effectiveAt: Date()
-            )
-            topic.goalChanges.append(change)
-            context.insert(change)
-        }
+        let now = Date()
+        let goal = Goal(
+            topicID: topic.id,
+            targetSecondsPerDay: TimeInterval(selectedMinutes * 60),
+            createdAt: now
+        )
+        context.insert(goal)
 
         do
         {
@@ -134,7 +131,7 @@ struct NewTopicView: View
         catch
         {
             #if DEBUG
-            print("Failed to save Topic / TopicGoalChange: \(error)")
+            print("Failed to save Topic / Goal: \(error)")
             #endif
         }
 

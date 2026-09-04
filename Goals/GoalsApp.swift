@@ -13,30 +13,7 @@ struct GoalsApp: App
 {
     // Persisted flag that survives app relaunches; cleared only when app is deleted
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
-
-    var sharedModelContainer: ModelContainer =
-    {
-        // Use the latest schema (V2) + migration plan (V1 -> V2)
-        let schema = Schema(versionedSchema: GoalsSchemaV2.self)
-
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false
-        )
-
-        do
-        {
-            return try ModelContainer(
-                for: schema,
-                migrationPlan: GoalsMigrationPlan.self,
-                configurations: [modelConfiguration]
-            )
-        }
-        catch
-        {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+    @State private var dataContainer = DataContainer()
 
     var body: some Scene
     {
@@ -54,6 +31,7 @@ struct GoalsApp: App
                 }
             }
         }
-        .modelContainer(sharedModelContainer)
+        .environment(dataContainer)
+        .modelContainer(dataContainer.modelContainer)
     }
 }

@@ -20,7 +20,7 @@ struct StreakPerTopicView: View
 
         let topicID = topic.id
         let predicate = #Predicate<StudySession> { session in
-            session.topic.id == topicID
+            session.topicID == topicID
         }
 
         _sessions = Query(
@@ -29,19 +29,14 @@ struct StreakPerTopicView: View
         )
     }
 
-    private var streak: Streak
-    {
-        Streak(sessions: sessions)
-    }
-
     private var current: Int
     {
-        streak.currentStreak(for: topic)
+        StreakCalculator().calculateStreak(for: sessions)
     }
 
     private var longest: Int
     {
-        streak.longestStreak(for: topic)
+        longestStreak(from: sessions)
     }
 
     var body: some View
@@ -209,6 +204,69 @@ private extension StreakPerTopicView
     var tipText: String
     {
         "Stay focus, consistency beats intensity."
+    }
+}
+
+// MARK: - Data
+private extension StreakPerTopicView
+{
+    func longestStreak(from sessions: [StudySession]) -> Int
+    {
+        let days = successfulDays(from: sessions).sorted()
+        guard !days.isEmpty else { return 0 }
+
+        var longest = 0
+        var current = 0
+        var previousDay: Date?
+        let calendar = Calendar.current
+
+        for day in days
+        {
+            if let previousDay,
+               calendar.dateComponents([.day], from: previousDay, to: day).day == 1
+            {
+                current += 1
+            }
+            else
+            {
+                current = 1
+            }
+
+            longest = max(longest, current)
+            previousDay = day
+        }
+
+        return longest
+    }
+
+    func successfulDays(from sessions: [StudySession]) -> Set<Date>
+    {
+        var days = Set<Date>()
+        let calendar = Calendar.current
+
+        for session in sessions
+        {
+            for interval in session.sessionIntervals
+            {
+                guard let endDate = interval.endDate, interval.startDate < endDate else { continue }
+
+                let firstDay = calendar.startOfDay(for: interval.startDate)
+                let inclusiveEnd = endDate.addingTimeInterval(-TimeInterval.leastNonzeroMagnitude)
+                guard inclusiveEnd >= interval.startDate else { continue }
+
+                let lastDay = calendar.startOfDay(for: inclusiveEnd)
+                var currentDay = firstDay
+
+                while currentDay <= lastDay
+                {
+                    days.insert(currentDay)
+                    guard let nextDay = calendar.date(byAdding: .day, value: 1, to: currentDay) else { break }
+                    currentDay = nextDay
+                }
+            }
+        }
+
+        return days
     }
 }
 

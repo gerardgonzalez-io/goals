@@ -42,6 +42,7 @@ struct CalendarView: View {
     // 2) Fuente de datos reactiva desde SwiftData
     //    - Se rellena automáticamente según el filtro que definimos en init.
     @Query private var topicSessions: [StudySession]
+    @Query private var topicGoals: [Goal]
 
     // 3) Estados locales de UI
     //    - completionCache NO se usa en este código, pero queda como idea de optimización.
@@ -62,7 +63,10 @@ struct CalendarView: View {
 
         let topicID = topic.id
         self._topicSessions = Query(filter: #Predicate<StudySession> { session in
-            session.topic.id == topicID
+            session.topicID == topicID
+        })
+        self._topicGoals = Query(filter: #Predicate<Goal> { goal in
+            goal.topicID == topicID && !goal.isArchived
         })
     }
 
@@ -90,7 +94,11 @@ struct CalendarView: View {
     // 2) Se usa para NO mostrar indicadores antes de que el tema exista.
     private func earliestTopicDay() -> Date?
     {
-        topicSessions.map(\.normalizedDay).min()
+        topicSessions
+            .flatMap(\.sessionIntervals)
+            .map(\.startDate)
+            .map { calendar.startOfDay(for: $0) }
+            .min()
     }
 
     // 1) Decide si debemos mostrar el indicador en una fecha.
@@ -117,22 +125,17 @@ struct CalendarView: View {
         return false
     }
 
-    // 1) Filtra todas las sesiones que caen en "date".
-    // 2) Llama a DailyStatus.compute(...) para obtener estado diario.
-    // 3) Devuelve true si el objetivo estuvo "met".
+    // 1) Evalúa todas las sesiones e historial de metas del topic.
+    // 2) GoalEvaluator reparte intervalos que cruzan medianoche.
+    // 3) Devuelve true si el objetivo estuvo "met" para ese día.
     private func isCompleted(on date: Date) -> Bool
     {
         let dayKey = calendar.startOfDay(for: date)
-
-        let sessionsForDay = topicSessions.filter { session in
-            calendar.isDate(session.normalizedDay, inSameDayAs: dayKey)
-        }
-
-        guard let status = DailyStatus.compute(from: sessionsForDay) else {
-            return false
-        }
-
-        return status.isMet.contains(true)
+        let completedByDay = GoalEvaluator().reachedGoalsByDay(
+            sessions: topicSessions,
+            goals: topicGoals
+        )
+        return completedByDay[dayKey] == true
     }
 
     // "Hoy" normalizado a inicio de día.
