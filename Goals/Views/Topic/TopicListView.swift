@@ -15,7 +15,7 @@ struct TopicListView: View
     @Query private var goals: [Goal]
     @Environment(\.modelContext) private var context
     @State private var newTopic: Topic?
-    @Bindable var timer: Timer
+    @Bindable var timer: StudySessionTimer
 
     typealias Route = Topic.ID
 
@@ -98,7 +98,7 @@ struct TopicListView: View
 {
     NavigationStack
     {
-        TopicListView(timer: Timer())
+        TopicListView(timer: StudySessionTimer())
             .modelContainer(SampleData.shared.modelContainer)
             .preferredColorScheme(.dark)
     }
@@ -108,7 +108,7 @@ struct TopicListView: View
 {
     NavigationStack
     {
-        TopicListView(timer: Timer())
+        TopicListView(timer: StudySessionTimer())
             .modelContainer(SampleData.shared.modelContainer)
             .preferredColorScheme(.light)
     }

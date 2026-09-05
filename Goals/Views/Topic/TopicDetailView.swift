@@ -13,7 +13,7 @@ struct TopicDetailView: View
     let topic: Topic
     @Query private var sessions: [StudySession]
 
-    @Bindable var timer: Timer
+    @Bindable var timer: StudySessionTimer
 
     fileprivate enum TopicRoute: Hashable
     {
@@ -34,7 +34,7 @@ struct TopicDetailView: View
         Int(TimeCalculator.dailyTime(from: sessions, on: Date()) / 60)
     }
 
-    init(topic: Topic, timer: Timer)
+    init(topic: Topic, timer: StudySessionTimer)
     {
         self.topic = topic
         self._timer = Bindable(wrappedValue: timer)
@@ -262,7 +262,7 @@ private struct TopicDetailNavCard<Value: Hashable>: View
     {
         TopicDetailView(
             topic: SampleData.shared.topic,
-            timer: Timer()
+            timer: StudySessionTimer()
         )
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
@@ -275,7 +275,7 @@ private struct TopicDetailNavCard<Value: Hashable>: View
     {
         TopicDetailView(
             topic: SampleData.shared.topic,
-            timer: Timer()
+            timer: StudySessionTimer()
         )
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)

@@ -24,6 +24,14 @@
 		FD4DE465304B095200DDFEE0 /* GoalEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4DE464304B095200DDFEE0 /* GoalEvaluator.swift */; };
 		FD4DE467304B095300DDFEE0 /* TimeCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4DE466304B095300DDFEE0 /* TimeCalculator.swift */; };
 		FD4DE46F304B0A0100DDFEE0 /* ProgressVsPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4DE46E304B0A0100DDFEE0 /* ProgressVsPlan.swift */; };
+		FD4DE473304B113800DDFEE0 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = FD4DE472304B113800DDFEE0 /* Documentation.docc */; };
+		FD4DE475304B131600DDFEE0 /* DataModelsArchitecture.md in Resources */ = {isa = PBXBuildFile; fileRef = FD4DE474304B131600DDFEE0 /* DataModelsArchitecture.md */; };
+		FD4DE477304B131900DDFEE0 /* LogicArchitecture.md in Resources */ = {isa = PBXBuildFile; fileRef = FD4DE476304B131900DDFEE0 /* LogicArchitecture.md */; };
+		FD4DE479304B131C00DDFEE0 /* MigrationArchitecture.md in Resources */ = {isa = PBXBuildFile; fileRef = FD4DE478304B131C00DDFEE0 /* MigrationArchitecture.md */; };
+		FD4DE47B304B131F00DDFEE0 /* ViewsArchitecture.md in Resources */ = {isa = PBXBuildFile; fileRef = FD4DE47A304B131F00DDFEE0 /* ViewsArchitecture.md */; };
+		FD4DE47E304CA77400DDFEE0 /* StudySessionTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4DE47D304CA77400DDFEE0 /* StudySessionTimer.swift */; };
+		FD4DE480304CA82A00DDFEE0 /* StudySessionTimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4DE47F304CA82A00DDFEE0 /* StudySessionTimerTests.swift */; };
+		FD4DE482304CAA0400DDFEE0 /* StudySessionTimerArchitecture.md in Resources */ = {isa = PBXBuildFile; fileRef = FD4DE481304CAA0400DDFEE0 /* StudySessionTimerArchitecture.md */; };
 		FD6F7FF22E82FB51000E1C4F /* TopicDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F7FF12E82FB51000E1C4F /* TopicDetailView.swift */; };
 		FD6F7FF42E836D8C000E1C4F /* TopicCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F7FF32E836D8C000E1C4F /* TopicCard.swift */; };
 		FD7DB2DF2EFC988200F029DD /* TopicGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7DB2DE2EFC988200F029DD /* TopicGoal.swift */; };
@@ -43,7 +51,6 @@
 		FDA4BC022E0776DE00E0DAA5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */; };
 		FDA4BC032E0776DE00E0DAA5 /* WelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFF2E0776DE00E0DAA5 /* WelcomePage.swift */; };
 		FDA4BC042E0776DE00E0DAA5 /* GoalsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */; };
-		FDBE08D02EA84C790083938F /* Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDBE08CF2EA84C790083938F /* Timer.swift */; };
 		FDC82AE32E5DEC2500C2F545 /* NewTopicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */; };
 		FDC82AE82E5DF04700C2F545 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AE72E5DF04700C2F545 /* SampleData.swift */; };
 		FDC82AEC2E5E1E6600C2F545 /* TimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */; };
@@ -77,6 +84,14 @@
 		FD4DE464304B095200DDFEE0 /* GoalEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEvaluator.swift; sourceTree = "<group>"; };
 		FD4DE466304B095300DDFEE0 /* TimeCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeCalculator.swift; sourceTree = "<group>"; };
 		FD4DE46E304B0A0100DDFEE0 /* ProgressVsPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressVsPlan.swift; sourceTree = "<group>"; };
+		FD4DE472304B113800DDFEE0 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
+		FD4DE474304B131600DDFEE0 /* DataModelsArchitecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = DataModelsArchitecture.md; sourceTree = "<group>"; };
+		FD4DE476304B131900DDFEE0 /* LogicArchitecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LogicArchitecture.md; sourceTree = "<group>"; };
+		FD4DE478304B131C00DDFEE0 /* MigrationArchitecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = MigrationArchitecture.md; sourceTree = "<group>"; };
+		FD4DE47A304B131F00DDFEE0 /* ViewsArchitecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ViewsArchitecture.md; sourceTree = "<group>"; };
+		FD4DE47D304CA77400DDFEE0 /* StudySessionTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySessionTimer.swift; sourceTree = "<group>"; };
+		FD4DE47F304CA82A00DDFEE0 /* StudySessionTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySessionTimerTests.swift; sourceTree = "<group>"; };
+		FD4DE481304CAA0400DDFEE0 /* StudySessionTimerArchitecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = StudySessionTimerArchitecture.md; sourceTree = "<group>"; };
 		FD6F7FF12E82FB51000E1C4F /* TopicDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicDetailView.swift; sourceTree = "<group>"; };
 		FD6F7FF32E836D8C000E1C4F /* TopicCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicCard.swift; sourceTree = "<group>"; };
 		FD7DB2BE2EF4B54800F029DD /* GoalsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoalsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,7 +113,6 @@
 		FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsApp.swift; sourceTree = "<group>"; };
 		FDA4BBFF2E0776DE00E0DAA5 /* WelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomePage.swift; sourceTree = "<group>"; };
-		FDBE08CF2EA84C790083938F /* Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timer.swift; sourceTree = "<group>"; };
 		FDC82AE22E5DEC2500C2F545 /* NewTopicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTopicView.swift; sourceTree = "<group>"; };
 		FDC82AE72E5DF04700C2F545 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		FDC82AEB2E5E1E6600C2F545 /* TimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerView.swift; sourceTree = "<group>"; };
@@ -133,8 +147,18 @@
 				FD7DB2F92EFDFD2D00F029DD /* StudySession+Samples.swift */,
 				FD7DB3042F0356A600F029DD /* Topic+Samples.swift */,
 				FD4DE453304B03BD00DDFEE0 /* Goal+Samples.swift */,
+				FD4DE474304B131600DDFEE0 /* DataModelsArchitecture.md */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		FD4DE47C304CA76500DDFEE0 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				FD4DE47D304CA77400DDFEE0 /* StudySessionTimer.swift */,
+				FD4DE481304CAA0400DDFEE0 /* StudySessionTimerArchitecture.md */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		FD7DB2C82EF4B5B900F029DD /* GoalsTests */ = {
@@ -146,6 +170,7 @@
 				FD4DE45A304B078F00DDFEE0 /* TimerCalculatorTests.swift */,
 				FD4DE45C304B07A300DDFEE0 /* DataContainerTests.swift */,
 				FD4DE45E304B07AD00DDFEE0 /* DataContainerStartupCleanupTests.swift */,
+				FD4DE47F304CA82A00DDFEE0 /* StudySessionTimerTests.swift */,
 			);
 			path = GoalsTests;
 			sourceTree = "<group>";
@@ -162,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				FD7DB2EA2EFDD60700F029DD /* GoalsMigrationPlan.swift */,
+				FD4DE478304B131C00DDFEE0 /* MigrationArchitecture.md */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -195,10 +221,12 @@
 		FDA4BC002E0776DE00E0DAA5 /* Goals */ = {
 			isa = PBXGroup;
 			children = (
+				FD4DE472304B113800DDFEE0 /* Documentation.docc */,
 				FD7DB2E52EFDD1DA00F029DD /* Migration */,
 				FD4DE455304B04D300DDFEE0 /* Models */,
 				FDC82AE42E5DEF8800C2F545 /* Logic */,
 				FDBE08C82EA84B320083938F /* Views */,
+				FD4DE47C304CA76500DDFEE0 /* Utilities */,
 				FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */,
 				FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */,
 			);
@@ -217,6 +245,7 @@
 				FDE9420A2E46A6EC00AF23D4 /* Onboarding */,
 				FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */,
 				FD7DB2E32EFD785600F029DD /* SummaryCard.swift */,
+				FD4DE47A304B131F00DDFEE0 /* ViewsArchitecture.md */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -253,12 +282,12 @@
 		FDC82AE42E5DEF8800C2F545 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				FDBE08CF2EA84C790083938F /* Timer.swift */,
 				FD4DE460304B095000DDFEE0 /* DataContainer.swift */,
 				FD4DE462304B095100DDFEE0 /* StreakCalculator.swift */,
 				FD4DE464304B095200DDFEE0 /* GoalEvaluator.swift */,
 				FD4DE466304B095300DDFEE0 /* TimeCalculator.swift */,
 				FD4DE46E304B0A0100DDFEE0 /* ProgressVsPlan.swift */,
+				FD4DE476304B131900DDFEE0 /* LogicArchitecture.md */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -375,7 +404,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FD4DE47B304B131F00DDFEE0 /* ViewsArchitecture.md in Resources */,
+				FD4DE479304B131C00DDFEE0 /* MigrationArchitecture.md in Resources */,
+				FD4DE482304CAA0400DDFEE0 /* StudySessionTimerArchitecture.md in Resources */,
+				FD4DE477304B131900DDFEE0 /* LogicArchitecture.md in Resources */,
 				FDA4BC012E0776DE00E0DAA5 /* Assets.xcassets in Resources */,
+				FD4DE475304B131600DDFEE0 /* DataModelsArchitecture.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +424,7 @@
 				FD7DB2F42EFDDDEB00F029DD /* SwiftDataMigrationTests.swift in Sources */,
 				FD4DE459304B071400DDFEE0 /* StreakCalculatorTests.swift in Sources */,
 				FD4DE45F304B07AD00DDFEE0 /* DataContainerStartupCleanupTests.swift in Sources */,
+				FD4DE480304CA82A00DDFEE0 /* StudySessionTimerTests.swift in Sources */,
 				FD4DE45B304B078F00DDFEE0 /* TimerCalculatorTests.swift in Sources */,
 				FD4DE45D304B07A300DDFEE0 /* DataContainerTests.swift in Sources */,
 			);
@@ -412,6 +447,7 @@
 				FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */,
 				FD7DB2E22EFD778800F029DD /* StudyHistoryView.swift in Sources */,
 				FD4DE465304B095200DDFEE0 /* GoalEvaluator.swift in Sources */,
+				FD4DE473304B113800DDFEE0 /* Documentation.docc in Sources */,
 				FD7DB2DF2EFC988200F029DD /* TopicGoal.swift in Sources */,
 				FD7DB3052F0356A600F029DD /* Topic+Samples.swift in Sources */,
 				FD6F7FF22E82FB51000E1C4F /* TopicDetailView.swift in Sources */,
@@ -420,7 +456,7 @@
 				FD7DB2EB2EFDD60700F029DD /* GoalsMigrationPlan.swift in Sources */,
 				FD4DE46F304B0A0100DDFEE0 /* ProgressVsPlan.swift in Sources */,
 				FD7DB3032F0326CC00F029DD /* ProgressVsPlanView.swift in Sources */,
-				FDBE08D02EA84C790083938F /* Timer.swift in Sources */,
+				FD4DE47E304CA77400DDFEE0 /* StudySessionTimer.swift in Sources */,
 				FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */,
 				FD4CFA1F2E078BEA00FD5095 /* FeatureCard.swift in Sources */,
 				FD7DB2FA2EFDFD2D00F029DD /* StudySession+Samples.swift in Sources */,

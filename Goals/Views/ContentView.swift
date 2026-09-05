@@ -10,8 +10,7 @@ import SwiftData
 
 struct ContentView: View
 {
-    @Environment(\.modelContext) private var modelContext
-    @State private var timer = Timer()
+    @State private var timer = StudySessionTimer()
 
     private enum Route: Hashable
     {
@@ -77,10 +76,6 @@ struct ContentView: View
                     StudyHistoryView()
                 }
             }
-        }
-        .onAppear
-        {
-            UserDefaults.standard.set(UUID().uuidString, forKey: "currentLaunchID")
         }
     }
 }

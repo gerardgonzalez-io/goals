@@ -11,20 +11,18 @@ import SwiftData
 struct TimerView: View
 {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.scenePhase) private var scenePhase
-    @State private var didFinishSession = false
 
-    @Bindable var timer: Timer
+    @Bindable var timer: StudySessionTimer
 
     /// Topic que viene desde TopicDetailView
     let preselectedTopic: Topic
 
     @State private var selectedTopic: Topic? = nil
-    @State private var activeIntervalStartDate: Date? = nil
-    @State private var completedIntervals: [CompletedInterval] = []
-    @State private var didAutoConfigureFromPreselection = false
+    @State private var activeSession: StudySession? = nil
+    @State private var activeInterval: SessionInterval? = nil
+    @State private var didAutoStart = false
 
-    init(timer: Timer, preselectedTopic: Topic)
+    init(timer: StudySessionTimer, preselectedTopic: Topic)
     {
         self._timer = Bindable(wrappedValue: timer)
         self.preselectedTopic = preselectedTopic
@@ -34,6 +32,7 @@ struct TimerView: View
     {
         GeometryReader { geo in
             let dialSize = min(geo.size.width, geo.size.height) * 0.82
+            let elapsedTime = TimeInterval(timer.secondsElapsed)
 
             VStack(spacing: 28)
             {
@@ -44,13 +43,11 @@ struct TimerView: View
 
                 Group
                 {
-                    let t = timer.displayTime()
-
-                    TimerDialView(time: t)
+                    TimerDialView(time: elapsedTime)
                         .frame(width: dialSize, height: dialSize)
                         .padding(.top, 4)
 
-                    Text(timer.formatted(t))
+                    Text(formatted(elapsedTime))
                         .font(.system(size: 40, weight: .medium, design: .monospaced))
                         .padding(.top, 8)
                 }
@@ -66,64 +63,17 @@ struct TimerView: View
         }
         .onAppear
         {
-            didFinishSession = false
-            guard !didAutoConfigureFromPreselection else { return }
+            selectedTopic = preselectedTopic
 
-            if selectedTopic == nil
-            {
-                selectedTopic = preselectedTopic
-            }
-
-            if !timer.isRunning && timer.elapsed == 0
-            {
-                openInterval()
-                timer.toggle()
-            }
-
-            didAutoConfigureFromPreselection = true
-        }
-        .onChange(of: scenePhase)
-        { oldPhase, newPhase in
-            switch newPhase
-            {
-            case .background:
-                UserDefaults.standard.set(UUID().uuidString, forKey: "lastSessionID")
-                timer.saveSnapshot()
-            case .active:
-                let lastSessionID = UserDefaults.standard.string(forKey: "lastSessionID")
-                let currentLaunchID = UserDefaults.standard.string(forKey: "currentLaunchID")
-                if lastSessionID == currentLaunchID
-                {
-                    timer.restoreFromSnapshotAndResume()
-                }
-                else
-                {
-                    UserDefaults.standard.removeObject(forKey: "timer.snapshot.v1")
-                }
-            default:
-                break
-            }
+            guard !didAutoStart else { return }
+            startSessionIfNeeded()
+            didAutoStart = true
         }
         .onDisappear
         {
-            guard !didFinishSession else { return }
-            guard timer.elapsed > 0 else { return }
-
-            if timer.isRunning
-            {
-                if let topic = selectedTopic
-                {
-                    done(for: topic)
-                }
-            }
+            stopSession()
         }
     }
-}
-
-private struct CompletedInterval: Equatable
-{
-    let startDate: Date
-    let endDate: Date
 }
 
 private extension TimerView
@@ -175,52 +125,40 @@ private extension TimerView
     {
         HStack
         {
-            let doneEnabled = timer.elapsed > 0 && selectedTopic != nil
+            let stopEnabled = activeSession != nil
             let startEnabled = selectedTopic != nil
 
             Button
             {
-                if let topic = selectedTopic
-                {
-                    done(for: topic)
-                }
+                stopSession()
             }
             label:
             {
                 Circle()
-                    .fill(doneEnabled
+                    .fill(stopEnabled
                           ? AnyShapeStyle(successGradient)
                           : AnyShapeStyle(Color(.secondarySystemFill)))
                     .frame(width: 96, height: 96)
-                    .shadow(color: doneEnabled ? successShadow : .clear,
+                    .shadow(color: stopEnabled ? successShadow : .clear,
                             radius: 16, x: 0, y: 8)
                     .overlay(
-                        Text("Done")
+                        Text("Stop")
                             .font(.title3.weight(.semibold))
-                            .foregroundStyle(doneEnabled ? Color.white : Color.secondary)
+                            .foregroundStyle(stopEnabled ? Color.white : Color.secondary)
                     )
             }
-            .disabled(!doneEnabled)
+            .disabled(!stopEnabled)
 
             Spacer()
 
             Button
             {
-                if didFinishSession
-                {
-                    didFinishSession = false
-                    completedIntervals = []
-                    activeIntervalStartDate = nil
-                }
-                if selectedTopic == nil
-                {
-                    selectedTopic = preselectedTopic
-                }
                 toggleTimerInterval()
             }
             label:
             {
                 let running = timer.isRunning
+                let title = activeSession == nil ? "Start" : (running ? "Pause" : "Resume")
 
                 Circle()
                     .fill(
@@ -234,8 +172,7 @@ private extension TimerView
                     .shadow(color: startEnabled ? brandShadow : .clear,
                             radius: 16, x: 0, y: 8)
                     .overlay(
-                        Text(running ? "Pause"
-                                     : (timer.elapsed == 0 ? "Start" : "Resume"))
+                        Text(title)
                             .font(.title3.weight(.semibold))
                             .foregroundStyle(startEnabled ? Color.white : Color.secondary)
                     )
@@ -284,9 +221,9 @@ private extension TimerView
     }
 }
 
-extension TimerView
+private extension TimerView
 {
-    private func normalizedNow() -> Date
+    func normalizedNow() -> Date
     {
         var calendarWithTimeZone = Calendar.current
         calendarWithTimeZone.timeZone = .current
@@ -294,60 +231,96 @@ extension TimerView
         return calendarWithTimeZone.date(bySetting: .nanosecond, value: 0, of: now) ?? now
     }
 
-    private func openInterval()
+    func startSessionIfNeeded()
     {
-        guard activeIntervalStartDate == nil else { return }
-        activeIntervalStartDate = normalizedNow()
-    }
+        guard activeSession == nil, let topic = selectedTopic else { return }
 
-    private func closeInterval()
-    {
-        guard let startDate = activeIntervalStartDate else { return }
-        let endDate = normalizedNow()
-        activeIntervalStartDate = nil
-
-        guard startDate < endDate else { return }
-        completedIntervals.append(CompletedInterval(startDate: startDate, endDate: endDate))
-    }
-
-    private func toggleTimerInterval()
-    {
-        if timer.isRunning
-        {
-            closeInterval()
-            timer.pause()
-        }
-        else
-        {
-            openInterval()
-            timer.start()
-        }
-    }
-
-    private func createAndPersistSession(for topic: Topic)
-    {
-        let intervals = completedIntervals
-        guard let firstStart = intervals.map(\.startDate).min(),
-              let lastEnd = intervals.map(\.endDate).max()
-        else
-        {
-            return
-        }
-
-        let sessionIntervals = intervals.map
-        { interval in
-            SessionInterval(startDate: interval.startDate, endDate: interval.endDate)
-        }
-
+        let now = normalizedNow()
+        let interval = SessionInterval(startDate: now)
         let session = StudySession(
             topicID: topic.id,
-            startDate: firstStart,
-            endDate: lastEnd,
-            sessionIntervals: sessionIntervals
+            startDate: now,
+            sessionIntervals: [interval]
         )
 
         modelContext.insert(session)
+        activeSession = session
+        activeInterval = interval
+        timer.start()
+        saveContext()
+    }
 
+    func closeActiveInterval(at endDate: Date)
+    {
+        guard let interval = activeInterval else { return }
+
+        interval.endDate = max(interval.startDate, endDate)
+        interval.updatedAt = endDate
+        activeInterval = nil
+    }
+
+    func pauseSession()
+    {
+        guard timer.isRunning else { return }
+
+        let now = normalizedNow()
+        closeActiveInterval(at: now)
+        timer.stop()
+        saveContext()
+    }
+
+    func resumeSession()
+    {
+        guard let session = activeSession, activeInterval == nil else { return }
+
+        let now = normalizedNow()
+        let interval = SessionInterval(startDate: now, studySession: session)
+        session.sessionIntervals.append(interval)
+        session.updatedAt = now
+        activeInterval = interval
+        timer.start()
+        saveContext()
+    }
+
+    func stopSession()
+    {
+        guard let session = activeSession else { return }
+
+        let now = normalizedNow()
+        closeActiveInterval(at: now)
+        session.endDate = max(session.startDate, now)
+        session.updatedAt = now
+        timer.reset()
+        activeSession = nil
+        activeInterval = nil
+        saveContext()
+    }
+
+    func toggleTimerInterval()
+    {
+        if activeSession == nil
+        {
+            startSessionIfNeeded()
+        }
+        else if timer.isRunning
+        {
+            pauseSession()
+        }
+        else
+        {
+            resumeSession()
+        }
+    }
+
+    func formatted(_ time: TimeInterval) -> String
+    {
+        let minutes = Int(time) / 60
+        let seconds = Int(time) % 60
+        return String(format: "%02d:%02d,00", minutes, seconds)
+    }
+
+    func saveContext()
+    {
         do
         {
             try modelContext.save()
@@ -355,38 +328,22 @@ extension TimerView
         catch
         {
             #if DEBUG
-            print("Failed to save StudySession: \(error)")
+            print("Failed to save study session timer state: \(error)")
             #endif
         }
-    }
-    private func done(for topic: Topic)
-    {
-        guard !didFinishSession else { return }
-        didFinishSession = true
-
-        if timer.isRunning
-        {
-            closeInterval()
-        }
-
-        timer.done(for: topic)
-        createAndPersistSession(for: topic)
-        selectedTopic = preselectedTopic
-        activeIntervalStartDate = nil
-        completedIntervals = []
     }
 }
 
 #Preview("Dark")
 {
-    TimerView(timer: Timer(), preselectedTopic: SampleData.shared.topic)
+    TimerView(timer: StudySessionTimer(), preselectedTopic: SampleData.shared.topic)
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Light")
 {
-    TimerView(timer: Timer(), preselectedTopic: SampleData.shared.topic)
+    TimerView(timer: StudySessionTimer(), preselectedTopic: SampleData.shared.topic)
         .modelContainer(SampleData.shared.modelContainer)
         .preferredColorScheme(.light)
 }
