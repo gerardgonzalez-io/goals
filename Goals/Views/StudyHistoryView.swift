@@ -42,14 +42,6 @@ struct StudyHistoryView: View
 
     @Query(sort: \Topic.name) private var topics: [Topic]
 
-    private var brandLight: Color
-    {
-        Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
-    }
-    private var brandDark: Color
-    {
-        Color(red: 29/255, green: 53/255, blue: 87/255)   // #1D3557
-    }
 
     var body: some View
     {
@@ -101,48 +93,12 @@ private extension StudyHistoryView
 
     var emptyState: some View
     {
-        VStack(alignment: .leading, spacing: 10)
-        {
-            HStack(spacing: 12)
-            {
-                ZStack
-                {
-                    LinearGradient(
-                        colors: [brandDark, brandLight],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-
-                    Image(systemName: "calendar.badge.clock")
-                        .font(.system(size: 18, weight: .semibold))
-                        .foregroundStyle(.white)
-                }
-                .frame(width: 44, height: 44)
-
-                VStack(alignment: .leading, spacing: 3)
-                {
-                    Text("No sessions yet")
-                        .font(.headline)
-
-                    Text("Start a focus session to see your daily summary here.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                }
-
-                Spacer()
-            }
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(.secondarySystemBackground))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(Color.white.opacity(0.04), lineWidth: 1)
-            )
-        }
+        SummaryCard(
+            title: "No sessions yet",
+            subtitle: "Start a focus session to see your daily summary here.",
+            systemImage: "calendar.badge.clock",
+            showsChevron: false
+        )
     }
 
     func dayCard(_ section: DaySection) -> some View
@@ -155,7 +111,7 @@ private extension StudyHistoryView
                 ZStack
                 {
                     LinearGradient(
-                        colors: [brandDark, brandLight],
+                        colors: [Color("GoalPurple"), Color("GoalLightPurple")],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )

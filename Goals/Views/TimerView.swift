@@ -80,45 +80,7 @@ private extension TimerView
 {
     var topicHeader: some View
     {
-        HStack(spacing: 14)
-        {
-            ZStack
-            {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(brandGradient)
-
-                Image(systemName: "book.closed.fill")
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundStyle(.white)
-            }
-            .frame(width: 44, height: 44)
-
-            VStack(alignment: .leading, spacing: 4)
-            {
-                Text("Focus on")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Text(preselectedTopic.name)
-                    .font(.headline.weight(.semibold))
-                    .lineLimit(1)
-
-                Text("This session will be tracked for this topic")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-        }
-        .padding(14)
-        .background(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(Color(.secondarySystemBackground))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .strokeBorder(Color.white.opacity(0.06), lineWidth: 1)
-        )
+        TimerTopicCard(topicName: preselectedTopic.name)
     }
 
     var controlButtons: some View
@@ -190,8 +152,8 @@ private extension TimerView
     {
         LinearGradient(
             colors: [
-                Color(red: 63/255, green: 167/255, blue: 214/255), // #3FA7D6
-                Color(red: 29/255, green: 53/255,  blue: 87/255)   // #1D3557
+                Color("GoalLightPurple"),
+                Color("GoalPurple")
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing

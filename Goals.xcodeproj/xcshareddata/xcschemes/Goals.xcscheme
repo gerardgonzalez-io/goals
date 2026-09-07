@@ -17,6 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FDA4BBEB2E07763E00E0DAA5"
                BuildableName = "Goals.app"
+               BlueprintName = "Goals"
                ReferencedContainer = "container:Goals.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -36,6 +37,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "FD7DB2BD2EF4B54800F029DD"
                BuildableName = "GoalsTests.xctest"
+               BlueprintName = "GoalsTests"
                ReferencedContainer = "container:Goals.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -58,6 +60,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FDA4BBEB2E07763E00E0DAA5"
             BuildableName = "Goals.app"
+            BlueprintName = "Goals"
             ReferencedContainer = "container:Goals.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,6 +77,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "FDA4BBEB2E07763E00E0DAA5"
             BuildableName = "Goals.app"
+            BlueprintName = "Goals"
             ReferencedContainer = "container:Goals.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

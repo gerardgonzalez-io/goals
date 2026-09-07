@@ -249,15 +249,11 @@ private extension CalendarView
 {
     var header: some View
     {
-        // 1) Colores de marca
-        let brandLight = Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
-        let brandDark  = Color(red: 29/255, green: 53/255,  blue: 87/255)  // #1D3557
-
-        // 2) ZStack para fondo degradado + contenido del header
+        // 1) ZStack para fondo degradado + contenido del header
         return ZStack
         {
             LinearGradient(
-                colors: [brandDark, brandLight],
+                colors: [Color("GoalPurple"), Color("GoalLightPurple")],
                 startPoint: .leading,
                 endPoint: .trailing
             )
@@ -454,19 +450,10 @@ private struct DayCell: View
     let completed: Bool
     let showIndicator: Bool
 
-    // 1) Colores de marca usados para estado "success".
-    private var brandLight: Color {
-        Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
-    }
-
-    private var brandDark: Color {
-        Color(red: 29/255, green: 53/255, blue: 87/255)   // #1D3557
-    }
-
     private var successGradient: LinearGradient
     {
         LinearGradient(
-            colors: [brandLight, brandDark],
+            colors: [Color("GoalLightPurple"), Color("GoalPurple")],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
@@ -510,7 +497,7 @@ private struct DayCell: View
                         if isToday && status == .none
                         {
                             Circle()
-                                .strokeBorder(brandLight.opacity(0.9), lineWidth: 1.6)
+                                .strokeBorder(Color("GoalLightPurple").opacity(0.9), lineWidth: 1.6)
                         }
                     }
                 )

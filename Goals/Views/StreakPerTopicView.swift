@@ -89,47 +89,11 @@ private extension StreakPerTopicView
 {
     var currentCard: some View
     {
-        ZStack
-        {
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(brandGradient)
-
-            VStack(spacing: 16)
-            {
-                HStack(spacing: 10)
-                {
-                    Image(systemName: "flame.fill")
-                        .symbolRenderingMode(.multicolor)
-                        .font(.title2)
-
-                    Text("Current streak")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-
-                    Spacer()
-                }
-
-                HStack(alignment: .firstTextBaseline, spacing: 4)
-                {
-                    Text("\(current)")
-                        .font(.system(size: 54, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-
-                    Text(current == 1 ? "day" : "days")
-                        .font(.headline)
-                        .foregroundStyle(.white.opacity(0.9))
-
-                    Spacer()
-                }
-
-                Text(currentSubtitle)
-                    .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.9))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(20)
-        }
-        .shadow(radius: 8, y: 4)
+        StreakSummaryCard(
+            title: "Current streak",
+            current: current,
+            subtitle: currentSubtitle
+        )
     }
 
     var currentSubtitle: String
@@ -270,21 +234,6 @@ private extension StreakPerTopicView
     }
 }
 
-// MARK: - Brand gradient
-private extension StreakPerTopicView
-{
-    var brandGradient: LinearGradient
-    {
-        LinearGradient(
-            colors: [
-                Color(red: 63/255, green: 167/255, blue: 214/255), // #3FA7D6
-                Color(red: 29/255, green: 53/255,  blue: 87/255)   // #1D3557
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-}
 
 // MARK: - Preview
 #Preview

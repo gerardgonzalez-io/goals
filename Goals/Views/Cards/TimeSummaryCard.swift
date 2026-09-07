@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TopicCard: View
+struct TimeSummaryCard: View
 {
     let title: String
     let value: String
@@ -58,8 +58,8 @@ struct TopicCard: View
         {
             return LinearGradient(
                 colors: [
-                    Color(red: 29/255, green: 53/255, blue: 87/255),
-                    Color(red: 63/255, green: 167/255, blue: 214/255),
+                    Color("GoalPurple"),
+                    Color("GoalLightPurple"),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -91,7 +91,7 @@ struct TopicCard: View
 
 #Preview("Primary - Dark")
 {
-    TopicCard(
+    TimeSummaryCard(
         title: "Today",
         value: "07h 09m",
         subtitle: "Study time today",
@@ -104,7 +104,7 @@ struct TopicCard: View
 
 #Preview("Secondary - Light")
 {
-    TopicCard(
+    TimeSummaryCard(
         title: "Total",
         value: "32h 45m",
         subtitle: "Total time spent on this topic",

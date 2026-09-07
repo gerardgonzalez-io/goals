@@ -14,14 +14,6 @@ struct SummaryCard: View
     let systemImage: String
     let showsChevron: Bool
 
-    private var brandLight: Color
-    {
-        Color(red: 63/255, green: 167/255, blue: 214/255) // #3FA7D6
-    }
-    private var brandDark: Color
-    {
-        Color(red: 29/255, green: 53/255, blue: 87/255)   // #1D3557
-    }
 
     var body: some View
     {
@@ -30,7 +22,7 @@ struct SummaryCard: View
             ZStack
             {
                 LinearGradient(
-                    colors: [brandDark, brandLight],
+                    colors: [Color("GoalPurple"), Color("GoalLightPurple")],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
