@@ -6,8 +6,19 @@ struct ProgressPlanChartData
     {
         case currentWeek = "7 Days"
         case currentMonth = "30 Days"
+        case custom = "Custom"
 
         var id: Self { self }
+
+        var dayCount: Int
+        {
+            switch self
+            {
+            case .currentWeek: return 7
+            case .currentMonth: return 30
+            case .custom: return 0
+            }
+        }
     }
 
     struct Point: Identifiable, Equatable
@@ -34,11 +45,21 @@ struct ProgressPlanChartData
         sessions: [StudySession],
         goals: [Goal],
         timeRange: TimeRange,
+        pageOffset: Int = 0,
+        customStartDate: Date? = nil,
+        customEndDate: Date? = nil,
         now: Date = .now,
         calendar: Calendar = .current
     ) -> [Series]
     {
-        let days = days(in: timeRange, now: now, calendar: calendar)
+        let days = days(
+            in: timeRange,
+            pageOffset: pageOffset,
+            customStartDate: customStartDate,
+            customEndDate: customEndDate,
+            now: now,
+            calendar: calendar
+        )
         let topicGoals = goals
             .filter { $0.topicID == topicID && !$0.isArchived }
             .sorted { $0.createdAt < $1.createdAt }
@@ -74,49 +95,102 @@ struct ProgressPlanChartData
 
     static func days(
         in timeRange: TimeRange,
+        pageOffset: Int = 0,
+        customStartDate: Date? = nil,
+        customEndDate: Date? = nil,
         now: Date = .now,
         calendar: Calendar = .current
     ) -> [Date]
     {
         switch timeRange
         {
-        case .currentWeek:
-            return currentMondayToSunday(now: now, calendar: calendar)
-        case .currentMonth:
-            return currentMonthDays(now: now, calendar: calendar)
+        case .currentWeek, .currentMonth:
+            return rollingDays(
+                count: timeRange.dayCount,
+                pageOffset: pageOffset,
+                now: now,
+                calendar: calendar
+            )
+        case .custom:
+            guard let customStartDate, let customEndDate else { return [] }
+            return customDays(
+                from: customStartDate,
+                through: customEndDate,
+                calendar: calendar
+            )
         }
     }
 
-    private static func currentMondayToSunday(now: Date, calendar: Calendar) -> [Date]
+    static func periodTitle(
+        for timeRange: TimeRange,
+        pageOffset: Int,
+        customStartDate: Date? = nil,
+        customEndDate: Date? = nil,
+        now: Date = .now,
+        calendar: Calendar = .current
+    ) -> String
     {
-        let today = calendar.startOfDay(for: now)
-        let weekday = calendar.component(.weekday, from: today)
-        let daysSinceMonday = (weekday + 5) % 7
+        let windowDays = days(
+            in: timeRange,
+            pageOffset: pageOffset,
+            customStartDate: customStartDate,
+            customEndDate: customEndDate,
+            now: now,
+            calendar: calendar
+        )
 
-        guard let monday = calendar.date(byAdding: .day, value: -daysSinceMonday, to: today) else
-        {
-            return []
-        }
-
-        return (0..<7).compactMap
-        { offset in
-            calendar.date(byAdding: .day, value: offset, to: monday)
-        }
-    }
-
-    private static func currentMonthDays(now: Date, calendar: Calendar) -> [Date]
-    {
-        guard let monthInterval = calendar.dateInterval(of: .month, for: now),
-              let dayRange = calendar.range(of: .day, in: .month, for: now)
+        guard let first = windowDays.first,
+              let last = windowDays.last
         else
         {
-            return []
+            return timeRange.rawValue
         }
 
-        return dayRange.compactMap
-        { day in
-            calendar.date(byAdding: .day, value: day - 1, to: monthInterval.start)
+        return formattedRangeTitle(from: first, through: last, calendar: calendar)
+    }
+
+    private static func rollingDays(
+        count: Int,
+        pageOffset: Int,
+        now: Date,
+        calendar: Calendar
+    ) -> [Date]
+    {
+        let today = calendar.startOfDay(for: now)
+        let endOffset = pageOffset * count
+        let end = calendar.date(byAdding: .day, value: endOffset, to: today) ?? today
+        let start = calendar.date(byAdding: .day, value: -(count - 1), to: end) ?? end
+
+        return (0..<count).compactMap
+        { offset in
+            calendar.date(byAdding: .day, value: offset, to: start)
         }
+    }
+
+    private static func customDays(
+        from startDate: Date,
+        through endDate: Date,
+        calendar: Calendar
+    ) -> [Date]
+    {
+        let start = calendar.startOfDay(for: min(startDate, endDate))
+        let end = calendar.startOfDay(for: max(startDate, endDate))
+        let dayCount = calendar.dateComponents([.day], from: start, to: end).day ?? 0
+
+        return (0...dayCount).compactMap
+        { offset in
+            calendar.date(byAdding: .day, value: offset, to: start)
+        }
+    }
+
+    private static func formattedRangeTitle(from first: Date, through last: Date, calendar: Calendar) -> String
+    {
+        if calendar.isDate(first, equalTo: last, toGranularity: .month)
+        {
+            return "\(first.formatted(.dateTime.month(.abbreviated).day())) - \(last.formatted(.dateTime.day().year()))"
+        }
+
+        return "\(first.formatted(.dateTime.month(.abbreviated).day())) - \(last.formatted(.dateTime.month(.abbreviated).day().year()))"
     }
 
     private static func indexedProgressSecondsByDay(

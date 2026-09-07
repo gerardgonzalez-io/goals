@@ -12,6 +12,9 @@ struct ProgressPlanChartView: View
 
     @Environment(\.calendar) private var calendar
     @State private var timeRange: ProgressPlanChartData.TimeRange = .currentWeek
+    @State private var pageOffset: Int = 0
+    @State private var customStartDate: Date = Calendar.current.date(byAdding: .day, value: -6, to: Date.now) ?? Date.now
+    @State private var customEndDate: Date = Date.now
     @State private var chartData: [ProgressPlanChartData.Series] = []
     @State private var rawSelectedDate: Date?
     @State private var rawSelectedRange: ClosedRange<Date>?
@@ -56,7 +59,17 @@ struct ProgressPlanChartView: View
                     }
                 }
                 .pickerStyle(.segmented)
-                .padding(.bottom, 4)
+
+                if timeRange == .custom
+                {
+                    customDateSelector
+                        .padding(.bottom, 4)
+                }
+                else
+                {
+                    periodSelector
+                        .padding(.bottom, 4)
+                }
 
                 VStack(alignment: .leading, spacing: 4)
                 {
@@ -85,22 +98,120 @@ struct ProgressPlanChartView: View
         .listStyle(.plain)
         .navigationTitle("Progress vs Plan")
         .navigationBarTitleDisplayMode(.inline)
-        .scrollDisabled(true)
         .task(id: refreshID)
         {
             refreshChartData()
         }
         .onChange(of: timeRange)
         {
-            rawSelectedDate = nil
-            rawSelectedRange = nil
+            pageOffset = 0
+            clearSelection()
+            refreshChartData()
+        }
+        .onChange(of: pageOffset)
+        {
+            clearSelection()
+            refreshChartData()
+        }
+        .onChange(of: customStartDate)
+        {
+            normalizeCustomRange(changedStartDate: true)
+            clearSelection()
+            refreshChartData()
+        }
+        .onChange(of: customEndDate)
+        {
+            normalizeCustomRange(changedStartDate: false)
+            clearSelection()
             refreshChartData()
         }
     }
 
     private var refreshID: String
     {
-        "\(timeRange.id)-\(sessions.count)-\(goals.count)-\(topicID)"
+        let customStart = calendar.startOfDay(for: customStartDate).timeIntervalSinceReferenceDate
+        let customEnd = calendar.startOfDay(for: customEndDate).timeIntervalSinceReferenceDate
+        return "\(timeRange.id)-\(pageOffset)-\(customStart)-\(customEnd)-\(sessions.count)-\(goals.count)-\(topicID)"
+    }
+
+    private var periodSelector: some View
+    {
+        HStack(spacing: 10)
+        {
+            Button
+            {
+                pageOffset -= 1
+            }
+            label:
+            {
+                Image(systemName: "chevron.left")
+                    .font(.caption.weight(.semibold))
+                    .frame(width: 34, height: 30)
+            }
+            .buttonStyle(.plain)
+
+            Text(periodTitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity)
+
+            Button
+            {
+                guard pageOffset < 0 else { return }
+                pageOffset += 1
+            }
+            label:
+            {
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.semibold))
+                    .frame(width: 34, height: 30)
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(pageOffset < 0 ? .primary : .tertiary)
+            .disabled(pageOffset == 0)
+        }
+    }
+
+    private var customDateSelector: some View
+    {
+        VStack(alignment: .leading, spacing: 20)
+        {
+            Text("Custom range")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.primary)
+
+            HStack(spacing: 12)
+            {
+                roundedDatePicker(
+                    title: "Start date",
+                    selection: $customStartDate,
+                    range: Date.distantPast...customEndDate
+                )
+
+                roundedDatePicker(
+                    title: "End date",
+                    selection: $customEndDate,
+                    range: customStartDate...Date.now
+                )
+            }
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(.secondarySystemBackground))
+        )
+    }
+
+    private var periodTitle: String
+    {
+        ProgressPlanChartData.periodTitle(
+            for: timeRange,
+            pageOffset: pageOffset,
+            customStartDate: customStartDate,
+            customEndDate: customEndDate,
+            calendar: calendar
+        )
     }
 
     private var title: some View
@@ -146,8 +257,7 @@ struct ProgressPlanChartView: View
             return Text("No chart data is available yet.")
         }
 
-        let period = timeRange == .currentWeek ? "this week" : "this month"
-        return Text("So far, you have studied \(formattedHours(progress)) against \(formattedHours(plan)) planned for \(period).")
+        return Text("For \(periodTitle), you studied \(formattedHours(progress)) against \(formattedHours(plan)) planned.")
     }
 
     private func refreshChartData()
@@ -157,9 +267,66 @@ struct ProgressPlanChartView: View
             sessions: sessions,
             goals: goals,
             timeRange: timeRange,
+            pageOffset: pageOffset,
+            customStartDate: customStartDate,
+            customEndDate: customEndDate,
             calendar: calendar
         )
     }
+
+    private func roundedDatePicker(
+        title: String,
+        selection: Binding<Date>,
+        range: ClosedRange<Date>
+    ) -> some View
+    {
+        DatePicker(
+            title,
+            selection: selection,
+            in: range,
+            displayedComponents: .date
+        )
+        .datePickerStyle(.compact)
+        .font(.caption)
+        .labelsHidden()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        //.padding(10)
+        .overlay(alignment: .topLeading)
+        {
+            Text(title)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .offset(x: 0, y: -16)
+        }
+
+    }
+
+    private func clearSelection()
+    {
+        rawSelectedDate = nil
+        rawSelectedRange = nil
+    }
+
+    private func normalizeCustomRange(changedStartDate: Bool)
+    {
+        if customEndDate > Date.now
+        {
+            customEndDate = Date.now
+        }
+
+        if customStartDate > customEndDate
+        {
+            if changedStartDate
+            {
+                customEndDate = customStartDate
+            }
+            else
+            {
+                customStartDate = customEndDate
+            }
+        }
+    }
+
 
     private func formattedHours(_ hours: Double) -> String
     {
@@ -387,6 +554,17 @@ private struct ProgressPlanChart: View
             return .stride(by: .day)
         case .currentMonth:
             return .stride(by: .day, count: 7)
+        case .custom:
+            if dataPointCount > 45
+            {
+                return .stride(by: .day, count: 14)
+            }
+            else if dataPointCount > 14
+            {
+                return .stride(by: .day, count: 7)
+            }
+
+            return .stride(by: .day)
         }
     }
 
@@ -398,7 +576,14 @@ private struct ProgressPlanChart: View
             return .dateTime.weekday(.abbreviated)
         case .currentMonth:
             return .dateTime.day()
+        case .custom:
+            return dataPointCount > 14 ? .dateTime.month(.abbreviated).day() : .dateTime.weekday(.abbreviated)
         }
+    }
+
+    private var dataPointCount: Int
+    {
+        data.first?.points.count ?? 0
     }
 
     private func chartValueColumn(_ value: SeriesValue) -> some View
