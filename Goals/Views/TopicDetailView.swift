@@ -104,6 +104,17 @@ struct TopicDetailView: View
                     Text("Study history")
                         .font(.headline)
 
+                    
+                    NavigationLink(value: TopicRoute.progressVsPlan)
+                    {
+                        ProgressPlanOverviewCard(
+                            topicID: topic.id,
+                            topicName: topic.name
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, 4)
+
                     NavigationLink(value: TopicRoute.calendar)
                     {
                         TopicCard(
@@ -136,18 +147,6 @@ struct TopicDetailView: View
                     }
                     .buttonStyle(.plain)
                     .padding(.bottom, 4)
-                    
-                    NavigationLink(value: TopicRoute.progressVsPlan)
-                    {
-                        TopicCard(
-                            systemImage: "chart.xyaxis.line",
-                            title: "Progress vs Plan",
-                            subtitle: "See if you’re ahead or behind schedule"
-                        )
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.bottom, 4)
-
                 }
                 .padding(.horizontal, 20)
             }
@@ -168,7 +167,10 @@ struct TopicDetailView: View
             case .topicGoal:
                 TopicGoal(topic: topic)
             case .progressVsPlan:
-                ProgressVsPlanView(topic: topic)
+                ProgressPlanChartView(
+                    topicID: topic.id,
+                    topicName: topic.name
+                )
             }
         }
     }
