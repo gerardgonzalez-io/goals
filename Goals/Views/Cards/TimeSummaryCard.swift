@@ -58,8 +58,8 @@ struct TimeSummaryCard: View
         {
             return LinearGradient(
                 colors: [
-                    Color("GoalPurple"),
-                    Color("GoalLightPurple"),
+                    Color("GradientBottom"),
+                    Color("GradientTop"),
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing

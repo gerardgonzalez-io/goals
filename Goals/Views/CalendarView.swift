@@ -253,7 +253,7 @@ private extension CalendarView
         return ZStack
         {
             LinearGradient(
-                colors: [Color("GoalPurple"), Color("GoalLightPurple")],
+                colors: [Color("GradientBottom"), Color("GradientTop")],
                 startPoint: .leading,
                 endPoint: .trailing
             )
@@ -453,7 +453,7 @@ private struct DayCell: View
     private var successGradient: LinearGradient
     {
         LinearGradient(
-            colors: [Color("GoalLightPurple"), Color("GoalPurple")],
+            colors: [Color("GradientTop"), Color("GradientBottom")],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
@@ -497,7 +497,7 @@ private struct DayCell: View
                         if isToday && status == .none
                         {
                             Circle()
-                                .strokeBorder(Color("GoalLightPurple").opacity(0.9), lineWidth: 1.6)
+                                .strokeBorder(Color("GradientTop").opacity(0.9), lineWidth: 1.6)
                         }
                     }
                 )

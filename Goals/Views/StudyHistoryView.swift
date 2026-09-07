@@ -111,7 +111,7 @@ private extension StudyHistoryView
                 ZStack
                 {
                     LinearGradient(
-                        colors: [Color("GoalPurple"), Color("GoalLightPurple")],
+                        colors: [Color("GradientBottom"), Color("GradientTop")],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )

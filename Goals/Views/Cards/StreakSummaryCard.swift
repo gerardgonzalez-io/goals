@@ -60,8 +60,8 @@ struct StreakSummaryCard: View
     {
         LinearGradient(
             colors: [
-                Color("GoalLightPurple"),
-                Color("GoalPurple")
+                Color("GradientTop"),
+                Color("GradientBottom")
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
