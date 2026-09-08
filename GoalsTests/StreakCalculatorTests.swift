@@ -6,10 +6,10 @@ import Testing
 /// 1. `testCalculations`:
 ///    Verifies streak results across multiple day-pattern scenarios using parameterized inputs.
 ///    Covered behaviors include:
-///    empty input, activity today, activity yesterday, inactive streak after gaps,
-///    duplicate same-day sessions counting as one streak day, and multi-day consecutive streak counting.
+///    empty input, goal reached today, goal reached yesterday, inactive streak after gaps,
+///    same-day sessions summing toward one streak day, and multi-day consecutive streak counting.
 /// 2. `measureCalculateStreakExecutionTime`:
-///    Measures execution time of `calculateStreak(for:)` with a large synthetic dataset
+///    Measures execution time of `calculateStreak(for:goals:)` with a large synthetic dataset
 ///    to monitor performance characteristics under heavier load.
 struct StreakCalculatorTests
 {
@@ -20,6 +20,18 @@ struct StreakCalculatorTests
     {
         let expectedStreak: Int
         let days: [Int]
+        let targetSecondsPerDay: TimeInterval
+
+        init(
+            expectedStreak: Int,
+            days: [Int],
+            targetSecondsPerDay: TimeInterval = 1_800
+        )
+        {
+            self.expectedStreak = expectedStreak
+            self.days = days
+            self.targetSecondsPerDay = targetSecondsPerDay
+        }
     }
 
     @Test("Streak calculations", arguments: [
@@ -36,16 +48,27 @@ struct StreakCalculatorTests
         Input(expectedStreak: 3, days: [-2, -1, 0]),
         Input(expectedStreak: 2, days: [-3, -1, 0]),
         Input(expectedStreak: 3, days: [-3, -2, -1]),
-        Input(expectedStreak: 2, days: [-4, -2, -1])
+        Input(expectedStreak: 2, days: [-4, -2, -1]),
+
+        Input(expectedStreak: 0, days: [0], targetSecondsPerDay: 3_600),
+        Input(expectedStreak: 0, days: [-1], targetSecondsPerDay: 3_600),
+        Input(expectedStreak: 1, days: [0, 0], targetSecondsPerDay: 3_600),
+        Input(expectedStreak: 1, days: [-1, -1], targetSecondsPerDay: 3_600)
     ])
 
     func testCalculations(input: Input)
     {
+        let topicID = UUID()
+        let goal = Goal(
+            topicID: topicID,
+            targetSecondsPerDay: input.targetSecondsPerDay,
+            createdAt: Calendar.current.date(byAdding: .day, value: -10, to: now)!
+        )
         let sessions = input.days.map {
             let endDate = Calendar.current.date(byAdding: .day, value: $0, to: now)!
             let startDate = endDate.addingTimeInterval(-1_800)
             return StudySession(
-                topicID: UUID(),
+                topicID: topicID,
                 startDate: startDate,
                 endDate: endDate,
                 sessionIntervals: [
@@ -54,7 +77,7 @@ struct StreakCalculatorTests
             )
         }
 
-        let streak = streakCalculator.calculateStreak(for: sessions)
+        let streak = streakCalculator.calculateStreak(for: sessions, goals: [goal])
         #expect(streak == input.expectedStreak, "\(input.days)")
     }
 }
@@ -66,6 +89,11 @@ extension StreakCalculatorTests
     {
         let calendar = Calendar(identifier: .gregorian)
         let topicID = UUID()
+        let goal = Goal(
+            topicID: topicID,
+            targetSecondsPerDay: 3_600,
+            createdAt: date(year: 2000, month: 1, day: 1, calendar: calendar)
+        )
 
         let sessions = (0..<1_500).map { i in
             let startDate = calendar.date(
@@ -89,7 +117,7 @@ extension StreakCalculatorTests
         let clock = ContinuousClock()
 
         let duration = clock.measure {
-            _ = streakCalculator.calculateStreak(for: sessions)
+            _ = streakCalculator.calculateStreak(for: sessions, goals: [goal])
         }
 
         print("calculateStreak took:", duration)

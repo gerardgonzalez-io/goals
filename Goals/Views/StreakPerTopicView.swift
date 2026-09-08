@@ -13,30 +13,50 @@ struct StreakPerTopicView: View
     let topic: Topic
 
     @Query private var sessions: [StudySession]
+    @Query private var goals: [Goal]
 
     init(topic: Topic)
     {
         self.topic = topic
 
         let topicID = topic.id
-        let predicate = #Predicate<StudySession> { session in
+        let sessionsPredicate = #Predicate<StudySession> { session in
             session.topicID == topicID
+        }
+        let goalsPredicate = #Predicate<Goal> { goal in
+            goal.topicID == topicID && !goal.isArchived
         }
 
         _sessions = Query(
-            filter: predicate,
+            filter: sessionsPredicate,
             sort: [SortDescriptor(\.startDate, order: .reverse)]
+        )
+        _goals = Query(
+            filter: goalsPredicate,
+            sort: [SortDescriptor(\.createdAt, order: .forward)]
         )
     }
 
     private var current: Int
     {
-        StreakCalculator().calculateStreak(for: sessions)
+        StreakCalculator().calculateStreak(for: sessions, goals: goals)
     }
 
     private var longest: Int
     {
-        longestStreak(from: sessions)
+        longestStreak(from: reachedGoalDays)
+    }
+
+    private var reachedGoalDays: Set<Date>
+    {
+        let reachedGoalsByDay = GoalEvaluator().reachedGoalsByDay(
+            sessions: sessions,
+            goals: goals
+        )
+
+        return Set(reachedGoalsByDay.compactMap { day, reachedGoal in
+            reachedGoal ? day : nil
+        })
     }
 
     var body: some View
@@ -104,7 +124,7 @@ private extension StreakPerTopicView
         }
         if current == 0
         {
-            return "Your streak is waiting. A session today brings it back."
+            return "Your streak is waiting. Reach today's goal to bring it back."
         }
         return "Keep going. Every day you add makes this topic stronger."
     }
@@ -174,9 +194,9 @@ private extension StreakPerTopicView
 // MARK: - Data
 private extension StreakPerTopicView
 {
-    func longestStreak(from sessions: [StudySession]) -> Int
+    func longestStreak(from days: Set<Date>) -> Int
     {
-        let days = successfulDays(from: sessions).sorted()
+        let days = days.sorted()
         guard !days.isEmpty else { return 0 }
 
         var longest = 0
@@ -201,36 +221,6 @@ private extension StreakPerTopicView
         }
 
         return longest
-    }
-
-    func successfulDays(from sessions: [StudySession]) -> Set<Date>
-    {
-        var days = Set<Date>()
-        let calendar = Calendar.current
-
-        for session in sessions
-        {
-            for interval in session.sessionIntervals
-            {
-                guard let endDate = interval.endDate, interval.startDate < endDate else { continue }
-
-                let firstDay = calendar.startOfDay(for: interval.startDate)
-                let inclusiveEnd = endDate.addingTimeInterval(-TimeInterval.leastNonzeroMagnitude)
-                guard inclusiveEnd >= interval.startDate else { continue }
-
-                let lastDay = calendar.startOfDay(for: inclusiveEnd)
-                var currentDay = firstDay
-
-                while currentDay <= lastDay
-                {
-                    days.insert(currentDay)
-                    guard let nextDay = calendar.date(byAdding: .day, value: 1, to: currentDay) else { break }
-                    currentDay = nextDay
-                }
-            }
-        }
-
-        return days
     }
 }
 

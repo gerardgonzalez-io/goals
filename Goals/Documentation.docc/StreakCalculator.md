@@ -7,35 +7,35 @@ Calculates study streaks from session intervals.
 `calculateStreak(for:)`:
 
 - Calculates the current consecutive-day streak from active study intervals.
-- Counts a day as successful when at least one interval overlaps that day.
-- Keeps the streak active when the user studied yesterday, even if not today.
+- Counts a day as successful when completed study time reaches that day's active goal.
+- Keeps the streak active when the user reached yesterday's goal, even if not today.
 
 ---
 
 ## Streak Rules
 
-- A day counts toward the streak when at least one interval overlaps that day.
-- The streak is still active if the user studied yesterday (even if not today).
-- The streak breaks after one full missed day between successful days.
+- A day counts toward the streak when completed study time reaches that day's active goal.
+- The streak is still active if the user reached yesterday's goal, even if not today.
+- The streak breaks after one full day where the active goal was not reached.
 
 ---
 
 ## How It Works
 
-- Input: `[StudySession]`, where each session can contain multiple `SessionInterval` values.
-- Intervals are the source of truth; session outer `startDate`/`endDate` do not define successful days.
-- If an interval crosses midnight, activity is split across each overlapped calendar day.
+- Input: `[StudySession]` and `[Goal]`, where each session can contain multiple `SessionInterval` values.
+- Intervals are the source of truth for completed time; session outer `startDate`/`endDate` do not define successful days.
+- If an interval crosses midnight, completed time is split across each overlapped calendar day.
 - Output: `Int` representing the current consecutive-day streak up to today.
 
 ---
 
 ## Examples
 
-- Activity only today -> streak `1`.
-- No activity today, but activity yesterday -> streak `1`.
-- Activity on today and yesterday -> streak `2`.
-- Activity on today and two days ago, but not yesterday -> streak `1` (gap breaks streak).
-- Activity on yesterday and two days ago, but not today -> streak `2` (active from yesterday).
+- Goal reached only today -> streak `1`.
+- Goal not reached today, but reached yesterday -> streak `1`.
+- Goal reached today and yesterday -> streak `2`.
+- Goal reached today and two days ago, but not yesterday -> streak `1` (gap breaks streak).
+- Goal reached yesterday and two days ago, but not today -> streak `2` (active from yesterday).
 
 ---
 
@@ -46,7 +46,7 @@ Calculates study streaks from session intervals.
 ### Declaration
 
 ```swift
-func calculateStreak(for sessions: [StudySession]) -> Int
+func calculateStreak(for sessions: [StudySession], goals: [Goal]) -> Int
 ```
 
 ### Return Value
@@ -57,4 +57,8 @@ An integer representing the current consecutive-day streak up to today.
 
 - **sessions**
 
-  The study sessions to evaluate. Their intervals are used to determine successful study days.
+  The study sessions to evaluate. Their intervals are used to calculate completed study time per day.
+
+- **goals**
+
+  The goal history used to determine whether each day's completed time reached the active daily target.

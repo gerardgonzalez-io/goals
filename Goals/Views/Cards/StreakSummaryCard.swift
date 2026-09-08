@@ -74,7 +74,7 @@ struct StreakSummaryCard: View
     StreakSummaryCard(
         title: "Current streak",
         current: 7,
-        subtitle: "Consecutive study days up to today or yesterday."
+        subtitle: "Consecutive days meeting the goal up to today or yesterday."
     )
     .padding()
 }
