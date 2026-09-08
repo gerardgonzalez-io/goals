@@ -121,7 +121,8 @@ Shows:
 - Focus session card
 - Today’s study time
 - Total study time
-- Navigation cards for calendar, streak, goal editing, and progress
+- Navigation cards for calendar, streak, and goal editing
+- `ProgressPlanOverviewCard` for progress versus plan
 
 Routes:
 
@@ -129,7 +130,7 @@ Routes:
 - `.calendar` -> `CalendarView`
 - `.streak` -> `StreakPerTopicView`
 - `.topicGoal` -> `TopicGoal`
-- `.progressVsPlan` -> `ProgressVsPlanView`
+- `.progressVsPlan` -> `ProgressPlanChartView`
 
 ### TopicCard
 
@@ -162,8 +163,8 @@ Key state:
 
 Timer persistence notes:
 
-- `TimerView` no longer uses `UserDefaults` timer snapshots.
-- Unfinished sessions and intervals are represented by `endDate == nil` and are cleaned up by `DataContainer` on startup.
+- Unfinished sessions and intervals are represented by `endDate == nil`.
+- `DataContainer` cleans up unfinished sessions and intervals on startup.
 
 ### TimerDialView
 
@@ -250,23 +251,55 @@ Behavior:
 - Saves a new `Goal` snapshot when changed.
 - Displays goal history.
 
-### ProgressVsPlanView
+### ProgressPlanOverviewCard
 
-Per-topic chart screen.
+Compact progress versus plan entry card shown in `TopicDetailView`.
 
 Data:
 
-- Fetches sessions for the topic.
-- Fetches non-archived goals for the topic.
+- Fetches sessions for the selected topic.
+- Fetches non-archived goals for the selected topic.
+- Stores chart data in `@State`.
+- Refreshes chart data with `.task(id:)`.
 
 UI:
 
-- Header with date range.
-- Segmented picker for 7D, 30D, 12M.
-- Previous/next period buttons.
-- KPI row: Actual, Plan, Ahead/Behind.
-- Swift Charts line chart comparing actual cumulative progress against planned cumulative progress.
-- Insight text from `ProgressVsPlan.Report`.
+- Topic name.
+- Small Swift Charts preview.
+- Summary text showing studied time versus planned time.
+- Chevron indicating navigation to the full chart.
+
+### ProgressPlanChartView
+
+Full per-topic progress versus plan chart screen.
+
+Data:
+
+- Fetches sessions for the selected topic.
+- Fetches non-archived goals for the selected topic.
+- Stores computed chart series in `@State`.
+- Refreshes chart data when the selected range, page offset, custom dates, session count, or goal count changes.
+
+UI:
+
+- Segmented picker for `7 Days`, `30 Days`, and `Custom`.
+- Previous/next period selector for fixed 7-day and 30-day windows.
+- Rounded native start/end date selectors for custom ranges.
+- Swift Charts line chart comparing cumulative planned hours with cumulative progress hours.
+- Interactive chart selection for inspecting values by date or selected chart range.
+- Description text summarizing studied hours against planned hours for the selected period.
+
+### ProgressPlanChartData
+
+Chart data builder used by `ProgressPlanOverviewCard` and `ProgressPlanChartView`.
+
+Responsibilities:
+
+- Builds cumulative plan and progress series.
+- Supports rolling 7-day windows.
+- Supports rolling 30-day windows.
+- Supports custom start/end date ranges.
+- Indexes completed session intervals by day before generating chart points, avoiding repeated full-session scans per plotted day.
 
 ## Overall Architecture
 
@@ -277,4 +310,4 @@ The app is organized cleanly around three layers:
 - Utilities: observable app helpers such as `StudySessionTimer`.
 - Views: SwiftUI screens that query SwiftData, call logic/utilities, and render navigation flows.
 
-The strongest architectural choice is the V3 move toward immutable goal snapshots and interval-based sessions. That gives the app enough historical accuracy to answer questions like “did I meet the goal that was active on that day?” and “how much time belongs to each calendar day?” without rewriting old records.
+The V3 model uses immutable goal snapshots and interval-based sessions. That gives the app enough historical accuracy to answer questions like “did I meet the goal that was active on that day?” and “how much time belongs to each calendar day?”
