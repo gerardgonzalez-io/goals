@@ -9,16 +9,16 @@ import SwiftUI
 
 struct TimeSummaryCard: View
 {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
-    let subtitle: String?
+    let subtitle: LocalizedStringKey?
     let isPrimary: Bool
 
     var body: some View
     {
         VStack(alignment: .leading, spacing: 12)
         {
-            Text(title.uppercased())
+            Text(title)
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(isPrimary ? Color.white.opacity(0.85) : .secondary)
 

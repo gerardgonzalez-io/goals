@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		98A37F9B305AD9CA000BDFCC /* Goals-InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 98A37F99305AD9CA000BDFCC /* Goals-InfoPlist.xcstrings */; };
+		98A37F9C305AD9CA000BDFCC /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 98A37F9A305AD9CA000BDFCC /* Localizable.xcstrings */; };
 		FD07C98A2E845C01009D4132 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD07C9892E845C01009D4132 /* CalendarView.swift */; };
 		FD4AF6622E46A820004B75FE /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6612E46A820004B75FE /* OnboardingView.swift */; };
 		FD4AF6642E46A968004B75FE /* TopicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4AF6632E46A968004B75FE /* TopicListView.swift */; };
@@ -77,6 +79,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		98A37F99305AD9CA000BDFCC /* Goals-InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Goals-InfoPlist.xcstrings"; sourceTree = "<group>"; };
+		98A37F9A305AD9CA000BDFCC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		FD07C9892E845C01009D4132 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		FD4AF6612E46A820004B75FE /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		FD4AF6632E46A968004B75FE /* TopicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicListView.swift; sourceTree = "<group>"; };
@@ -156,6 +160,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		98A37F9D305ADAD2000BDFCC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				98A37F99305AD9CA000BDFCC /* Goals-InfoPlist.xcstrings */,
+				98A37F9A305AD9CA000BDFCC /* Localizable.xcstrings */,
+				FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		FD4DE455304B04D300DDFEE0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -266,9 +280,9 @@
 				FDC82AE42E5DEF8800C2F545 /* Logic */,
 				FDBE08C82EA84B320083938F /* Views */,
 				FD4DE47C304CA76500DDFEE0 /* Utilities */,
+				98A37F9D305ADAD2000BDFCC /* Resources */,
 				FDA4BBFD2E0776DE00E0DAA5 /* ContentView.swift */,
 				FDA4BBFE2E0776DE00E0DAA5 /* GoalsApp.swift */,
-				FDA4BBFC2E0776DE00E0DAA5 /* Assets.xcassets */,
 			);
 			path = Goals;
 			sourceTree = "<group>";
@@ -384,6 +398,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = FDA4BBE32E07763E00E0DAA5;
 			minimizedProjectReferenceProxies = 1;
@@ -411,6 +426,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD4DE47B304B131F00DDFEE0 /* ViewsArchitecture.md in Resources */,
+				98A37F9B305AD9CA000BDFCC /* Goals-InfoPlist.xcstrings in Resources */,
+				98A37F9C305AD9CA000BDFCC /* Localizable.xcstrings in Resources */,
 				FD4DE479304B131C00DDFEE0 /* MigrationArchitecture.md in Resources */,
 				FD4DE495304EFC3100DDFEE0 /* ProgressVsPlanHang.md in Resources */,
 				FD4DE482304CAA0400DDFEE0 /* StudySessionTimerArchitecture.md in Resources */,

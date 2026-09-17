@@ -2,13 +2,23 @@ import Foundation
 
 struct ProgressPlanChartData
 {
-    enum TimeRange: String, CaseIterable, Identifiable
+    enum TimeRange: CaseIterable, Identifiable
     {
-        case currentWeek = "7 Days"
-        case currentMonth = "30 Days"
-        case custom = "Custom"
+        case currentWeek
+        case currentMonth
+        case custom
 
         var id: Self { self }
+
+        var title: LocalizedStringResource
+        {
+            switch self
+            {
+            case .currentWeek: return "7 Days"
+            case .currentMonth: return "30 Days"
+            case .custom: return "Custom"
+            }
+        }
 
         var dayCount: Int
         {
@@ -143,7 +153,7 @@ struct ProgressPlanChartData
               let last = windowDays.last
         else
         {
-            return timeRange.rawValue
+            return String(localized: timeRange.title)
         }
 
         return formattedRangeTitle(from: first, through: last, calendar: calendar)

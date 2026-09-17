@@ -54,7 +54,7 @@ struct ProgressPlanChartView: View
                 {
                     ForEach(ProgressPlanChartData.TimeRange.allCases)
                     { range in
-                        Text(range.rawValue)
+                        Text(range.title)
                             .tag(range)
                     }
                 }

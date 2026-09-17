@@ -7,9 +7,9 @@ import SwiftUI
 
 struct StreakSummaryCard: View
 {
-    let title: String
+    let title: LocalizedStringKey
     let current: Int
-    let subtitle: String
+    let subtitle: LocalizedStringKey
 
     var body: some View
     {
