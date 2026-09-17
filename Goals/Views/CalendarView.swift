@@ -45,8 +45,6 @@ struct CalendarView: View {
     @Query private var topicGoals: [Goal]
 
     // 3) Estados locales de UI
-    //    - completionCache NO se usa en este código, pero queda como idea de optimización.
-    @State private var completionCache: [Date: Bool] = [:]
     @State private var monthOffset: Int = 0   // 0 = mes actual, -1 = anterior, etc.
 
     // =========================================================
@@ -101,41 +99,17 @@ struct CalendarView: View {
             .min()
     }
 
-    // 1) Decide si debemos mostrar el indicador en una fecha.
-    // 2) Reglas:
-    //    - Si no hay sesiones -> no mostrar nada.
-    //    - Si la fecha es anterior al primer día del topic -> no mostrar.
-    //    - Si es un día pasado -> mostrar (éxito o fallo).
-    //    - Si es hoy -> mostrar SOLO si se cumplió la meta.
-    //    - Si es futuro -> no mostrar.
-    private func shouldShowIndicator(on date: Date) -> Bool
+    // 1) Evalúa todas las sesiones e historial de metas del topic una sola vez
+    //    por render, en vez de repetir el cálculo desde cada celda del calendario.
+    private func makeProgressState() -> CalendarProgressState
     {
-        if topicSessions.isEmpty { return false }
-
-        let startOfDate = calendar.startOfDay(for: date)
-        let startOfToday = calendar.startOfDay(for: today)
-
-        if let rawFirstDay = earliestTopicDay() {
-            let firstDay = calendar.startOfDay(for: rawFirstDay)
-            if startOfDate < firstDay { return false }
-        }
-
-        if startOfDate < startOfToday { return true }
-        if calendar.isDate(startOfDate, inSameDayAs: startOfToday) { return isCompleted(on: date) }
-        return false
-    }
-
-    // 1) Evalúa todas las sesiones e historial de metas del topic.
-    // 2) GoalEvaluator reparte intervalos que cruzan medianoche.
-    // 3) Devuelve true si el objetivo estuvo "met" para ese día.
-    private func isCompleted(on date: Date) -> Bool
-    {
-        let dayKey = calendar.startOfDay(for: date)
-        let completedByDay = GoalEvaluator().reachedGoalsByDay(
-            sessions: topicSessions,
-            goals: topicGoals
+        CalendarProgressState(
+            completedByDay: GoalEvaluator().reachedGoalsByDay(
+                sessions: topicSessions,
+                goals: topicGoals
+            ),
+            earliestTopicDay: earliestTopicDay()
         )
-        return completedByDay[dayKey] == true
     }
 
     // "Hoy" normalizado a inicio de día.
@@ -198,6 +172,8 @@ struct CalendarView: View {
     // 2) Si cambia topicSessions o monthOffset, body se ejecuta de nuevo.
     var body: some View
     {
+        let progressState = makeProgressState()
+
         ScrollView
         {
             VStack(spacing: 20)
@@ -211,13 +187,12 @@ struct CalendarView: View {
                     WeekdayRow(calendar: calendar)
 
                     // 3) Parrilla del mes
-                    //    - Recibe closures para decidir completado e indicador.
+                    //    - Recibe el estado ya calculado para pintar las celdas.
                     MonthGrid(
                         month: startOfMonth,
                         calendar: calendar,
                         today: today,
-                        isCompleted: isCompleted(on:),
-                        shouldShowIndicator: shouldShowIndicator(on:)
+                        progressState: progressState
                     )
                 }
                 .padding(16)
@@ -357,13 +332,18 @@ private struct WeekdayRow: View
 // =========================================================
 // SUBVISTA: PARRILLA DEL MES
 // =========================================================
+private struct CalendarProgressState
+{
+    let completedByDay: [Date: Bool]
+    let earliestTopicDay: Date?
+}
+
 private struct MonthGrid: View
 {
     let month: Date
     let calendar: Calendar
     let today: Date
-    let isCompleted: (Date) -> Bool
-    let shouldShowIndicator: (Date) -> Bool
+    let progressState: CalendarProgressState
 
     var body: some View
     {
@@ -385,8 +365,8 @@ private struct MonthGrid: View
                         date: dayDate,
                         isToday: calendar.isDate(dayDate, inSameDayAs: today),
                         inCurrentMonth: day.inCurrentMonth,
-                        completed: isCompleted(dayDate),
-                        showIndicator: shouldShowIndicator(dayDate)
+                        completed: isCompleted(on: dayDate),
+                        showIndicator: shouldShowIndicator(on: dayDate)
                     )
                     .frame(height: 44)
                 }
@@ -397,6 +377,34 @@ private struct MonthGrid: View
                 }
             }
         }
+    }
+
+    // 1) Devuelve true si el objetivo estuvo "met" para ese día.
+    private func isCompleted(on date: Date) -> Bool
+    {
+        let dayKey = calendar.startOfDay(for: date)
+        return progressState.completedByDay[dayKey] == true
+    }
+
+    // 1) Decide si debemos mostrar el indicador en una fecha.
+    // 2) Reglas:
+    //    - Si no hay sesiones -> no mostrar nada.
+    //    - Si la fecha es anterior al primer día del topic -> no mostrar.
+    //    - Si es un día pasado -> mostrar (éxito o fallo).
+    //    - Si es hoy -> mostrar SOLO si se cumplió la meta.
+    //    - Si es futuro -> no mostrar.
+    private func shouldShowIndicator(on date: Date) -> Bool
+    {
+        guard let rawFirstDay = progressState.earliestTopicDay else { return false }
+
+        let startOfDate = calendar.startOfDay(for: date)
+        let startOfToday = calendar.startOfDay(for: today)
+        let firstDay = calendar.startOfDay(for: rawFirstDay)
+
+        if startOfDate < firstDay { return false }
+        if startOfDate < startOfToday { return true }
+        if calendar.isDate(startOfDate, inSameDayAs: startOfToday) { return isCompleted(on: date) }
+        return false
     }
 
     // =========================================================

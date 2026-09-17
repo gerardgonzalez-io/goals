@@ -275,7 +275,7 @@ struct ProgressPlanChartView: View
     }
 
     private func roundedDatePicker(
-        title: String,
+        title: LocalizedStringKey,
         selection: Binding<Date>,
         range: ClosedRange<Date>
     ) -> some View
