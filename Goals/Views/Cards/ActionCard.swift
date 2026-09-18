@@ -7,8 +7,8 @@ import SwiftUI
 
 struct ActionCard: View
 {
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
     let systemImage: String
     let showsChevron: Bool
 

@@ -116,7 +116,7 @@ private extension StreakPerTopicView
         )
     }
 
-    var currentSubtitle: String
+    var currentSubtitle: LocalizedStringKey
     {
         if sessions.isEmpty
         {
@@ -185,7 +185,7 @@ private extension StreakPerTopicView
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    var tipText: String
+    var tipText: LocalizedStringKey
     {
         "Stay focus, consistency beats intensity."
     }

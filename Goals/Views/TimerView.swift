@@ -120,7 +120,7 @@ private extension TimerView
             label:
             {
                 let running = timer.isRunning
-                let title = activeSession == nil ? "Start" : (running ? "Pause" : "Resume")
+                let title: LocalizedStringKey = activeSession == nil ? "Start" : (running ? "Pause" : "Resume")
 
                 Circle()
                     .fill(

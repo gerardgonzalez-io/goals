@@ -8,8 +8,8 @@ import SwiftUI
 struct TopicCard: View
 {
     let systemImage: String
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
 
     var body: some View
     {

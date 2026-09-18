@@ -33,7 +33,7 @@ struct ProgressPlanOverviewCard: View
         )
     }
 
-    private var summaryText: String
+    private var summaryText: LocalizedStringKey
     {
         guard let plan = chartData.first(where: { $0.name == ProgressPlanChartData.planSeriesName })?.points.last?.hours,
               let progress = chartData.first(where: { $0.name == ProgressPlanChartData.progressSeriesName })?.points.last?.hours

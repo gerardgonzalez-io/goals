@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SummaryCard: View
 {
-    let title: String
-    let subtitle: String
+    let title: LocalizedStringKey
+    let subtitle: LocalizedStringKey
     let systemImage: String
     let showsChevron: Bool
 
